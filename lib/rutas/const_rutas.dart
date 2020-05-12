@@ -1,2 +1,2 @@
-const String Home = '/';
-const String OtroWidget = 'otrowidget';
+const String HOME = '/';
+const String CONTENIDO = 'contenido';
