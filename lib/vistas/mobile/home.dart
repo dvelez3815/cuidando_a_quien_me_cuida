@@ -20,10 +20,14 @@ class _HomeState extends State<Home> {
       appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
         tresPuntos()        
       ],),
-      body: Column(
+      body: ListView(
+        children: <Widget>[
+          Column(
         children: <Widget>[
           cambioDePestanas(mediaQuery), //Inicio-Calendario
           opciones(mediaQuery),
+        ],
+      )
         ],
       )
     );
@@ -78,7 +82,7 @@ Widget cambioDePestanas(Size mediaQuery){
             height: mediaQuery.height*0.04,
             child: Text(""+DateFormat('EEEE', 'es').format(DateTime.now()).toString().toUpperCase()+" "+DateTime.now().day.toString()),
           ),
-          FlatButton(onPressed: (){}, color: Colors.green, child: Container(width: mediaQuery.width,height: mediaQuery.height*0.45,child: Center(child: Text('COMENZAR', style: TextStyle(fontSize: 20,color: Colors.white),)),))
+          FlatButton(onPressed: (){Navigator.pushNamed(context, constantesRutas.RUTINA);}, color: Colors.green, child: Container(width: mediaQuery.width,height: mediaQuery.height*0.45,child: Center(child: Text('COMENZAR', style: TextStyle(fontSize: 20,color: Colors.white),)),))
         ],
       ),
     );
@@ -88,7 +92,7 @@ Widget cambioDePestanas(Size mediaQuery){
     return Container(
       width: mediaQuery.width,
       height: mediaQuery.height*0.5,
-      
+
       child: Center(child: Text('VISTA CALENDARIO'),),
     );
   }  

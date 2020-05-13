@@ -1,0 +1,23 @@
+{
+    "nombreApp": "Nombre de la App",
+    "contenidos": [{
+            "nombre": "Cuidado",
+            "descripcion": "Muestra diversas alternativas para actividades comunes del paciente, como maneras de ayudarlo en el baño, de acostrlo, caminar, entre otros.",
+            "imagen": "assets/imagenes/doctor.jpg",
+            "ruta": "cuidado"
+        },
+        {
+            "nombre": "Actividades",
+            "descripcion": "Alguna descripción acerca de lo que lleva el plato es decir se extraera de la información que mostrara esta receta y...",
+            "imagen": "assets/imagenes/actividad.jpg",
+            "ruta": "actividades"
+        },
+        {
+            "nombre": "Recetas",
+            "descripcion": "Alguna descripción acerca de lo que lleva el plato es decir se extraera de la información que mostrara esta receta y...",
+            "imagen": "assets/imagenes/recetas.jpg",
+            "ruta": "recetas"
+
+        }
+    ]
+}
