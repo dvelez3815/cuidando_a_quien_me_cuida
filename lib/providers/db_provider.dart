@@ -200,12 +200,15 @@ class DBProvider {
   Future getComidas() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("Comida");
+    List<Map<String, dynamic>> res2;
 
     if(res.isNotEmpty){
 
       comidas.clear();
 
       for(Comida i in res.map((f)=>Comida.fromJson(f)).toList()){
+        res2 = await db.query("ComidaIngrediente", where: "idComida = ?", whereArgs: [i.id]);
+        i.ingredientes.addAll(res2.map((e) => e["idIngrediente"]));
         comidas.add(i);
       }
 

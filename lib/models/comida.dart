@@ -29,7 +29,7 @@ class Comida {
   });
 
   Comida.fromJson(Map<String, dynamic> item){
-    id = item['id'];
+    id = int.parse(item['id']);
     nombre = item['nombre'];
     descripcion = item['descripcion'];
     preparacion = item['preparacion'];
