@@ -38,12 +38,17 @@ class _Rutina extends State<Rutina> {
   }
   List<Widget> _listaContenido(List<dynamic> data){
     final List<Widget> contenido = [];
+    
     List actividadesManiana = data[0]["mañana"]; //esta es la data de la mañana.
+    
     List actividadesTarde = data[1]["tarde"];
+    
     List actividadesNoche = data[2]["noche"];    
+    //agrego la cabecera que dice mañana con un sol a la izquierda
     contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("MAÑANA"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){Navigator.pushNamed(context, RUTINAMANIANA);},child: Text("Ver todo"),)]),);
 
     contenido.add(Divider());
+    //este for itera la lista de las actividades de la mañana y así para las otras, por alguna razón que no comprendo flutter me hecha un error cuando hago la expresión data[0]["mañana"] tarde o noche, no encuentro la solución para resolverlo, lo dejaré así ya que luego se cambiará la data del json por la de la db
     for (var i = 0; i < 2; i++) {
       contenido.add(Container(padding: EdgeInsets.symmetric(horizontal: 2),child: Row(children: <Widget>[convertirStringIcono(actividadesManiana[i]["icono"]), Text(actividadesManiana[i]["nombre"].toString()), Spacer(),Text(actividadesManiana[i]["hora"]),Switch(value: actividadesManiana[i]["estado"], 
       onChanged: (value){setState(() {
