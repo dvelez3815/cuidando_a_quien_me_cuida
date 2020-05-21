@@ -21,3 +21,16 @@ void handleClick(String value) {
       break;
   }
 }
+
+Icon convertirStringIcono(String icono){
+  switch (icono) {
+    case "favorite":
+      return Icon(Icons.favorite);
+      break;
+    case "fastfood":
+      return Icon(Icons.fastfood);
+    default:
+      return Icon(Icons.favorite_border);
+  }
+}
+

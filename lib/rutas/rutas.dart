@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/vistas/mobile/actividades.dart';
 import 'package:utm_vinculacion/vistas/mobile/contenido.dart';
+import 'package:utm_vinculacion/vistas/mobile/contenidos/maniana.dart';
+import 'package:utm_vinculacion/vistas/mobile/contenidos/noche.dart';
+import 'package:utm_vinculacion/vistas/mobile/contenidos/tarde.dart';
 import 'package:utm_vinculacion/vistas/mobile/cuidados.dart';
 import 'package:utm_vinculacion/vistas/mobile/home.dart';
 import 'package:utm_vinculacion/vistas/mobile/recetas.dart';
@@ -27,7 +30,16 @@ Route<dynamic> generarRutas(RouteSettings routeSettings){
       break;
     case(constantesRutas.RUTINA):
       return MaterialPageRoute(builder: (BuildContext context)=>Rutina());
-      break;                        
+      break;
+    case(constantesRutas.RUTINAMANIANA):
+      return MaterialPageRoute(builder: (BuildContext context)=>Maniana());
+      break;
+    case(constantesRutas.RUTINATARDE):
+      return MaterialPageRoute(builder: (BuildContext context)=>Tarde());
+      break;
+    case(constantesRutas.RUTINANOCHE):
+      return MaterialPageRoute(builder: (BuildContext context)=>Noche());
+      break;                                          
     default:
     return MaterialPageRoute(builder: (BuildContext context)=>Home());
   }

@@ -82,7 +82,7 @@ Widget cambioDePestanas(Size mediaQuery){
             height: mediaQuery.height*0.04,
             child: Text(""+DateFormat('EEEE', 'es').format(DateTime.now()).toString().toUpperCase()+" "+DateTime.now().day.toString()),
           ),
-          FlatButton(onPressed: (){Navigator.pushNamed(context, constantesRutas.RUTINA);}, color: Colors.green, child: Container(width: mediaQuery.width,height: mediaQuery.height*0.45,child: Center(child: Text('COMENZAR', style: TextStyle(fontSize: 20,color: Colors.white),)),))
+          FlatButton(onPressed: (){Navigator.pushNamed(context, constantesRutas.RUTINA);}, color: Colors.green, child: Container(width: mediaQuery.width,height: mediaQuery.height*0.45,child: Center(child: Text('COMENZAR', style: TextStyle(fontSize: 20,color: Colors.white),)),)),
         ],
       ),
     );

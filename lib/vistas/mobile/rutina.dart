@@ -1,18 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/providers/actividades_provider.dart';
+import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Rutina extends StatefulWidget {
-  Rutina({Key key}) : super(key: key);
+  
+  const Rutina({Key key}) : super(key: key);
 
   @override
-  _RutinaState createState() => _RutinaState();
+  _Rutina createState() => _Rutina();
 }
 
-class _RutinaState extends State<Rutina> {
+class _Rutina extends State<Rutina> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Nombre de la app"),),
-      body: Center(child: Text('Aca va a ir la vista de las rutinas'),),
+      appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
+        tresPuntos()        
+      ],),
+      body: listaContenido()
     );
+  }
+  Widget listaContenido(){
+    return Container(
+      padding: EdgeInsets.only(top: 20),
+      child: FutureBuilder(
+        future: actividadesProvider.cargarData(),
+        initialData: [],
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot){
+          return ListView(
+            children: _listaContenido(snapshot.data),
+          );
+
+        },
+      ),
+    );
+  }
+  List<Widget> _listaContenido(List<dynamic> data){
+    final List<Widget> contenido = [];
+    List actividadesManiana = data[0]["mañana"]; //esta es la data de la mañana.
+    List actividadesTarde = data[1]["tarde"];
+    List actividadesNoche = data[2]["noche"];    
+    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("MAÑANA"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){Navigator.pushNamed(context, RUTINAMANIANA);},child: Text("Ver todo"),)]),);
+
+    contenido.add(Divider());
+    for (var i = 0; i < 2; i++) {
+      contenido.add(Container(padding: EdgeInsets.symmetric(horizontal: 2),child: Row(children: <Widget>[convertirStringIcono(actividadesManiana[i]["icono"]), Text(actividadesManiana[i]["nombre"].toString()), Spacer(),Text(actividadesManiana[i]["hora"]),Switch(value: actividadesManiana[i]["estado"], 
+      onChanged: (value){setState(() {
+      });})],),));
+
+    }
+    contenido.add(Divider());
+    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.grey,), Text("TARDE"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){Navigator.pushNamed(context, RUTINATARDE);},child: Text("Ver todo"),)]),);
+
+
+    contenido.add(Divider());
+    for (var i = 0; i < 2; i++) {
+      contenido.add(Container(padding: EdgeInsets.symmetric(horizontal: 2),child: Row(children: <Widget>[convertirStringIcono(actividadesManiana[i]["icono"]), Text(actividadesTarde[i]["nombre"].toString()), Spacer(),Text(actividadesTarde[i]["hora"]),Switch(value: actividadesTarde[i]["estado"], 
+      onChanged: (value){setState(() {
+      });})],),));
+
+    }
+    contenido.add(Divider());    
+    contenido.add(Row(children: <Widget>[Icon(Icons.airline_seat_individual_suite,color: Colors.grey,), Text("NOCHE"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){Navigator.pushNamed(context, RUTINANOCHE);},child: Text("Ver todo"),)]),);
+
+    contenido.add(Divider());
+    for (var i = 0; i < 2; i++) {
+      contenido.add(Container(padding: EdgeInsets.symmetric(horizontal: 2),child: Row(children: <Widget>[convertirStringIcono(actividadesNoche[i]["icono"]), Text(actividadesNoche[i]["nombre"].toString()), Spacer(),Text(actividadesNoche[i]["hora"]),Switch(value: actividadesNoche[i]["estado"], 
+      onChanged: (value){setState(() {
+      });})],),));
+
+    }
+    contenido.add(Divider());    
+
+    return contenido;
   }
 }
