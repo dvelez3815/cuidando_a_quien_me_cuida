@@ -53,17 +53,17 @@ class _FechasProvider {
 
   }
 
-  // si retorna false, es que la fecha no es válida
-  Future<bool> guardaActividad(Actividad actividad) async{
+  // // si retorna false, es que la fecha no es válida
+  // Future<bool> guardaActividad(Actividad actividad) async{
 
-    if(actividad.fecha.compareTo(DateTime.now()) <= 0 ){
-      return false;
-    }
+  //   if(actividad.fecha.compareTo(DateTime.now()) <= 0 ){
+  //     return false;
+  //   }
 
-    if( await dbProvider.nuevaActividad(actividad) == 0) return false;
+  //   if( await dbProvider.nuevaActividad(actividad) == 0) return false;
 
-    return true;
-  }
+  //   return true;
+  // }
 
 }
 
