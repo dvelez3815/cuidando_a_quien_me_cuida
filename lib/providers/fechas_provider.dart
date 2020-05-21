@@ -1,5 +1,9 @@
 
+import 'package:utm_vinculacion/providers/db_provider.dart';
+
 class _FechasProvider {
+
+  DBProvider dbProvider = DBProvider.db;
 
   List<String> dias = new List<String>();
   List<String> meses = new List<String>();
@@ -37,6 +41,31 @@ class _FechasProvider {
     return '$dia ${fecha.day} de $mes del ${fecha.year}';
   }
 
+  String getHorario(DateTime fecha){
+
+    String horario;
+
+    if(fecha.hour<12 && fecha.hour>5) horario = 'Morning';
+    else if(fecha.hour>=12 && fecha.hour < 19) horario = 'Tarde';
+    else horario = 'Noche';
+
+    return horario;
+
+  }
+
+  // si retorna false, es que la fecha no es válida
+  Future<bool> guardaActividad(Actividad actividad) async{
+
+    if(actividad.fecha.compareTo(DateTime.now()) <= 0 ){
+      return false;
+    }
+
+    if( await dbProvider.nuevaActividad(actividad) == 0) return false;
+
+    return true;
+  }
+
 }
 
+// este objeto será el que se llamará en los otros archivos
 _FechasProvider fechaProvider = new _FechasProvider();
