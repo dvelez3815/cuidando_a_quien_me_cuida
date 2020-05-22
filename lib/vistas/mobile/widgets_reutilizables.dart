@@ -35,6 +35,7 @@ Icon convertirStringIcono(String icono){
 }
 
 void mostrarAlerta(mensaje, context){
+
   showDialog(context: context,barrierDismissible: true,
   builder: (BuildContext context){
     return AlertDialog(
@@ -53,3 +54,9 @@ void mostrarAlerta(mensaje, context){
     );
   });
 }
+
+ListTile sinDatos()=>ListTile(
+  leading: Icon(Icons.do_not_disturb_alt),
+  title: Text('No hay datos que cargar'),
+  trailing: Icon(Icons.speaker_notes_off),
+);

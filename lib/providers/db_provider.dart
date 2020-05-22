@@ -92,8 +92,8 @@ class DBProvider {
           "coccion VARCHAR NOT NULL,"
           "comensales VARCHAR NOT NULL,"
           "tipo VARCHAR NOT NULL,"
-          "urlImagen NOT NULL,"
-          "rutaVista NOT NULL"
+          "urlImagen VARCHAR,"
+          "rutaVista VARCHAR"
           ");"
         );
 

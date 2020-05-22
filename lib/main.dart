@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'rutas/rutas.dart' as rutas;
 
-void main() => runApp(DevicePreview(builder: (context)=>MyApp()));
-//void main() => runApp(MyApp());
+// void main() => runApp(DevicePreview(builder: (context)=>MyApp()));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: DevicePreview.of(context).locale,
+      // locale: DevicePreview.of(context).locale,
       builder: DevicePreview.appBuilder,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           ],
       debugShowCheckedModeBanner: false,
       onGenerateRoute: rutas.generarRutas,
-      initialRoute: 'test',
+      initialRoute: '/',
     );
   }
 }
