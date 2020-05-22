@@ -34,3 +34,22 @@ Icon convertirStringIcono(String icono){
   }
 }
 
+void mostrarAlerta(mensaje, context){
+  showDialog(context: context,barrierDismissible: true,
+  builder: (BuildContext context){
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text(mensaje),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(mensaje+"\n\n"),
+          Image.asset('assets/imagenes/alert.png',width: 100,height: 100,)
+        ],
+      ),
+      actions: <Widget>[
+        FlatButton(onPressed: (){Navigator.pop(context);}, child: Text("Ok"))
+      ],
+    );
+  });
+}

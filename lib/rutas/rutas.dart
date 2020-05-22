@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/vistas/mobile/actividades.dart';
+import 'package:utm_vinculacion/vistas/mobile/add_platos.dart';
 import 'package:utm_vinculacion/vistas/mobile/contenido.dart';
 import 'package:utm_vinculacion/vistas/mobile/contenidos/maniana.dart';
 import 'package:utm_vinculacion/vistas/mobile/contenidos/noche.dart';
@@ -40,6 +40,8 @@ Route<dynamic> generarRutas(RouteSettings routeSettings){
     case(constantesRutas.RUTINANOCHE):
       return MaterialPageRoute(builder: (BuildContext context)=>Noche());
       break;                                          
+    case(constantesRutas.ADDPLATOS):
+      return MaterialPageRoute(builder: (BuildContext context)=>AddPlatos());      
     default:
     return MaterialPageRoute(builder: (BuildContext context)=>Home());
   }

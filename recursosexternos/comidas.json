@@ -1,0 +1,147 @@
+{
+    "data": [{
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        },
+        {
+            "nombre": "Nombre de la comida",
+            "descripcion": "alguna descripción de lo que lleva el plato, es decir se extrae información que mostrará la receta y....",
+            "preparacion": "5min",
+            "total": "1hr",
+            "calorias": "190",
+            "coccion": " 1h",
+            "comensales": "4",
+            "tipo": "Almuerzo",
+            "ingredientes": ["Pollo", "manzana", "zumo de manzanas", "sal", "pimienta"],
+            "url-imagen": "assets/imagenes/recetas.jpg"
+        }
+    ]
+}
