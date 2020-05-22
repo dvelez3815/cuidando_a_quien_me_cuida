@@ -135,13 +135,25 @@ class DBProvider {
   
   Future<int> eliminarToDos() async {
     final db = await database;
-    final res = await db.delete('ToDo');
+    final res = await db.delete('Actividad');
 
     actividades.clear();
 
     actividadSink(actividades);
 
     return res;
+  }
+
+  Future<int> eliminarComidas() async {
+    final db = await database;
+    final res = await db.delete('Comida');
+    final res1 = await db.delete('ComidaIngrediente');
+
+    comidas.clear();
+
+    comidaSink(comidas);
+
+    return res*res1;
   }
 
   Future getToDos() async {

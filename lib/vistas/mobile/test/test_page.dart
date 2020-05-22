@@ -22,6 +22,12 @@ class TestPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
+              leading: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: ()async{
+                  await provider.eliminarToDos();
+                },
+              ),
               title: Text('Actividades'),
               trailing: IconButton(
                 icon: Icon(Icons.add),
@@ -56,7 +62,7 @@ class TestPage extends StatelessWidget {
             ),
             ListTile(
               title: Text('Comidas'),
-              leading: IconButton(
+              trailing: IconButton(
                 icon: Icon(Icons.add_box),
                 onPressed: (){
                   provider.nuevaComida(new Comida(
@@ -79,22 +85,10 @@ class TestPage extends StatelessWidget {
                   ));
                 },
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: (){
-                  provider.nuevaComida(new Comida(
-                    calorias: "-10000",
-                    coccion: "0.01h",
-                    comensales: "No sé qué es esto",
-                    descripcion: "Agua sin oxígeno",
-                    ingredientes: ["Agua"],
-                    nombre: "Agua desoxigenada",
-                    preparacion: "Coja un poco de agua y quítele el oxígeno",
-                    rutaVista: "No tiene",
-                    tipo: "bebida",
-                    total: "¿Total de qué?",
-                    urlImagen: "imagen.jpg"
-                  ));
+              leading: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: ()async{
+                  await provider.eliminarComidas();
                 },
               )
             ),
