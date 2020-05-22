@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           ],
       debugShowCheckedModeBanner: false,
       onGenerateRoute: rutas.generarRutas,
-      initialRoute: '/',
+      initialRoute: 'test',
     );
   }
 }

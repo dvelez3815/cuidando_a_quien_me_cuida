@@ -8,3 +8,4 @@ const String RUTINAMANIANA = "maniana";
 const String RUTINATARDE = "tarde";
 const String RUTINANOCHE = "noche";
 const String ADDPLATOS = "add_platos";
+const String TESTING = "test";

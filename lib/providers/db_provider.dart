@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:utm_vinculacion/models/actividades_model.dart';
-import 'package:utm_vinculacion/models/comida.dart';
+import 'package:utm_vinculacion/models/comida_model.dart';
 
 export 'package:utm_vinculacion/models/actividades_model.dart';
 
