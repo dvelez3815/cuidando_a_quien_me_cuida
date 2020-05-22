@@ -6,6 +6,12 @@ class TestPage extends StatelessWidget {
 
   final provider = DBProvider.db;
 
+  TestPage(){
+    provider.getComidas().then((value)async{
+      await provider.getToDos();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

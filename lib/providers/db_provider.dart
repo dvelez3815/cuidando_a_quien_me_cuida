@@ -120,6 +120,9 @@ class DBProvider {
 
     final db = await database;
 
+    if(actividades.length == 0) await getToDos();
+    if(comidas.length == 0) await getComidas();
+
     final res = await db.insert('Actividad', actividad.toJson());
 
 
@@ -144,7 +147,7 @@ class DBProvider {
   Future getToDos() async {
 
     final db = await database;
-    List<Map<String, dynamic>> res = await db.query("todo");
+    List<Map<String, dynamic>> res = await db.query("Actividad");
 
     if(res.isNotEmpty){
 

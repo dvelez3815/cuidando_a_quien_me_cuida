@@ -29,7 +29,7 @@ class Comida {
   });
 
   Comida.fromJson(Map<String, dynamic> item){
-    id = int.parse(item['id']);
+    id = item['id'];
     nombre = item['nombre'];
     descripcion = item['descripcion'];
     preparacion = item['preparacion'];
@@ -41,6 +41,8 @@ class Comida {
     // ingredientes = item['ingredientes'];
     urlImagen = item['urlImagen'];
     rutaVista = item['rutaVista'];
+
+    ingredientes = new List<String>();
   }
 
   Map<String, dynamic> toJson() => {
