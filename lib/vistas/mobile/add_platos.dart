@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/comida.dart';
+import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 class AddPlatos extends StatefulWidget {
   AddPlatos({Key key}) : super(key: key);
@@ -9,6 +10,7 @@ class AddPlatos extends StatefulWidget {
 }
 
 class _AddPlatosState extends State<AddPlatos> {
+  DBProvider db;
   TextEditingController nombrePlato = new TextEditingController();
   TextEditingController descripcion = new TextEditingController();
   TextEditingController preparacion = new TextEditingController();
@@ -52,6 +54,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.fastfood),
                   title: new TextField(
+                    controller: nombrePlato,
                     decoration: new InputDecoration(
                       hintText: "Nombre del plato",
                     ),
@@ -60,6 +63,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: descripcion,
                     decoration: new InputDecoration(
                       hintText: "Descripción",
                     ),
@@ -68,6 +72,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: preparacion,
                     decoration: new InputDecoration(
                       hintText: "Preparación",
                     ),
@@ -79,6 +84,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: total,
                     decoration: new InputDecoration(
                       hintText: "Total",
                     ),
@@ -87,6 +93,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: calorias,
                     decoration: new InputDecoration(
                       hintText: "Calorias",
                     ),
@@ -95,6 +102,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: coccion,
                     decoration: new InputDecoration(
                       hintText: "Cocción",
                     ),
@@ -103,6 +111,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 new ListTile(
                   leading: const Icon(Icons.table_chart),
                   title: new TextField(
+                    controller: commensales,
                     decoration: new InputDecoration(
                       hintText: "Commensales",
                     ),
@@ -146,8 +155,8 @@ class _AddPlatosState extends State<AddPlatos> {
                   for (var i = 0; i < ingredientes.length; i++) {
                     ingredientesString.add(ingredientes[i].text);
                   }
-                  Comida comida = new Comida(calorias: calorias.text, coccion: coccion.text,comensales: commensales.text,descripcion: descripcion.text,ingredientes: ingredientesString,nombre: nombrePlato.text,preparacion: preparacion.text, rutaVista: "",tipo: tipo.text, total: total.text,urlImagen: "");
-                  
+                  Comida comida = new Comida(calorias: calorias.text, coccion: coccion.text,comensales: commensales.text,descripcion: descripcion.text,ingredientes: ingredientesString,nombre: nombrePlato.text,preparacion: preparacion.text, rutaVista: "",tipo: _horaActual, total: total.text,urlImagen: "");
+                  print("Calorias: "+calorias.text+" coccion: "+coccion.text+" commensales: "+commensales.text+" descripcion: "+descripcion.text+" ingredientes: "+ingredientesString.toString()+" \nnombrePlato: "+nombrePlato.text+" preparacion: "+preparacion.text+" rutivaVista:   Tipo: "+_horaActual+" total: "+total.text+"url imagne:");
                   mostrarAlerta("Datos guardados con éxito", context);
                 },child: Text("Guardar"),))
               ],
