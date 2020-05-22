@@ -164,8 +164,14 @@ class DBProvider {
 
     final db = await database;
     final res1 = await db.insert("Comida", comida.toJson()); 
-    final idComida = await db.rawQuery("select id from comida");
-    comida.id = idComida[idComida.length - 1]["id"];
+
+    // le pone un id a la comida si no lo tiene
+    if(comida.id == null){
+      final idComida = await db.rawQuery("select id from comida");
+      comida.id = idComida[idComida.length - 1]["id"];
+    }
+
+    // esta variable sirve para detectar errores
     int res2 = 5;
     List<Map<String, dynamic>> tmp;
 
