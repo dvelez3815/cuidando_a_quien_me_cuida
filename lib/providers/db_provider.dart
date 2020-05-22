@@ -65,7 +65,8 @@ class DBProvider {
       onCreate: (Database db, int version) async{
         await db.execute(
           "CREATE TABLE Actividad("
-          "nombre VARCHAR PRIMARY KEY,"
+          "id INTEGER PRIMARY KEY,"
+          "nombre VARCHAR NOT NULL,"
           "hora VARCHAR NOT NULL,"
           "rutaImagen VARCHAR NOT NULL,"
           "estado INTEGER DEFAULT 0,"
@@ -119,7 +120,7 @@ class DBProvider {
 
     final db = await database;
 
-    final res = await db.insert('todo', actividad.toJson());
+    final res = await db.insert('Actividad', actividad.toJson());
 
 
     if(res != 0){
@@ -163,11 +164,13 @@ class DBProvider {
 
     final db = await database;
     final res1 = await db.insert("Comida", comida.toJson()); 
+    final idComida = await db.rawQuery("select id from comida");
+    comida.id = idComida[idComida.length - 1]["id"];
     int res2 = 5;
     List<Map<String, dynamic>> tmp;
 
     for(String i in comida.ingredientes){
-      tmp = await db.query("Ingrediente", where: "idIngrediente = '?'", whereArgs: [i]);
+      tmp = await db.query("ComidaIngrediente", where: "idIngrediente = ?", whereArgs: [i]);
 
       // si ya está el ingrediente registrado
       if(tmp.length == 0){

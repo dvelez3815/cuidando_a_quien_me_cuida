@@ -19,7 +19,7 @@ class Actividad {
     nombre = json['nombre'];
     hora = json['hora'];
     rutaImagen = json['rutaImagen'];
-    estado = json['estado'];
+    estado = json['estado'] == 1? true: false;
     icono = json['icono'];
   }
 
@@ -27,7 +27,7 @@ class Actividad {
     "nombre"    : this.nombre,
     "hora"      : this.hora,
     "rutaImagen": this.rutaImagen,
-    "estado"    : this.estado,
+    "estado"    : this.estado? 1:0,
     "icono"     : this.icono
   };
 
