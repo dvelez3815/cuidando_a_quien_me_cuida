@@ -39,7 +39,7 @@ void mostrarAlerta(mensaje, context){
   builder: (BuildContext context){
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text(mensaje),
+      title: Text("Mensaje"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
