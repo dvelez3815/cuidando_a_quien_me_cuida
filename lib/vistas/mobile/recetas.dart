@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/providers/comidas_json_provider.dart';
-import 'package:utm_vinculacion/providers/contenido_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 

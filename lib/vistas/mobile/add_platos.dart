@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/models/comida.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
-
 class AddPlatos extends StatefulWidget {
   AddPlatos({Key key}) : super(key: key);
 
@@ -141,7 +141,15 @@ class _AddPlatosState extends State<AddPlatos> {
                 :Column(
                   children: crearListaTitle(ingredientes.length),
                 ),
-                Container(width: MediaQuery.of(context).size.width*0.5,child: RaisedButton(color: Colors.amber,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),onPressed: (){},child: Text("Guardar"),))
+                Container(width: MediaQuery.of(context).size.width*0.5,child: RaisedButton(color: Colors.amber,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),onPressed: () async {
+                  List<String> ingredientesString = [];
+                  for (var i = 0; i < ingredientes.length; i++) {
+                    ingredientesString.add(ingredientes[i].text);
+                  }
+                  Comida comida = new Comida(calorias: calorias.text, coccion: coccion.text,comensales: commensales.text,descripcion: descripcion.text,ingredientes: ingredientesString,nombre: nombrePlato.text,preparacion: preparacion.text, rutaVista: "",tipo: tipo.text, total: total.text,urlImagen: "");
+                  
+                  mostrarAlerta("Datos guardados con éxito", context);
+                },child: Text("Guardar"),))
               ],
             ),
           ],
