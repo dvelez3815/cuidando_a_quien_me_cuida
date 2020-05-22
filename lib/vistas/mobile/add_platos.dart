@@ -138,11 +138,8 @@ class _AddPlatosState extends State<AddPlatos> {
                   }),
                 ),
                 ingredientes.length<0?SizedBox()
-                :Container(
-                  height: 150,
-                  child: ListView(
-                    children: crearListaTitle(ingredientes.length),
-                  )
+                :Column(
+                  children: crearListaTitle(ingredientes.length),
                 ),
                 Container(width: MediaQuery.of(context).size.width*0.5,child: RaisedButton(color: Colors.amber,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),onPressed: (){},child: Text("Guardar"),))
               ],
