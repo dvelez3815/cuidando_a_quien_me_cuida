@@ -4,10 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'rutas/rutas.dart' as rutas;
 
 // void main() => runApp(DevicePreview(builder: (context)=>MyApp()));
+//
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,11 +16,8 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
-        ],
-        supportedLocales: [
-          const Locale('en','US'), 
-          const Locale('es','ES')
-          ],
+      ],
+      supportedLocales: [const Locale('en', 'US'), const Locale('es', 'ES')],
       debugShowCheckedModeBanner: false,
       onGenerateRoute: rutas.generarRutas,
       initialRoute: '/',
