@@ -25,7 +25,7 @@ class _ContenidoState extends State<Contenido> {
     return Container(
       padding: EdgeInsets.only(top: 20),
       child: FutureBuilder(
-        future: busesProvider.cargarData(),
+        future: dataContenidoPanel.cargarData(),
         initialData: [],
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot){
           return ListView(

@@ -34,9 +34,7 @@ class _RecetasState extends State<Recetas> {
           IconButton(
             icon: Icon(Icons.file_upload),
             onPressed: ()async{
-
               final List<Map<String, dynamic>> data = await jsonProvider.cargaDatosDelJson('recursosexternos/comidas.json');
-              
               for(Map<String, dynamic> item in data){
                 Comida comida = Comida.fromJson(item);
                 comida.urlImagen = item['url-imagen'];
@@ -88,6 +86,11 @@ class _RecetasState extends State<Recetas> {
                 final List<Widget> widgets = new List<Widget>();
 
                 widgets.addAll(snapshot.data.map((item)=>ListTile(
+                  onTap: (){
+                    //Aca mando los datos de la comida que desea ver y los muestros en info comida
+                    Comida comida = item;
+                    Navigator.pushNamed(context, INFO_COMIDA, arguments: comida);
+                    },            
                   leading: Container(
                     width: MediaQuery.of(context).size.width*0.2,
                     child: item.urlImagen != null?Image.asset(item.urlImagen):Container()
@@ -108,14 +111,4 @@ class _RecetasState extends State<Recetas> {
       
     );
   }
-  // List<Widget> _listaContenido(List<dynamic> data){
-  //   List<Widget> contenido = [];
-  //   contenido.add(Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[Text("Mis recetas",style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),),Spacer(),IconButton(icon: Icon(Icons.add), onPressed: (){Navigator.pushNamed(context, ADDPLATOS);})],));
-  //   contenido.add(Divider());
-  //   data.forEach((data){
-  //      contenido..add(ListTile(leading: Container(width: MediaQuery.of(context).size.width*0.2,child: Image.asset(data['url-imagen'])),subtitle: Text(data['descripcion']),title:Text(data['nombre']),))
-  //      ..add(Divider());
-  //   });
-  //   return contenido;
-  // }
 }

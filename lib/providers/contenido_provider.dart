@@ -14,4 +14,4 @@ class _Contenido {
   }
 }
 
-final busesProvider = new _Contenido();
+final dataContenidoPanel = new _Contenido();
