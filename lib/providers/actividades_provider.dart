@@ -12,8 +12,8 @@ class _Actividades {
   Future<List<dynamic>> cargarData()async{
   final respuesta = await rootBundle.loadString('recursosexternos/actividades.json');
   Map data = json.decode(respuesta);
-  actividades = data['actividades'];
-    return data['actividades'];
+  actividades = data['data'];
+    return data['data'];
   }
 }
 
