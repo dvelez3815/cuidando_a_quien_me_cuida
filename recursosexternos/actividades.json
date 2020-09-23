@@ -1,7 +1,7 @@
 {
     "nombreApp": "Nombre de la App",
-    "actividades": [{
-            "mañana": [{
+    "data": [
+                {                    
                     "nombre": "Preparar Desayuno",
                     "hora": "6:30",
                     "ruta-imagen": "",
@@ -35,11 +35,8 @@
                     "ruta-imagen": "",
                     "estado": true,
                     "icono": "favorite"
-                }
-            ]
-        },
-        {
-            "tarde": [{
+                },
+                {
                     "nombre": "Preparar Almuerzo",
                     "hora": "12:00",
                     "ruta-imagen": "",
@@ -73,11 +70,8 @@
                     "ruta-imagen": "",
                     "estado": true,
                     "icono": "favorite"
-                }
-            ]
-        },
-        {
-            "noche": [{
+                },
+                {
                     "nombre": "Preparar Merienda",
                     "hora": "18:30",
                     "ruta-imagen": "",
@@ -112,7 +106,7 @@
                     "estado": true,
                     "icono": "favorite"
                 }
-            ]
-        }
+            
+        
     ]
 }

@@ -18,7 +18,11 @@ class _HomeState extends State<Home> {
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
-        tresPuntos()        
+        tresPuntos(),
+        IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: ()=>Navigator.of(context).pushNamed(constantesRutas.SETTINGS),
+        )
       ],),
       body: ListView(
         children: <Widget>[

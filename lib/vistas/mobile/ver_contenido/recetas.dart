@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
 // import 'package:utm_vinculacion/providers/comidas_json_provider.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
-import 'package:utm_vinculacion/providers/json_db.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Recetas extends StatefulWidget {
-  
-  const Recetas({Key key}) : super(key: key);
+   
 
   @override
   _RecetasState createState() => _RecetasState();
@@ -16,11 +14,10 @@ class Recetas extends StatefulWidget {
 
 class _RecetasState extends State<Recetas> {
 
-  DBProvider dbProvider = DBProvider.db;
-  JsonToDBProvider jsonProvider = JsonToDBProvider();
+  final DBProvider dbProvider = DBProvider.db;
 
   _RecetasState(){
-    dbProvider.getComidas();    
+    dbProvider.getComidas();
   }
 
   @override
@@ -31,18 +28,6 @@ class _RecetasState extends State<Recetas> {
         title: Text('Nombre de la app'), 
         actions: <Widget>[
           tresPuntos(),
-          IconButton(
-            icon: Icon(Icons.file_upload),
-            onPressed: ()async{
-              final List<Map<String, dynamic>> data = await jsonProvider.cargaDatosDelJson('recursosexternos/comidas.json');
-              for(Map<String, dynamic> item in data){
-                Comida comida = Comida.fromJson(item);
-                comida.urlImagen = item['url-imagen'];
-                await dbProvider.nuevaComida(comida);
-              }
-
-            },
-          ),
           IconButton(
             icon: Icon(Icons.delete), 
             onPressed: ()async{

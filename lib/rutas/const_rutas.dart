@@ -10,3 +10,4 @@ const String RUTINANOCHE = "noche";
 const String ADDPLATOS = "add_platos";
 const String TESTING = "test";
 const String INFO_COMIDA = "info_comida";
+const String SETTINGS = "settings";

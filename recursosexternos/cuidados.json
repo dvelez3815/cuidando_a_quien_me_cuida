@@ -1,0 +1,20 @@
+{
+    "data": [
+        {
+            "nombre": "Ahorcar",
+            "descripcion": "Presione fuerte y acabe con el sufrimiento"
+        },
+        {
+            "nombre": "Drogar",
+            "descripcion": "Dele un momento de felicidad :)"
+        },
+        {
+            "nombre": "Salud mental",
+            "descripcion": "Háblele de lo bien que se muere, hágale saber que está haciendo algo bien"
+        },
+        {
+            "nombre": "Regálele un gato",
+            "descripcion": "Capaz y el animal le decora la cara :')"
+        }
+    ]
+}

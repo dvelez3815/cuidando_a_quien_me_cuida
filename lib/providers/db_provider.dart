@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:utm_vinculacion/models/actividades_model.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
+import 'package:utm_vinculacion/models/cuidado_model.dart';
 
 export 'package:utm_vinculacion/models/actividades_model.dart';
 
@@ -16,10 +17,11 @@ class DBProvider {
   // esto es parte del patrón BLOC
   List<Actividad>actividades = new List<Actividad>();
   List<Comida>comidas        = new List<Comida>();
-
+  List<Cuidado>cuidados      = new List<Cuidado>();
   // uso de streams
   final _streamControllerActividades = new StreamController<List<Actividad>>.broadcast();
   final _streamControllerComidas     = new StreamController<List<Comida>>.broadcast();
+  final _streamControllerCuidados    = new StreamController<List<Cuidado>>.broadcast();
 
   /*
    * Estos métodos lo que hacen es retornar una función llamándola con
@@ -31,6 +33,9 @@ class DBProvider {
   Function(List<Actividad>) get actividadSink => _streamControllerActividades.sink.add;
   Stream<List<Actividad>> get actividadStream => _streamControllerActividades.stream;
 
+  Function(List<Cuidado>) get cuidadoSink => _streamControllerCuidados.sink.add;
+  Stream<List<Cuidado>> get cuidadoStream  => _streamControllerCuidados.stream;
+
   Function(List<Comida>) get comidaSink => _streamControllerComidas.sink.add;
   Stream<List<Comida>> get comidaStream => _streamControllerComidas.stream;
 
@@ -39,6 +44,7 @@ class DBProvider {
   void dispose(){
     _streamControllerActividades?.close();
     _streamControllerComidas?.close();
+    _streamControllerCuidados?.close();
   }
 
   DBProvider._();
@@ -108,6 +114,15 @@ class DBProvider {
           "ON UPDATE CASCADE ON DELETE NO ACTION"
           ");"
         );
+
+        await db.execute(
+          "CREATE TABLE cuidado("
+          "idCuidado INTEGER NOT NULL,"
+          "nombre VARCHAR NOT NULL,"
+          "descripcion VARCHAR NOT NULL,"
+          "CONSTRAINT pkCuidado PRIMARY KEY(idCuidado)"
+          ");"
+        );
       }
     );
 
@@ -133,6 +148,17 @@ class DBProvider {
     return res;
   }
   
+  Future getActividades() async {
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.query("Actividad");
+
+    if(res.isNotEmpty){
+      actividades.clear();
+      actividades = res.map((f)=>Actividad.fromJson(f)).toList();
+      actividadSink(actividades);
+    }
+  }
+
   Future<int> eliminarToDos() async {
     final db = await database;
     final res = await db.delete('Actividad');
@@ -237,6 +263,35 @@ class DBProvider {
       }
 
       comidaSink(comidas);
+    }
+  }
+
+  Future nuevoCuidado(Cuidado cuidado) async {
+    final db = await database;
+    final res = await db.insert("cuidado", cuidado.toJson()); 
+
+    // le pone un id a la cuidado si no lo tiene
+    if(cuidado.idCuidado == null){
+      final idCuidado = await db.rawQuery("select idCuidado from cuidado");
+      cuidado.idCuidado = idCuidado[idCuidado.length - 1]["id"];
+    }
+
+    if(res != 0){
+      cuidados.add(cuidado);
+      cuidadoSink(cuidados);
+    }
+    return res == 0;
+  }
+
+
+  Future getCuidados() async {
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.query("cuidado");
+
+    if(res.isNotEmpty){
+      cuidados.clear();
+      cuidados = res.map((f)=>Cuidado.fromJson(f)).toList();
+      cuidadoSink(cuidados);
     }
   }
 }

@@ -14,10 +14,10 @@ Widget tresPuntos() { //este es para el icono de hamburguesa de 3 puntos
   );
 }
 
-void handleClick(String value) {
+ handleClick(String value) {
   switch (value) {
     case 'Configuraciones':
-      //aca pondras la lógica al dar tap en configuraciones
+      // 
       break;
   }
 }

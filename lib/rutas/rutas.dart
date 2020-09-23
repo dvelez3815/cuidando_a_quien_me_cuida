@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
+import 'package:utm_vinculacion/vistas/mobile/settings.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/actividades.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/add_platos.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/contenido_panel_P.dart';
@@ -41,7 +42,8 @@ Route<dynamic> generarRutas(RouteSettings routeSettings){
     case(constantesRutas.INFO_COMIDA):
     Comida comida = routeSettings.arguments;
       return MaterialPageRoute(builder: (BuildContext context)=>InfoReceta(comida: comida));
-
+    case(constantesRutas.SETTINGS):
+      return MaterialPageRoute(builder: (BuildContext context)=>SettingsPage());
     default:
     return MaterialPageRoute(builder: (BuildContext context)=>Home());
   }
