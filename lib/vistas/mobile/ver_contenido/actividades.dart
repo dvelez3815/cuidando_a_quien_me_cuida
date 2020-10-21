@@ -1,8 +1,8 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:utm_vinculacion/models/alarma_model.dart';
+import 'package:utm_vinculacion/providers/alarms_provider.dart';
 
 /*
 class Actividades extends StatefulWidget {
@@ -156,42 +156,8 @@ class Actividades extends StatefulWidget {
 
 class _ActividadesState extends State<Actividades> {
 
-  // Esto es de la alarma como tal
-  static final alarmID = 1999; // Esto debe variar con cada notificacion
-  static final androidChannel = AndroidNotificationDetails(
-     'show weekly channel id', 'show weekly channel name', 'show weekly description');
-  static final iOSChannel = IOSNotificationDetails();
-
-  // Esto es para el sonido de la alarma (deben ser estaticos)
-  static AudioPlayer player = AudioPlayer();
-  static AudioCache cache = new AudioCache();
-
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    // Esto es para la notificacion en la barra de estado
-    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    final initializationSettingsAndroid = AndroidInitializationSettings("app_icon");
-    final initializationSettingsIOS = IOSInitializationSettings();
-    final initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onSelectNotification: selectNotification
-    );
-    super.initState();
-  }
-
-  // Esto dice que hacer cuando el usuario da tap en la notificacion
-  Future selectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-    await Navigator.of(context).pushNamed('/');
-  }
-
+  final AlarmProvider alarm = new AlarmProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +190,7 @@ class _ActividadesState extends State<Actividades> {
             ),
             FlatButton.icon(
               onPressed: ()async{
-                await player.stop();
+                await AlarmProvider.player.stop();
               },
               icon: Icon(Icons.stop),
               label: Text('Detener alarma'),
@@ -245,11 +211,13 @@ class _ActividadesState extends State<Actividades> {
     );
 
     // cancelando alarma anterior
-    await AndroidAlarmManager.cancel(alarmID);
-    
+    // await AndroidAlarmManager.cancel(alarmID);
+    AlarmModel model = new AlarmModel(
+      new DateTime(date.year, date.month, date.day, time.hour, time.minute),
+      title: "Alarma", description: "Body");
+
     AndroidAlarmManager.oneShotAt(
-       DateTime(date.year, date.month, date.day, time.hour, time.minute), 
-       alarmID, ejecucion
+       model.time, model.id, ejecucion
     );
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -260,12 +228,12 @@ class _ActividadesState extends State<Actividades> {
   // Esto reproduce el sonido y muestra la notificacion
   static Future<void> ejecucion() async {
 
-    player = await cache.play('sonido.mp3');
+    AlarmProvider.player = await AlarmProvider.cache.play('sonido.mp3');
 
     final localNotification = FlutterLocalNotificationsPlugin();
     await localNotification.show(
       1999, "Titulo Alarma", "Esto es un body", 
-      NotificationDetails(androidChannel, iOSChannel)
+      NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel)
     );
   }
 

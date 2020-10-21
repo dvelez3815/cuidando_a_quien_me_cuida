@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:utm_vinculacion/models/actividades_model.dart';
+import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 
@@ -18,10 +19,13 @@ class DBProvider {
   List<Actividad>actividades = new List<Actividad>();
   List<Comida>comidas        = new List<Comida>();
   List<Cuidado>cuidados      = new List<Cuidado>();
+  List<AlarmModel> alarmas   = new List<AlarmModel>();
+
   // uso de streams
   final _streamControllerActividades = new StreamController<List<Actividad>>.broadcast();
   final _streamControllerComidas     = new StreamController<List<Comida>>.broadcast();
   final _streamControllerCuidados    = new StreamController<List<Cuidado>>.broadcast();
+  final _streamControllerAlarmas     = new StreamController<List<AlarmModel>>.broadcast();
 
   /*
    * Estos métodos lo que hacen es retornar una función llamándola con
@@ -29,6 +33,9 @@ class DBProvider {
    * más que suficiente para hacer referencia a una propiedad, en vez de
    * tener que escribir todo la sintaxis reglamentaria
    */
+
+  Function(List<AlarmModel>) get alarmSink => _streamControllerAlarmas.sink.add;
+  Stream<List<AlarmModel>> get alarmStream => _streamControllerAlarmas.stream;
 
   Function(List<Actividad>) get actividadSink => _streamControllerActividades.sink.add;
   Stream<List<Actividad>> get actividadStream => _streamControllerActividades.stream;
@@ -45,6 +52,7 @@ class DBProvider {
     _streamControllerActividades?.close();
     _streamControllerComidas?.close();
     _streamControllerCuidados?.close();
+    _streamControllerAlarmas?.close();
   }
 
   DBProvider._();
@@ -123,12 +131,44 @@ class DBProvider {
           "CONSTRAINT pkCuidado PRIMARY KEY(idCuidado)"
           ");"
         );
+
+        await db.execute(
+          "CREATE TABLE alarma("
+          "id INTEGER NOT NULL,"
+          "title VARCHAR NULL DEFAULT \"Sin título\","
+          "body VARCHAR NULL DEFAULT \"Sin descripción\""
+          ");"
+        );
       }
     );
 
   }
 
-  
+  //****************************** Alarmas ******************************
+  Future<void> nuevaAlarma(AlarmModel alarma) async {
+    final db = await database;
+
+    final res = await db.insert('Alarma', alarma.toJson());
+
+    // recordar que 0 es error
+    if(res != 0){
+      alarmas.add(alarma);
+      alarmSink(alarmas);
+    }
+  }
+
+  Future<void> getAlarmas()async{
+    final db = await database;
+
+    List<Map<String, dynamic>> res = await db.query("Alarma");
+
+    if(res.isEmpty){
+      alarmas.clear();
+      alarmas = res.map((f)=>AlarmModel.fromJson(f)).toList();
+      alarmSink(alarmas);
+    }
+  }
+
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
   Future<int> nuevaActividad(Actividad actividad) async {
@@ -139,7 +179,6 @@ class DBProvider {
     if(comidas.length == 0) await getComidas();
 
     final res = await db.insert('Actividad', actividad.toJson());
-
 
     if(res != 0){
       actividades.add(actividad);
