@@ -3,20 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
-import 'package:utm_vinculacion/models/comida_model.dart';
+
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:utm_vinculacion/models/alarma_model.dart';
-import 'package:utm_vinculacion/providers/alarms_provider.dart';
-
-import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/providers/db_provider.dart';
-import 'package:utm_vinculacion/rutas/const_rutas.dart';
-import 'package:utm_vinculacion/vistas/mobile/ver_contenido/add_actividades.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class AddActividades extends StatefulWidget {
   @override
@@ -163,7 +153,7 @@ class _AddActividadesState extends State<AddActividades> {
   Future showPicker() async {
     // Obteniendo hora de la alarma
     time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    
+
   }
 
   // Esto reproduce el sonido y muestra la notificacion
