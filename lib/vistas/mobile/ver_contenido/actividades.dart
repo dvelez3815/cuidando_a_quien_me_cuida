@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
+import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/vistas/mobile/ver_contenido/add_actividades.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Actividades extends StatefulWidget {
@@ -45,7 +47,9 @@ class _ActividadesState extends State<Actividades> {
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.add), 
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.pushNamed(context, ADDACTIVIDADES);
+                  },
                 )
               ],
             ),
