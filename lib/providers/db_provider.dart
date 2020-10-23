@@ -74,7 +74,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onOpen: (db){},
       onCreate: (Database db, int version) async{
         await db.execute(
@@ -136,7 +136,8 @@ class DBProvider {
           "CREATE TABLE alarma("
           "id INTEGER NOT NULL,"
           "title VARCHAR NULL DEFAULT \"Sin título\","
-          "body VARCHAR NULL DEFAULT \"Sin descripción\""
+          "body VARCHAR NULL DEFAULT \"Sin descripción\","
+          "active INTEGER DEFAULT 1"
           ");"
         );
       }
@@ -157,7 +158,17 @@ class DBProvider {
     }
   }
 
-  Future<void> getAlarmas()async{
+  Future<AlarmModel> getAlarma(int id)async{
+    final db = await database;
+
+    List<Map<String, dynamic>> res = await db.rawQuery("SELECT * FROM alarma WHERE id=?", [id]);
+
+    if(res.isEmpty) return null;
+
+    return AlarmModel.fromJson(res[0]);
+  }
+
+  Future<List<AlarmModel>> getAlarmas()async{
     final db = await database;
 
     List<Map<String, dynamic>> res = await db.query("Alarma");
@@ -167,6 +178,8 @@ class DBProvider {
       alarmas = res.map((f)=>AlarmModel.fromJson(f)).toList();
       alarmSink(alarmas);
     }
+
+    return alarmas;
   }
 
   /// ************************** Actividades ****************************/

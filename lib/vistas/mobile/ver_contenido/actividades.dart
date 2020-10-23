@@ -1,6 +1,5 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
 
@@ -214,27 +213,13 @@ class _ActividadesState extends State<Actividades> {
     // await AndroidAlarmManager.cancel(alarmID);
     AlarmModel model = new AlarmModel(
       new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-      title: "Alarma", description: "Body");
-
-    AndroidAlarmManager.oneShotAt(
-       model.time, model.id, ejecucion
+      title: "Alarma", description: "Body"
     );
+
+    await model.save();
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')
     ));
   }
-
-  // Esto reproduce el sonido y muestra la notificacion
-  static Future<void> ejecucion() async {
-
-    AlarmProvider.player = await AlarmProvider.cache.play('sonido.mp3');
-
-    final localNotification = FlutterLocalNotificationsPlugin();
-    await localNotification.show(
-      1999, "Titulo Alarma", "Esto es un body", 
-      NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel)
-    );
-  }
-
 }
