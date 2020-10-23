@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
 
-class AlarmsView extends StatelessWidget {
+class AlarmsView extends StatefulWidget {
 
+  @override
+  _AlarmsViewState createState() => _AlarmsViewState();
+}
+
+class _AlarmsViewState extends State<AlarmsView> {
   final DBProvider db = DBProvider.db;
 
   @override
@@ -26,9 +31,15 @@ class AlarmsView extends StatelessWidget {
             itemBuilder: (context, index){
 
               AlarmModel data = snapshot.data[index];
-
+              print("${data.id}");
               return SwitchListTile(
-                onChanged: (change){},
+                onChanged: (change)async{
+
+                  data.active = !(data.active ?? true);
+                  await data.updateState();
+
+                  setState(() {});
+                },
                 value: data.active ?? true,
                 title: Text(data.title ?? "Sin título"),
                 subtitle: Text(data.description ?? "Sin descripción"),

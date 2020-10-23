@@ -134,7 +134,7 @@ class DBProvider {
 
         await db.execute(
           "CREATE TABLE alarma("
-          "id INTEGER NOT NULL,"
+          "id INTEGER PRIMARY KEY,"
           "title VARCHAR NULL DEFAULT \"Sin título\","
           "body VARCHAR NULL DEFAULT \"Sin descripción\","
           "active INTEGER DEFAULT 1"
@@ -153,8 +153,17 @@ class DBProvider {
 
     // recordar que 0 es error
     if(res != 0){
+      print("Alarma creada con el id ${alarma.id}");
       alarmas.add(alarma);
       alarmSink(alarmas);
+    }
+  }
+
+  Future<void> updateAlarmState(int id, int active)async{
+    final db = await database;
+    final up = await db.rawUpdate("UPDATE alarma SET active=? WHERE id = ?", [active, id]);
+    if(up>0){
+      print("Alarma actualizada con id $id");
     }
   }
 
