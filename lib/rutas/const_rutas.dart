@@ -11,5 +11,6 @@ const String ADDPLATOS = "add_platos";
 const String TESTING = "test";
 const String INFO_COMIDA = "info_comida";
 const String SETTINGS = "settings";
+const String ALARMS = "settings/alarms";
 const String ADDACTIVIDADES = "add_actividades";
 const String ADDCUIDADOS = "add_cuidados";

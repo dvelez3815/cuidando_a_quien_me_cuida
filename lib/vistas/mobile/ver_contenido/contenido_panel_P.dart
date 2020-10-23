@@ -16,7 +16,7 @@ class _ContenidoState extends State<Contenido> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
-        tresPuntos()        
+        tresPuntos(context)        
       ],),
       body: listaContenido()
     );

@@ -75,6 +75,8 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           Divider(),
+          ListTile(title: Text("Ver alarmas"), onTap: ()=>Navigator.of(context).pushNamed("settings/alarms")),
+          Divider(),
           SwitchListTile(
             title: Text("Modo oscuro"),
             value: UserPreferences().darkMode ?? false,

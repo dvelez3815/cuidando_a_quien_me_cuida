@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
-
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class AddActividades extends StatefulWidget {
   @override
@@ -24,7 +21,7 @@ class _AddActividadesState extends State<AddActividades> {
   List<String> litems = [];
   final TextEditingController eCtrl = new TextEditingController();
 
-  var time;
+  TimeOfDay time;
   Map<String, bool> values = {
     'lunes': true,
     'martes': true,
@@ -42,7 +39,7 @@ class _AddActividadesState extends State<AddActividades> {
       appBar: AppBar(
         elevation: 0,
         title: Text('Nombre de la app'),
-        actions: <Widget>[tresPuntos()],
+        actions: <Widget>[tresPuntos(context)],
       ),
       body: ListView(
         children: <Widget>[
@@ -96,27 +93,10 @@ class _AddActividadesState extends State<AddActividades> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FlatButton.icon(
-                        onPressed: showPicker,
-                        color: Colors.green,
-                        icon: Icon(Icons.timer),
-                        label: Text('Establecer hora')),
-                  
-                  FlatButton.icon(
-                    onPressed: () async {
-                      await AndroidAlarmManager.cancel(1999);
-                    },
-                    icon: Icon(Icons.cancel),
-                    label: Text('Cancelar alarma'),
-                    color: Colors.red,
-                    textColor: Colors.white,
-                  ),
-                  FlatButton.icon(
-                    onPressed: () async {
-                      await AlarmProvider.player.stop();
-                    },
-                    icon: Icon(Icons.stop),
-                    label: Text('Detener alarma'),
-                  )
+                      onPressed: showPicker,
+                      color: Colors.green,
+                      icon: Icon(Icons.timer),
+                      label: Text('Establecer hora')),
                 ],
               ),
               Container(
@@ -125,22 +105,7 @@ class _AddActividadesState extends State<AddActividades> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () async {
-                       final date = DateTime.now();                                     
-
-                      // cancelando alarma anterior
-                      // await AndroidAlarmManager.cancel(alarmID);
-                      AlarmModel model = new AlarmModel(
-                          new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-                          title: "Alarma",
-                          description: "Body");
-
-                      AndroidAlarmManager.oneShotAt(model.time, model.id, ejecucion);
-
-                      scaffoldKey.currentState.showSnackBar(SnackBar(
-                          content: Text(
-                              'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
-                    },
+                    onPressed: saveAlarm,
                     child: Text("Guardar"),
                   ))
             ],
@@ -150,22 +115,46 @@ class _AddActividadesState extends State<AddActividades> {
     );
   }
 
-  Future showPicker() async {
-    // Obteniendo hora de la alarma
-    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  int parseDay(String day){
+    int returnDay = 1;
+
+    switch(day.toUpperCase()){
+      case "LUNES": returnDay=1; break;
+      case "MARTES": returnDay=2; break;
+      case "MIERCOLES": returnDay=3; break;
+      case "JUEVES": returnDay=4; break;
+      case "VIERNES": returnDay=5; break;
+      case "SABADO": returnDay=6; break;
+      case "DOMINGO": returnDay=7; break;
+    }
+
+    return returnDay;
 
   }
 
-  // Esto reproduce el sonido y muestra la notificacion
-  static Future<void> ejecucion() async {
-    AlarmProvider.player = await AlarmProvider.cache.play('sonido.mp3');
+  Future<void> saveAlarm() async {
+    final date = DateTime.now();
 
-    final localNotification = FlutterLocalNotificationsPlugin();
-    await localNotification.show(
-        1999,
-        "Titulo Alarma",
-        "Esto es un body",
-        NotificationDetails(
-            AlarmProvider.androidChannel, AlarmProvider.iOSChannel));
+    AlarmModel model = new AlarmModel(
+        new DateTime(date.year, date.month, date.day, time.hour, time.minute),
+        title: (nombreActividad.text ?? "").length>0? nombreActividad.text:"Sin título",
+        description: objetivosActividad.text
+    );
+    await dbProvider.nuevaActividad(new Actividad(
+      estado: model.active,
+      hora: model.time.toString(),
+      nombre: nombreActividad.text,    
+      icono: "",
+      rutaImagen: "" 
+    ));
+    await model.save(); // esto guarda todo en SQLite
+
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
+  }
+
+  Future showPicker() async {
+    // Obteniendo hora de la alarma
+    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
   }
 }
