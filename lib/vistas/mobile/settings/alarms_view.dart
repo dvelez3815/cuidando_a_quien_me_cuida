@@ -13,6 +13,9 @@ class _AlarmsViewState extends State<AlarmsView> {
 
   @override
   Widget build(BuildContext context) {
+
+    db.getAlarmas().then((i)=>print("${i.length}"));
+
     return Scaffold(
       appBar: AppBar(title: Text("Lista de alarmas")),
       body: FutureBuilder(

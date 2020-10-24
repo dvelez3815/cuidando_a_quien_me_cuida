@@ -74,7 +74,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onOpen: (db){},
       onCreate: (Database db, int version) async{
         await db.execute(
@@ -137,6 +137,8 @@ class DBProvider {
           "id INTEGER PRIMARY KEY,"
           "title VARCHAR NULL DEFAULT \"Sin título\","
           "body VARCHAR NULL DEFAULT \"Sin descripción\","
+          "date VARCHAR NOT NULL," // "YYYY/MM/DD"
+          "time VARCHAR NOT NULL," // "HH:MM"
           "active INTEGER DEFAULT 1"
           ");"
         );
@@ -172,7 +174,10 @@ class DBProvider {
 
     List<Map<String, dynamic>> res = await db.rawQuery("SELECT * FROM alarma WHERE id=?", [id]);
 
-    if(res.isEmpty) return null;
+    if(res.isEmpty) {
+      print("No existen alarmas");
+      return null;
+    }
 
     return AlarmModel.fromJson(res[0]);
   }
@@ -182,7 +187,7 @@ class DBProvider {
 
     List<Map<String, dynamic>> res = await db.query("Alarma");
 
-    if(res.isEmpty){
+    if(res.length>0){
       alarmas.clear();
       alarmas = res.map((f)=>AlarmModel.fromJson(f)).toList();
       alarmSink(alarmas);

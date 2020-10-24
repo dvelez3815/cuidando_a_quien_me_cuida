@@ -34,6 +34,16 @@ class AlarmProvider {
 
   AlarmProvider._();
 
+  
+  static Future<void> playSong()async{
+    final audio = new AudioCache().fixedPlayer;
+    await audio.play('sonido.mp3', isLocal: true, respectSilence: true,);
+  }
+
+  static Future<void> stopSong() async {
+    await player.stop();
+  }
+
   void init(BuildContext context){
     
     // Esto dice que hacer cuando el usuario da tap en la notificacion
@@ -41,6 +51,7 @@ class AlarmProvider {
       if (payload != null) {
         debugPrint('notification payload: ' + payload);
       }
+      await playSong();
       await Navigator.of(context).pushNamed('/');
     }
 

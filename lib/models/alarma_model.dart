@@ -23,13 +23,6 @@ class AlarmModel {
     active=true;
   }
 
-  Future<void> playSong()async{
-    await AlarmProvider.player.play('sonido.mp3', isLocal: true, volume: 1.0, respectSilence: true);
-  }
-
-  Future<void> stopSong() async {
-    await AlarmProvider.player.stop();
-  }
 
   static Future<void> showAlarm(int id) async {
 
@@ -41,9 +34,10 @@ class AlarmModel {
     final localNotification = FlutterLocalNotificationsPlugin();
     await localNotification.show(
       alarm.id, alarm.title, alarm.description, 
-      NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel)
+      NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel),
+      payload: id.toString()
     );
-    await alarm.stopSong(); // silenciando la cosa esta
+    await AlarmProvider.playSong();
   }
 
   ///
@@ -73,7 +67,6 @@ class AlarmModel {
       Duration(minutes: this.interval), 
       _id,
       showAlarm,
-      exact: true,
       startAt: this.time,
       rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
     );
@@ -96,7 +89,9 @@ class AlarmModel {
     "id":    _id,
     "title": title,
     "body":  description,
-    "active": (active ?? true)? 1:0
+    "active": (active ?? true)? 1:0,
+    "date": "${time.year}/${time.month}/${time.day}",
+    "time": "${time.hour}:${time.minute}"
   };
 
   AlarmModel.fromJson(Map<String, dynamic> json) {
@@ -104,6 +99,12 @@ class AlarmModel {
     this.title = json["title"];
     this.description = json["body"];
     this.active = json["active"]==1;
+
+    List<int> date = json["date"].toString().split("/").map((i)=>int.parse(i)).toList();
+    List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
+
+    this.time = new DateTime(date[0], date[1], date[2], time[0], time[1]);
+    this.interval = 7;
   }
 
   int get id =>_id;

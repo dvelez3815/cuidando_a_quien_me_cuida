@@ -13,6 +13,7 @@ void main() async {
 
   // Preferencias de usuario que se almacenan en cache
   UserPreferences pref = new UserPreferences();
+  // await DBProvider.db.initDB();
   await pref.initPrefs();
 
   runApp(MyApp());
@@ -46,7 +47,5 @@ class MyApp extends StatelessWidget {
         );
       },
     );
-
   }
-
 }
