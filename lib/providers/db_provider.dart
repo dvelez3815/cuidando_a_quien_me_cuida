@@ -81,10 +81,10 @@ class DBProvider {
           "CREATE TABLE Actividad("
           "id INTEGER PRIMARY KEY,"
           "nombre VARCHAR NOT NULL,"
-          "hora VARCHAR NOT NULL,"
-          "rutaImagen VARCHAR NOT NULL,"
-          "estado INTEGER DEFAULT 0,"
-          "icono VARCHAR NOT NULL"
+          "description VARCHAR NOT NULL,"
+          "date VARCHAR NOT NULL,"
+          "time VARCHAR NOT NULL,"
+          "estado INTEGER DEFAULT 0"
           ");"
         );
         
@@ -142,6 +142,15 @@ class DBProvider {
           "active INTEGER DEFAULT 1"
           ");"
         );
+
+        await db.execute(
+          "CREATE TABLE actividadesAlarmas("
+          "alarma_id INTEGER NOT NULL,"
+          "actividad_id INTEGER NOT NULL,"
+          "FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
+          "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION"
+          ");"
+        );
       }
     );
 
@@ -159,6 +168,32 @@ class DBProvider {
       alarmas.add(alarma);
       alarmSink(alarmas);
     }
+  }
+
+  Future<void> newActivityAlarm(int activityID, int alarmID)async{
+    final db = await database;
+    await db.insert('actividadesAlarmas', {
+      "actividad_id": activityID,
+      "alarma_id": alarmID
+    });
+  }
+
+  Future<List<AlarmModel>> getAlarmsByActivity(int activityID) async {
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.rawQuery(
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?)",
+      [activityID]
+    );
+
+    return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
+  }
+
+  Future<void> updateAlarmStateByActivity(int activityID, int state)async{
+    final db = await database;
+    final String query = "UPDATE alarma SET active=? WHERE id in";
+    final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE alarma_id=?)";
+
+    await db.rawQuery("$query $subQuery", [state, activityID]);
   }
 
   Future<void> updateAlarmState(int id, int active)async{
@@ -203,7 +238,7 @@ class DBProvider {
     final db = await database;
 
     if(actividades.length == 0) await getToDos();
-    if(comidas.length == 0) await getComidas();
+    // if(comidas.length == 0) await getComidas(); ???????
 
     final res = await db.insert('Actividad', actividad.toJson());
 
@@ -348,7 +383,6 @@ class DBProvider {
     }
     return res == 0;
   }
-
 
   Future getCuidados() async {
     final db = await database;

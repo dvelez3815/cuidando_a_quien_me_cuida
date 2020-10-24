@@ -12,7 +12,6 @@ import 'package:utm_vinculacion/vistas/mobile/home.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/info_receta.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/recetas.dart';
 import 'package:utm_vinculacion/vistas/mobile/rutina.dart';
-import 'package:utm_vinculacion/vistas/mobile/test/test_page.dart';
 import 'const_rutas.dart' as constantesRutas;
 
 Route<dynamic> generarRutas(RouteSettings routeSettings){
@@ -44,8 +43,8 @@ Route<dynamic> generarRutas(RouteSettings routeSettings){
     case(constantesRutas.ADDPLATOS):
       return MaterialPageRoute(builder: (BuildContext context)=>AddPlatos()); 
 
-    case(constantesRutas.TESTING):
-      return MaterialPageRoute(builder: (BuildContext context)=>TestPage());
+    // case(constantesRutas.TESTING):
+    //   return MaterialPageRoute(builder: (BuildContext context)=>TestPage());
 
     case(constantesRutas.INFO_COMIDA):
       Comida comida = routeSettings.arguments;

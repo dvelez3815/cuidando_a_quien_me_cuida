@@ -56,22 +56,26 @@ class _ActividadesState extends State<Actividades> {
             StreamBuilder(
               stream: dbProvider.actividadStream,
               builder: (BuildContext context, AsyncSnapshot<List<Actividad>> snapshot){
-                
+
                 if(!snapshot.hasData) return sinDatos();
 
                 final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>ListTile(
-                  onTap: (){},
-                  subtitle: Text(item.hora),
-                  title: Text(item.nombre),
-                  trailing: Text(item.estado? "Activo":"Inactivo"),
+                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
+                  value: item.estado,
+                  onChanged: (status){
+                    setState(() {
+                      item.estado = status;
+                    });
+                  },
+                  subtitle: Text("${item.date}"),
+                  // subtitle: Text("${item.descripcion ?? "Sin descripción"}"),
+                  title: Text("${item.nombre ?? "Sin nombre"}"),
                 )).toList());
 
                 return Column(
                   children: widgets,
                 );
-
               },
             ),
           ],

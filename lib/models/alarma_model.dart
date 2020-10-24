@@ -37,7 +37,7 @@ class AlarmModel {
       NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel),
       payload: id.toString()
     );
-    await AlarmProvider.playSong();
+    // await AlarmProvider.playSong();
   }
 
   ///
@@ -60,12 +60,12 @@ class AlarmModel {
     await db.updateAlarmState(_id, (state ?? this.active)? 1:0);
   }
 
-  Future<void> reactivate() async {
+  Future<void> reactivate({int idAlarm}) async {
     print("${DateTime.now().day}");
     await AndroidAlarmManager.periodic(
       // Duration(days: interval), 
       Duration(minutes: this.interval), 
-      _id,
+      idAlarm ?? _id,
       showAlarm,
       startAt: this.time,
       rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
@@ -73,16 +73,16 @@ class AlarmModel {
   }
 
   // Cancelando la alarma (no implementada aun)
-  Future<void> cancelAlarm()async{
-    await AndroidAlarmManager.cancel(_id);
+  Future<void> cancelAlarm({int idAlarm})async{
+    await AndroidAlarmManager.cancel(idAlarm ?? _id);
   }
 
-  int generateID() {
-    return secondsFromDate(DateTime.now()) - 62832762060;
-  }
+  static int generateID() {
 
-  int secondsFromDate(DateTime date){
-    return date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
+    final date = DateTime.now();
+    final secondsNow = date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
+
+    return secondsNow - 62832762060;
   }
 
   Map<String, dynamic> toJson()=>{
@@ -100,7 +100,10 @@ class AlarmModel {
     this.description = json["body"];
     this.active = json["active"]==1;
 
-    List<int> date = json["date"].toString().split("/").map((i)=>int.parse(i)).toList();
+    List<int> date = json["date"].toString().split("/").map((i){
+      print("Imprimiendo fecha: $i");
+      return int.parse(i);
+    }).toList();
     List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
 
     this.time = new DateTime(date[0], date[1], date[2], time[0], time[1]);

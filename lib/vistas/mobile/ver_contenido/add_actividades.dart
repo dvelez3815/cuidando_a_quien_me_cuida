@@ -133,6 +133,22 @@ class _AddActividadesState extends State<AddActividades> {
   }
 
   Future<void> saveAlarm() async {
+
+    // Validaciones
+    if(nombreActividad.text.length<4 || objetivosActividad.text.length<4){
+      scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("El nombre y los objetivos deben ser rellenados")));
+      return;
+    }
+
+    final List<String> days = new List<String>();
+    this.values.forEach((key, value) {if(value) days.add(key);});
+
+    if(days.isEmpty) {
+      scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
+      return;
+    }
+
+    // La creacion como tal
     final date = DateTime.now();
 
     AlarmModel model = new AlarmModel(
@@ -140,14 +156,18 @@ class _AddActividadesState extends State<AddActividades> {
         title: (nombreActividad.text ?? "").length>0? nombreActividad.text:"Sin título",
         description: objetivosActividad.text
     );
-    await dbProvider.nuevaActividad(new Actividad(
-      estado: model.active,
-      hora: model.time.toString(),
-      nombre: nombreActividad.text,    
-      icono: "",
-      rutaImagen: "" 
-    ));
-    await model.save(); // esto guarda todo en SQLite
+
+    Actividad activity = new Actividad(
+      days, // dias para notificar
+      model.time,
+      nombreActividad.text,
+      objetivosActividad.text
+    );
+
+    await dbProvider.nuevaActividad(activity);
+    await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+
+    // await model.save(); // esto guarda todo en SQLite
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));

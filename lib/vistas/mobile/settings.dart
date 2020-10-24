@@ -54,7 +54,6 @@ class _SettingsPageState extends State<SettingsPage> {
               List<Map<String, dynamic>> data = await widget.jsonProvider.cargaDatosDelJson('recursosexternos/actividades.json');
               for(Map<String, dynamic> item in data){
                 Actividad actividad = Actividad.fromJson(item);
-                actividad.rutaImagen = item['ruta-imagen'];
                 await widget.dbProvider.nuevaActividad(actividad);
               }
               widget.scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text('Actividades cargadas')));
