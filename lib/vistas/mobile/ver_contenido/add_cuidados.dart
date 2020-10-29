@@ -149,7 +149,7 @@ class _AddCuidadoState extends State<AddCuidado> {
       rutaImagen: "" 
     ));
     await model.save(); // esto guarda todo en SQLite
-    */
+      */
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
   }
