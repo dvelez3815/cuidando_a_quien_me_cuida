@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
+import 'package:utm_vinculacion/rutas/const_rutas.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Cuidados extends StatefulWidget {
@@ -49,7 +50,9 @@ class _CuidadosState extends State<Cuidados> {
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.add), 
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.pushNamed(context, ADDCUIDADOS);
+                  },
                 )
               ],
             ),
