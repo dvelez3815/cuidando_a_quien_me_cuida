@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/providers/actividades_provider.dart';
+import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 
@@ -16,7 +17,7 @@ class _Rutina extends State<Rutina> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
+      appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context)        
       ],),
       body: listaContenido()
@@ -64,21 +65,21 @@ class _Rutina extends State<Rutina> {
        }
 
     }
-    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("Mañana"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){},child: Text("Ver todo"),)]),);
+    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("Mañana"),Spacer()]),);
 
     contenido.add(Divider());
 
     contenido.add(Column(children: actividadesManania,));  
 
     //tarde
-    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("Tarde"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){},child: Text("Ver todo"),)]),);
+    contenido.add(Row(children: <Widget>[Icon(Icons.wb_sunny,color: Colors.yellow,), Text("Tarde"),Spacer()]),);
 
     contenido.add(Divider());
 
     contenido.add(Column(children: actividadesTarde,));  
 
     //noche
-    contenido.add(Row(children: <Widget>[Icon(Icons.airline_seat_flat,color: Colors.grey,), Text("Noche"),Spacer(),RaisedButton(color: Colors.blue,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),onPressed: (){},child: Text("Ver todo"),)]),);
+    contenido.add(Row(children: <Widget>[Icon(Icons.airline_seat_flat,color: Colors.grey,), Text("Noche"),Spacer()]),);
 
     contenido.add(Divider());
 
