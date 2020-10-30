@@ -45,6 +45,7 @@ class _AddActividadesState extends State<AddActividades> {
       body: ListView(
         children: <Widget>[
           new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.directions_run),
@@ -77,6 +78,7 @@ class _AddActividadesState extends State<AddActividades> {
                 ),
               ),
               Column(
+                
                 children: values.keys.map((String key) {
                   return new CheckboxListTile(
                     title: new Text(key),
@@ -89,16 +91,15 @@ class _AddActividadesState extends State<AddActividades> {
                   );
                 }).toList(),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FlatButton.icon(
-                      onPressed: showPicker,
-                      color: Colors.green,
-                      icon: Icon(Icons.timer),
-                      label: Text('Establecer hora')),
-                ],
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    onPressed: showPicker,
+                    color: Colors.green,
+                    icon: Icon(Icons.timer),
+                    label: Text('Establecer hora')),
               ),
               Container(
                   width: MediaQuery.of(context).size.width * 0.5,
@@ -106,7 +107,7 @@ class _AddActividadesState extends State<AddActividades> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: (){
+                    onPressed: () {
                       saveAlarm();
                       Navigator.pop(context);
                     },
@@ -119,36 +120,52 @@ class _AddActividadesState extends State<AddActividades> {
     );
   }
 
-  int parseDay(String day){
+  int parseDay(String day) {
     int returnDay = 1;
 
-    switch(day.toUpperCase()){
-      case "LUNES": returnDay=1; break;
-      case "MARTES": returnDay=2; break;
-      case "MIERCOLES": returnDay=3; break;
-      case "JUEVES": returnDay=4; break;
-      case "VIERNES": returnDay=5; break;
-      case "SABADO": returnDay=6; break;
-      case "DOMINGO": returnDay=7; break;
+    switch (day.toUpperCase()) {
+      case "LUNES":
+        returnDay = 1;
+        break;
+      case "MARTES":
+        returnDay = 2;
+        break;
+      case "MIERCOLES":
+        returnDay = 3;
+        break;
+      case "JUEVES":
+        returnDay = 4;
+        break;
+      case "VIERNES":
+        returnDay = 5;
+        break;
+      case "SABADO":
+        returnDay = 6;
+        break;
+      case "DOMINGO":
+        returnDay = 7;
+        break;
     }
 
     return returnDay;
-
   }
 
   Future<void> saveAlarm() async {
-
     // Validaciones
-    if(nombreActividad.text.length<4 || objetivosActividad.text.length<4){
-      scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("El nombre y los objetivos deben ser rellenados")));
+    if (nombreActividad.text.length < 4 || objetivosActividad.text.length < 4) {
+      scaffoldKey.currentState.showSnackBar(new SnackBar(
+          content: Text("El nombre y los objetivos deben ser rellenados")));
       return;
     }
 
     final List<String> days = new List<String>();
-    this.values.forEach((key, value) {if(value) days.add(key);});
+    this.values.forEach((key, value) {
+      if (value) days.add(key);
+    });
 
-    if(days.isEmpty) {
-      scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
+    if (days.isEmpty) {
+      scaffoldKey.currentState.showSnackBar(
+          new SnackBar(content: Text("Debe seleccionar al menos un día")));
       return;
     }
 
@@ -157,24 +174,26 @@ class _AddActividadesState extends State<AddActividades> {
 
     AlarmModel model = new AlarmModel(
         new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        title: (nombreActividad.text ?? "").length>0? nombreActividad.text:"Sin título",
-        description: objetivosActividad.text
-    );
+        title: (nombreActividad.text ?? "").length > 0
+            ? nombreActividad.text
+            : "Sin título",
+        description: objetivosActividad.text);
 
     Actividad activity = new Actividad(
-      days, // dias para notificar
-      model.time,
-      nombreActividad.text,
-      objetivosActividad.text
-    );
+        days, // dias para notificar
+        model.time,
+        nombreActividad.text,
+        objetivosActividad.text);
 
     await dbProvider.nuevaActividad(activity);
-    await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+    await activity
+        .setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
     // await model.save(); // esto guarda todo en SQLite
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
+        content: Text(
+            'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
   }
 
   Future showPicker() async {
