@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
-Widget tresPuntos() { //este es para el icono de hamburguesa de 3 puntos
+import 'package:utm_vinculacion/rutas/const_rutas.dart';
+Widget tresPuntos(context) { //este es para el icono de hamburguesa de 3 puntos
   return PopupMenuButton<String>(
-    onSelected: handleClick,
+    onSelected: (val) => handleClick(val, context),
     itemBuilder: (BuildContext context) {
       return ['Configuraciones'].map((String choice) {
         return PopupMenuItem<String>(
@@ -14,13 +14,14 @@ Widget tresPuntos() { //este es para el icono de hamburguesa de 3 puntos
   );
 }
 
- handleClick(String value) {
+ handleClick(String value, context) {
   switch (value) {
     case 'Configuraciones':
-      // 
-      break;
+    Navigator.pushNamed(context, SETTINGS);
+      
   }
 }
+
 
 Icon convertirStringIcono(String icono){
   switch (icono) {

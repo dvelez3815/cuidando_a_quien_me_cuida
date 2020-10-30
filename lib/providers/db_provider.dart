@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:utm_vinculacion/models/actividades_model.dart';
+import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 
@@ -18,10 +19,13 @@ class DBProvider {
   List<Actividad>actividades = new List<Actividad>();
   List<Comida>comidas        = new List<Comida>();
   List<Cuidado>cuidados      = new List<Cuidado>();
+  List<AlarmModel> alarmas   = new List<AlarmModel>();
+
   // uso de streams
   final _streamControllerActividades = new StreamController<List<Actividad>>.broadcast();
   final _streamControllerComidas     = new StreamController<List<Comida>>.broadcast();
   final _streamControllerCuidados    = new StreamController<List<Cuidado>>.broadcast();
+  final _streamControllerAlarmas     = new StreamController<List<AlarmModel>>.broadcast();
 
   /*
    * Estos métodos lo que hacen es retornar una función llamándola con
@@ -29,6 +33,9 @@ class DBProvider {
    * más que suficiente para hacer referencia a una propiedad, en vez de
    * tener que escribir todo la sintaxis reglamentaria
    */
+
+  Function(List<AlarmModel>) get alarmSink => _streamControllerAlarmas.sink.add;
+  Stream<List<AlarmModel>> get alarmStream => _streamControllerAlarmas.stream;
 
   Function(List<Actividad>) get actividadSink => _streamControllerActividades.sink.add;
   Stream<List<Actividad>> get actividadStream => _streamControllerActividades.stream;
@@ -45,6 +52,7 @@ class DBProvider {
     _streamControllerActividades?.close();
     _streamControllerComidas?.close();
     _streamControllerCuidados?.close();
+    _streamControllerAlarmas?.close();
   }
 
   DBProvider._();
@@ -66,17 +74,17 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 4,
       onOpen: (db){},
       onCreate: (Database db, int version) async{
         await db.execute(
           "CREATE TABLE Actividad("
           "id INTEGER PRIMARY KEY,"
           "nombre VARCHAR NOT NULL,"
-          "hora VARCHAR NOT NULL,"
-          "rutaImagen VARCHAR NOT NULL,"
-          "estado INTEGER DEFAULT 0,"
-          "icono VARCHAR NOT NULL"
+          "description VARCHAR NOT NULL,"
+          "date VARCHAR NOT NULL,"
+          "time VARCHAR NOT NULL,"
+          "estado INTEGER DEFAULT 0"
           ");"
         );
         
@@ -120,7 +128,39 @@ class DBProvider {
           "idCuidado INTEGER NOT NULL,"
           "nombre VARCHAR NOT NULL,"
           "descripcion VARCHAR NOT NULL,"
+          "date VARCHAR NOT NULL," // "YYYY/MM/DD"
+          "time VARCHAR NOT NULL," // "HH:MM"
+          "active INTEGER DEFAULT 1,"
           "CONSTRAINT pkCuidado PRIMARY KEY(idCuidado)"
+          ");"
+        );
+
+        await db.execute(
+          "CREATE TABLE alarma("
+          "id INTEGER PRIMARY KEY,"
+          "title VARCHAR NULL DEFAULT \"Sin título\","
+          "body VARCHAR NULL DEFAULT \"Sin descripción\","
+          "date VARCHAR NOT NULL," // "YYYY/MM/DD"
+          "time VARCHAR NOT NULL," // "HH:MM"
+          "active INTEGER DEFAULT 1"
+          ");"
+        );
+
+        await db.execute(
+          "CREATE TABLE actividadesAlarmas("
+          "alarma_id INTEGER NOT NULL,"
+          "actividad_id INTEGER NOT NULL,"
+          "FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
+          "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION"
+          ");"
+        );
+
+        await db.execute(
+          "CREATE TABLE cuidadosAlarmas("
+          "alarma_id INTEGER NOT NULL,"
+          "cuidado_id INTEGER NOT NULL,"
+          "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
+          "FOREIGN KEY(cuidado_id) REFERENCES cuidado(idCuidado) ON UPDATE CASCADE ON DELETE NO ACTION"
           ");"
         );
       }
@@ -128,6 +168,116 @@ class DBProvider {
 
   }
 
+  //****************************** Alarmas ******************************
+  Future<void> nuevaAlarma(AlarmModel alarma) async {
+    final db = await database;
+
+    final res = await db.insert('Alarma', alarma.toJson());
+
+    // recordar que 0 es error
+    if(res != 0){
+      print("Alarma creada con el id ${alarma.id}");
+      alarmas.add(alarma);
+      alarmSink(alarmas);
+    }
+  }
+
+  Future<void> newActivityAlarm(int activityID, int alarmID)async{
+    final db = await database;
+    await db.insert('actividadesAlarmas', {
+      "actividad_id": activityID,
+      "alarma_id": alarmID
+    });
+  }
+
+  Future<List<AlarmModel>> getAlarmsByActivity(int activityID) async {
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.rawQuery(
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?)",
+      [activityID]
+    );
+
+    return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
+  }
+
+  Future<void> updateAlarmStateByActivity(int activityID, int state)async{
+    final db = await database;
+    final String query = "UPDATE alarma SET active=? WHERE idCuidado in";
+    final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE alarma_id=?)";
+
+    await db.rawUpdate("$query $subQuery", [state, activityID]);
+  }
+
+  Future<void> updateActivityState(int activityID, state)async{    
+    final db = await database;
+    await db.rawUpdate("UPDATE actividad SET estado=? WHERE id=?", [state, activityID]);
+  }
+
+  Future<void> updateAlarmState(int id, int active)async{
+    final db = await database;
+    final up = await db.rawUpdate("UPDATE alarma SET active=? WHERE id = ?", [active, id]);
+    if(up>0){
+      print("Alarma actualizada con id $id");
+    }
+  }
+
+  Future<AlarmModel> getAlarma(int id)async{
+    final db = await database;
+
+    List<Map<String, dynamic>> res = await db.rawQuery("SELECT * FROM alarma WHERE id=?", [id]);
+
+    if(res.isEmpty) {
+      print("No existen alarmas");
+      return null;
+    }
+
+    return AlarmModel.fromJson(res[0]);
+  }
+
+  Future<List<AlarmModel>> getAlarmas()async{
+    final db = await database;
+
+    List<Map<String, dynamic>> res = await db.query("Alarma");
+
+    if(res.length>0){
+      alarmas.clear();
+      alarmas = res.map((f)=>AlarmModel.fromJson(f)).toList();
+      alarmSink(alarmas);
+    }
+
+    return alarmas;
+  }
+
+  Future<void> newCareAlarm(int careID, int alarmID)async{
+    final db = await database;
+    await db.insert('cuidadosAlarmas', {
+      "alarma_id": alarmID,
+      "cuidado_id": careID
+    });
+  }
+
+  Future<void> updateAlarmStateByCare(int careID, int state)async{
+    final db = await database;
+    final String query = "UPDATE cuidado SET active=? WHERE id in";
+    final String subQuery = "(SELECT alarma_id FROM cuidadosAlarmas WHERE alarma_id=?)";
+
+    await db.rawUpdate("$query $subQuery", [state, careID]);
+  }
+  
+  Future<void> updateCareState(int careID, state)async{    
+    final db = await database;
+    await db.rawUpdate("UPDATE cuidado SET active=? WHERE idCuidado=?", [state, careID]);
+  }
+
+  Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.rawQuery(
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)",
+      [careID]
+    );
+
+    return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
+  }
   
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
@@ -136,10 +286,9 @@ class DBProvider {
     final db = await database;
 
     if(actividades.length == 0) await getToDos();
-    if(comidas.length == 0) await getComidas();
+    // if(comidas.length == 0) await getComidas(); ???????
 
     final res = await db.insert('Actividad', actividad.toJson());
-
 
     if(res != 0){
       actividades.add(actividad);
@@ -282,7 +431,6 @@ class DBProvider {
     }
     return res == 0;
   }
-
 
   Future getCuidados() async {
     final db = await database;

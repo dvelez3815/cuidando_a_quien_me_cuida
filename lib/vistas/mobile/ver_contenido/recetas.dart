@@ -27,7 +27,7 @@ class _RecetasState extends State<Recetas> {
         elevation: 0,
         title: Text('Nombre de la app'), 
         actions: <Widget>[
-          tresPuntos(),
+          tresPuntos(context),
           IconButton(
             icon: Icon(Icons.delete), 
             onPressed: ()async{

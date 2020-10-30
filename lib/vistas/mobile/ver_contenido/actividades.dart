@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
-import 'package:utm_vinculacion/vistas/mobile/ver_contenido/add_actividades.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Actividades extends StatefulWidget {
@@ -25,7 +25,7 @@ class _ActividadesState extends State<Actividades> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
-        tresPuntos()        
+        tresPuntos(context)        
       ],),      
       body: listaContenido()
     );
@@ -56,27 +56,31 @@ class _ActividadesState extends State<Actividades> {
             StreamBuilder(
               stream: dbProvider.actividadStream,
               builder: (BuildContext context, AsyncSnapshot<List<Actividad>> snapshot){
-                
+
                 if(!snapshot.hasData) return sinDatos();
 
                 final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>ListTile(
-                  onTap: (){},  
-                  // Suspendido hasta que se agreguen imagenes 
-                  // leading: Container(
-                  //   width: MediaQuery.of(context).size.width*0.2,
-                  //   child: item.rutaImagen != null?Image.asset(item.rutaImagen):Container()
-                  // ),
-                  subtitle: Text(item.hora),
-                  title: Text(item.nombre),
-                  trailing: Text(item.estado? "Activo":"Inactivo"),
+                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
+                  value: item.estado,
+                  onChanged: (status){
+                    setState(() {
+                      item.estado = status;
+                    });
+                  },
+                  subtitle: Text("${item.descripcion}"),
+                  title: Text("${item.nombre ?? "Sin nombre"}"),
+                  secondary: Column(
+                    children: [
+                      Icon(Icons.alarm),
+                      Text("${item.date.hour}:${item.date.minute}")
+                    ],
+                  ),
                 )).toList());
 
                 return Column(
                   children: widgets,
                 );
-
               },
             ),
           ],
@@ -86,3 +90,20 @@ class _ActividadesState extends State<Actividades> {
     );
   }
 }
+
+/*
+
+    // cancelando alarma anterior
+    // await AndroidAlarmManager.cancel(alarmID);
+    AlarmModel model = new AlarmModel(
+      new DateTime(date.year, date.month, date.day, time.hour, time.minute),
+      title: "Alarma", description: "Body"
+    );
+
+    await model.save();
+
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')
+    ));
+  }
+}*/

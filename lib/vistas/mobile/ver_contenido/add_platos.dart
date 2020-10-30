@@ -51,7 +51,7 @@ class _AddPlatosState extends State<AddPlatos> {
         appBar: AppBar(
           elevation: 0,
           title: Text('Nombre de la app'),
-          actions: <Widget>[tresPuntos()],
+          actions: <Widget>[tresPuntos(context)],
         ),
         body: ListView(children: <Widget>[
           new Column(
