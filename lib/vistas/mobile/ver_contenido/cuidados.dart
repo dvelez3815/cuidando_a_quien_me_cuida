@@ -64,10 +64,20 @@ class _CuidadosState extends State<Cuidados> {
 
                 final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>ListTile(
-                  onTap: (){},
+                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
+                  value: item.estado,
+                  onChanged: (status){
+                    item.estado = status;
+                    setState(() {});
+                  },
                   subtitle: Text(item.descripcion),
-                  title: Text(item.nombre),
+                  title: Text("${item.nombre ?? "Sin nombre"}"),
+                  secondary: Column(
+                    children: [
+                      Icon(Icons.alarm),
+                      Text("${item.date.hour}:${item.date.minute}"),
+                    ],
+                  ),
                 )).toList());
 
                 return Column(

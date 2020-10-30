@@ -68,9 +68,14 @@ class _ActividadesState extends State<Actividades> {
                       item.estado = status;
                     });
                   },
-                  subtitle: Text("${item.date}"),
-                  // subtitle: Text("${item.descripcion ?? "Sin descripción"}"),
+                  subtitle: Text("${item.descripcion}"),
                   title: Text("${item.nombre ?? "Sin nombre"}"),
+                  secondary: Column(
+                    children: [
+                      Icon(Icons.alarm),
+                      Text("${item.date.hour}:${item.date.minute}")
+                    ],
+                  ),
                 )).toList());
 
                 return Column(

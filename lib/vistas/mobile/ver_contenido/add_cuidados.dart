@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:utm_vinculacion/models/alarma_model.dart';
+import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
@@ -135,21 +136,32 @@ class _AddCuidadoState extends State<AddCuidado> {
   Future<void> saveAlarm() async {
     final date = DateTime.now();
 
+    
+    final List<String> daysToNotify = new List<String>();
+    this.values.forEach((key, value) {if(value) daysToNotify.add(key);});
+
+    if(daysToNotify.isEmpty) {
+      scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
+      return;
+    }
+
     AlarmModel model = new AlarmModel(
         new DateTime(date.year, date.month, date.day, time.hour, time.minute),
         title: (nombreActividad.text ?? "").length>0? nombreActividad.text:"Sin título",
         description: objetivosActividad.text
     );
-    /*
-    await dbProvider.nuevaActividad(new Actividad(
-      estado: model.active,
-      hora: model.time.toString(),
-      nombre: nombreActividad.text,    
-      icono: "",
-      rutaImagen: "" 
-    ));
-    await model.save(); // esto guarda todo en SQLite
-      */
+
+    Cuidado care = new Cuidado(
+      model.time,
+      daysToNotify,
+      nombre: nombreActividad.text,
+      descripcion: objetivosActividad.text
+    );
+
+    await dbProvider.nuevoCuidado(care);
+    await care.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+
+ 
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
   }

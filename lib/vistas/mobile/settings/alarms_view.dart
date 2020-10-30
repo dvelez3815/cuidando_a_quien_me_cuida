@@ -34,15 +34,16 @@ class _AlarmsViewState extends State<AlarmsView> {
             itemBuilder: (context, index){
 
               AlarmModel data = snapshot.data[index];
-              print("${data.id}");
+              print("${data.time.toString()}");
               return SwitchListTile(
-                onChanged: (change)async{
+                // onChanged: (change)async{
 
-                  data.active = !(data.active ?? true);
-                  await data.updateState();
+                //   data.active = !(data.active ?? true);
+                //   await data.updateState();
 
-                  setState(() {});
-                },
+                //   setState(() {});
+                // },
+                onChanged: null,
                 value: data.active ?? true,
                 title: Text(data.title ?? "Sin título"),
                 subtitle: Text(data.description ?? "Sin descripción"),

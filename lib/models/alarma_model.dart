@@ -62,12 +62,21 @@ class AlarmModel {
 
   Future<void> reactivate({int idAlarm}) async {
     print("${DateTime.now().day}");
+
+    if(this.time.compareTo(DateTime.now()) < 0){
+      // si ya paso la hora, sonara maniana
+      this.time = this.time.add(new Duration(days: 1));
+
+      this.time = new DateTime(this.time.year, this.time.month, this.time.day, this.time.hour, this.time.minute);
+    }
+
     await AndroidAlarmManager.periodic(
       // Duration(days: interval), 
-      Duration(minutes: this.interval), 
+      Duration(days: this.interval), 
       idAlarm ?? _id,
       showAlarm,
       startAt: this.time,
+      wakeup: true,
       rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
     );
   }

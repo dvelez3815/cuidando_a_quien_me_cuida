@@ -23,6 +23,7 @@ class Actividad {
   Future<void> setAlarms()async{
 
     daysToNotify.forEach((day)async{
+      print("Alarma para el día ${parseDayFromString(day)}");
       final AlarmModel alarm = new AlarmModel(
         new DateTime(date.year, date.month, parseDayFromString(day), date.hour, date.minute),
         title: "Recordatorio", description: this.nombre
@@ -41,9 +42,10 @@ class Actividad {
       }else{
         await element.cancelAlarm();
       }
+      await db.updateAlarmState(element.id, this._estado?1:0);
     });
 
-    await db.updateAlarmState(this.id, this._estado?1:0);
+    await db.updateActivityState(this.id, this._estado);
   }
 
   Actividad.fromJson(Map<String, dynamic> json){
@@ -55,7 +57,7 @@ class Actividad {
     List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
 
     this.date = new DateTime(date[0], date[1], date[2], time[0], time[1]);
-    _estado = json['estado'] == 1? true: false;
+    _estado = json['estado'] == 1;
 
   }
 

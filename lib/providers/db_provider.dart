@@ -128,6 +128,9 @@ class DBProvider {
           "idCuidado INTEGER NOT NULL,"
           "nombre VARCHAR NOT NULL,"
           "descripcion VARCHAR NOT NULL,"
+          "date VARCHAR NOT NULL," // "YYYY/MM/DD"
+          "time VARCHAR NOT NULL," // "HH:MM"
+          "active INTEGER DEFAULT 1,"
           "CONSTRAINT pkCuidado PRIMARY KEY(idCuidado)"
           ");"
         );
@@ -149,6 +152,15 @@ class DBProvider {
           "actividad_id INTEGER NOT NULL,"
           "FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
           "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION"
+          ");"
+        );
+
+        await db.execute(
+          "CREATE TABLE cuidadosAlarmas("
+          "alarma_id INTEGER NOT NULL,"
+          "cuidado_id INTEGER NOT NULL,"
+          "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
+          "FOREIGN KEY(cuidado_id) REFERENCES cuidado(idCuidado) ON UPDATE CASCADE ON DELETE NO ACTION"
           ");"
         );
       }
@@ -190,10 +202,15 @@ class DBProvider {
 
   Future<void> updateAlarmStateByActivity(int activityID, int state)async{
     final db = await database;
-    final String query = "UPDATE alarma SET active=? WHERE id in";
+    final String query = "UPDATE alarma SET active=? WHERE idCuidado in";
     final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE alarma_id=?)";
 
-    await db.rawQuery("$query $subQuery", [state, activityID]);
+    await db.rawUpdate("$query $subQuery", [state, activityID]);
+  }
+
+  Future<void> updateActivityState(int activityID, state)async{    
+    final db = await database;
+    await db.rawUpdate("UPDATE actividad SET estado=? WHERE id=?", [state, activityID]);
   }
 
   Future<void> updateAlarmState(int id, int active)async{
@@ -231,6 +248,37 @@ class DBProvider {
     return alarmas;
   }
 
+  Future<void> newCareAlarm(int careID, int alarmID)async{
+    final db = await database;
+    await db.insert('cuidadosAlarmas', {
+      "alarma_id": alarmID,
+      "cuidado_id": careID
+    });
+  }
+
+  Future<void> updateAlarmStateByCare(int careID, int state)async{
+    final db = await database;
+    final String query = "UPDATE cuidado SET active=? WHERE id in";
+    final String subQuery = "(SELECT alarma_id FROM cuidadosAlarmas WHERE alarma_id=?)";
+
+    await db.rawUpdate("$query $subQuery", [state, careID]);
+  }
+  
+  Future<void> updateCareState(int careID, state)async{    
+    final db = await database;
+    await db.rawUpdate("UPDATE cuidado SET active=? WHERE idCuidado=?", [state, careID]);
+  }
+
+  Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.rawQuery(
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)",
+      [careID]
+    );
+
+    return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
+  }
+  
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
   Future<int> nuevaActividad(Actividad actividad) async {
