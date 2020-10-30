@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Actividades extends StatefulWidget {
@@ -24,7 +25,7 @@ class _ActividadesState extends State<Actividades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
+      appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context)        
       ],),      
       body: listaContenido()

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
+import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class AddActividades extends StatefulWidget {
@@ -38,7 +39,7 @@ class _AddActividadesState extends State<AddActividades> {
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Nombre de la app'),
+        title: Text(NOMBREAPP),
         actions: <Widget>[tresPuntos(context)],
       ),
       body: ListView(
@@ -105,7 +106,10 @@ class _AddActividadesState extends State<AddActividades> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: saveAlarm,
+                    onPressed: (){
+                      saveAlarm();
+                      Navigator.pop(context);
+                    },
                     child: Text("Guardar"),
                   ))
             ],

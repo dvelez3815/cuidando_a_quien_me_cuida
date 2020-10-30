@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart' as constantesRutas;
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Size mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(elevation: 0,title: Text('Nombre de la app'), actions: <Widget>[
+      appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context),
       ],),
       body: ListView(

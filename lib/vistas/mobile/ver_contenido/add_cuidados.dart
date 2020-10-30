@@ -49,6 +49,7 @@ class _AddCuidadoState extends State<AddCuidado> {
               ListTile(
                 leading: Image.asset("assets/imagenes/medicine.png"),
                 title: TextField(
+                  
                   controller: nombreActividad,
                   decoration: InputDecoration(
                     hintText: "Nombre del medicamento",
@@ -106,7 +107,10 @@ class _AddCuidadoState extends State<AddCuidado> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: saveAlarm,
+                    onPressed: (){
+                      saveAlarm();
+                      Navigator.pop(context);
+                    },
                     child: Text("Guardar"),
                   ))
             ],
@@ -170,4 +174,5 @@ class _AddCuidadoState extends State<AddCuidado> {
     // Obteniendo hora de la alarma
     time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
   }
+  
 }
