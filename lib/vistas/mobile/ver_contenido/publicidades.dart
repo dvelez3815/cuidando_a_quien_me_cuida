@@ -11,7 +11,7 @@ class Item1 extends StatelessWidget {
         Container(width: 250,child: Text(PUBLICIDAD1,textAlign: TextAlign.justify,)),
         Container(
             child: Icon(
-          Icons.group,
+          Icons.wb_sunny,
           size: 50,
           color: Colors.orangeAccent,
         ))
@@ -30,9 +30,9 @@ class Item2 extends StatelessWidget {
         Container(width: 250,child: Text(PUBLICIDAD2,textAlign: TextAlign.justify,)),
         Container(
             child: Icon(
-          Icons.group,
+          Icons.wc,
           size: 50,
-          color: Colors.orangeAccent,
+          color: Colors.lightBlueAccent,
         ))
       ],
     );
@@ -49,7 +49,7 @@ class Item3 extends StatelessWidget {
         Container(width: 250,child: Text(PUBLICIDAD3,textAlign: TextAlign.justify,)),
         Container(
             child: Icon(
-          Icons.group,
+          Icons.tag_faces,
           size: 50,
           color: Colors.orangeAccent,
         ))

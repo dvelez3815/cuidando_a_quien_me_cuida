@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_week/calendar_week.dart';
+import 'package:flutter_calendar_week/model/decoration_item.dart';
 import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart' as constantesRutas;
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
@@ -187,12 +189,64 @@ class _HomeState extends State<Home> {
   }
 
   Widget opcion2(Size mediaQuery) {
+    var _selectedDate;
     return Container(
       width: mediaQuery.width,
       height: mediaQuery.height * 0.5,
-      child: Center(
-        child: Text('VISTA CALENDARIO'),
-      ),
+      child: CalendarWeek(
+              height: 80,
+              minDate: DateTime.now().add(
+                Duration(days: -365),
+              ),
+              maxDate: DateTime.now().add(
+                Duration(days: 365),
+              ),
+              onDatePressed: (DateTime datetime) {
+                setState(() {
+                  _selectedDate = datetime;
+                });
+              },
+              onDateLongPressed: (DateTime datetime) {
+                setState(() {
+                  _selectedDate = datetime;
+                });
+              },
+              dayOfWeekStyle:
+                  TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+              dayOfWeekAlignment: FractionalOffset.bottomCenter,
+              dateStyle:
+                  TextStyle(color: Colors.blue, fontWeight: FontWeight.w400),
+              dateAlignment: FractionalOffset.topCenter,
+              todayDateStyle:
+                  TextStyle(color: Colors.orange, fontWeight: FontWeight.w400),
+              todayBackgroundColor: Colors.black.withOpacity(0.15),
+              pressedDateBackgroundColor: Colors.blue,
+              pressedDateStyle:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+              dateBackgroundColor: Colors.transparent,
+              backgroundColor: Colors.white,
+              dayOfWeek: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+              spaceBetweenLabelAndDate: 0,
+              dayShapeBorder: CircleBorder(),
+              decorations: [
+                DecorationItem(
+                    decorationAlignment: FractionalOffset.bottomRight,
+                    date: DateTime.now(),
+                    decoration: Icon(
+                      Icons.today,
+                      color: Colors.blue,
+                    )),
+                DecorationItem(
+                    date: DateTime.now().add(Duration(days: 3)),
+                    decoration: Text(
+                      'Holiday',
+                      style: TextStyle(
+                        color: Colors.brown,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )),
+              ],
+            )
     );
   }
 }
