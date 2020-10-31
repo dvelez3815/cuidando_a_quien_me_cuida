@@ -300,12 +300,13 @@ class DBProvider {
   Future getActividades() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("Actividad");
-
     if(res.isNotEmpty){
       actividades.clear();
       actividades = res.map((f)=>Actividad.fromJson(f)).toList();
       actividadSink(actividades);
+      print(actividades);
     }
+    return actividades;
   }
 
   Future<int> eliminarToDos() async {

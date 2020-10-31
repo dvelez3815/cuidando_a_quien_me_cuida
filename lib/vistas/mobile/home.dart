@@ -623,6 +623,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                       : Colors.transparent),
               child: Center(
                 child: ListTile(
+                  onTap: (){
+                    mostrarAlerta("Prueba", context);
+                  },
                   title: Text( //Rojo si tiene actividades
                     rowValueList[i][j].toString(),
                     style: (rowValueList[i][j] == DateTime.now().day &&
