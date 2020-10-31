@@ -332,6 +332,19 @@ class DBProvider {
     return status>0;
   }
 
+  Future<List<GlobalActivity>> eventsByWeekday(int weekday) async {
+    await initTodasActividades();
+    List<GlobalActivity> events = new List<GlobalActivity>();
+
+    todoElContenido.forEach((element) {
+      if(element.date.weekday == weekday){
+        events.add(element);
+      }
+    });
+
+    return events;
+    
+  }
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
 
@@ -530,6 +543,7 @@ class DBProvider {
       init.addAll(todosCuidados);
     }
 
+    todoElContenido.addAll(init);
     todoContenidoSink(init);
   }
 }

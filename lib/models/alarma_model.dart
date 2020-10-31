@@ -81,7 +81,7 @@ class AlarmModel {
 
     await AndroidAlarmManager.periodic(
       // Duration(days: interval), 
-      Duration(days: this.interval), 
+      Duration(days: this.interval),
       idAlarm ?? _id,
       showAlarm,
       startAt: this.time,
