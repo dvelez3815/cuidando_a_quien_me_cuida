@@ -189,7 +189,13 @@ class _AddPlatosState extends State<AddPlatos> {
                           urlImagen: "assets/imagenes/recetas.jpg"
                         );
                       final int response = await dbProvider.nuevaComida(comida);
-                      mostrarAlerta("${response != 0?"Datos guardados":"La tarea fracasó"} con éxito", context);
+                      if(response!=0){
+                        mostrarAlerta("Datos guardados", context);
+                        Navigator.pop(context);
+                      }else{
+                        mostrarAlerta("La tarea fracasó", context);
+                      }
+  
                     },
                     child: Text("Guardar"),
                   ))

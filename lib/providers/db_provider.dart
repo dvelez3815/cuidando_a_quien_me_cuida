@@ -304,6 +304,7 @@ class DBProvider {
       actividades.clear();
       actividades = res.map((f)=>Actividad.fromJson(f)).toList();
       actividadSink(actividades);
+      print(actividades);
     }
     return actividades;
   }

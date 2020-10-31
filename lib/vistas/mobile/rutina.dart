@@ -64,9 +64,11 @@ class _Rutina extends State<Rutina> {
 
     print("Veamos bro");
     // Filtrando todo 
+    
     actividadesGenerales.forEach((element) {
       
       print("Agregando el elemento ${element.nombre}");
+      print(element.date.hour);
       if(element.date.hour>=6 && element.date.hour<12){
         maniana.add(element);
       }
