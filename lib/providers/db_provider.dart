@@ -332,18 +332,20 @@ class DBProvider {
     return status>0;
   }
 
-  Future<List<GlobalActivity>> eventsByWeekday(int weekday) async {
-    await initTodasActividades();
-    List<GlobalActivity> events = new List<GlobalActivity>();
+  Future<List<AlarmModel>> eventsByWeekday(int weekday) async {
+    final db = await database;
 
-    todoElContenido.forEach((element) {
-      if(element.date.weekday == weekday){
+    List<AlarmModel> events = new List<AlarmModel>();
+
+    List<AlarmModel> raw = (await db.rawQuery('alarmas')).map((i)=>AlarmModel.fromJson(i));
+
+    raw.forEach((element) {
+      if(element.time.weekday == weekday){
         events.add(element);
       }
     });
 
-    return events;
-    
+    return events;    
   }
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
