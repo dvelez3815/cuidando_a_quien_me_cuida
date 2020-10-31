@@ -256,6 +256,35 @@ class DBProvider {
   }
 
   ///***************************** Cuidados *****************************
+  Future<int> removeCuidado(Cuidado cuidado) async {
+    final db = await database;
+    final res = await db.rawDelete("DELETE FROM cuidado WHERE id=?", [cuidado.id]);
+
+    if(res > 0){
+      cuidados.remove(cuidado);
+      todoElContenido.remove(cuidado);
+      cuidadoSink(cuidados);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
+  
+  Future<int> nuevoCuidado(Cuidado cuidado) async {
+    final db = await database;
+    final res = await db.insert("cuidado", cuidado.toJson()); 
+
+    if(res != 0){
+
+      cuidados.add(cuidado);
+      cuidadoSink(cuidados);
+
+      todoElContenido.add(cuidado);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
 
   Future<void> newCareAlarm(int careID, int alarmID)async{
     final db = await database;
@@ -297,6 +326,7 @@ class DBProvider {
     }
 
     cuidados.remove(care);
+    todoElContenido.remove(care);
     cuidadoSink(cuidados);
 
     return status>0;
@@ -304,6 +334,21 @@ class DBProvider {
 
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
+
+  Future<int> removActividad(Actividad cuidado) async {
+    final db = await database;
+    final res = await db.rawDelete("DELETE FROM actividad WHERE id=?", [cuidado.id]);
+
+    if(res > 0){
+      actividades.remove(cuidado);
+      todoElContenido.remove(cuidado);
+      actividadSink(actividades);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
+
   Future<int> nuevaActividad(Actividad actividad) async {
 
     final db = await database;
@@ -316,6 +361,9 @@ class DBProvider {
     if(res != 0){
       actividades.add(actividad);
       actividadSink(actividades);
+
+      todoElContenido.add(actividad);
+      todoContenidoSink(todoElContenido);
     }
     return res;
   }
@@ -341,12 +389,11 @@ class DBProvider {
     }
 
     actividades.remove(actividad);
-    cuidadoSink(cuidados);
+    todoElContenido.remove(actividad);
+    actividadSink(actividades);
 
     return status>0;
   }
-
-
 
   Future<int> eliminarToDos() async {
     final db = await database;
@@ -453,23 +500,6 @@ class DBProvider {
 
       comidaSink(comidas);
     }
-  }
-
-  Future nuevoCuidado(Cuidado cuidado) async {
-    final db = await database;
-    final res = await db.insert("cuidado", cuidado.toJson()); 
-
-    // le pone un id a la cuidado si no lo tiene
-    if(cuidado.id == null){
-      final id = await db.rawQuery("select id from cuidado");
-      cuidado.id = id[id.length - 1]["id"];
-    }
-
-    if(res != 0){
-      cuidados.add(cuidado);
-      cuidadoSink(cuidados);
-    }
-    return res == 0;
   }
 
   Future<List<Cuidado>> getCuidados() async {

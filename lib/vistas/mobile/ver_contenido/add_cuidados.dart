@@ -13,35 +13,71 @@ class AddCuidado extends StatefulWidget {
 }
 
 class _AddCuidadoState extends State<AddCuidado> {
-  DBProvider dbProvider = DBProvider.db;
-  TextEditingController nombreActividad = new TextEditingController();
-  TextEditingController objetivosActividad = new TextEditingController();
-
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final AlarmProvider alarm = new AlarmProvider();
+  Map<String, dynamic> dataPre;
+  TimeOfDay time;
+  DBProvider dbProvider;
 
   List<String> litems = [];
-  final TextEditingController eCtrl = new TextEditingController();
 
-  TimeOfDay time;
-  Map<String, bool> values = {
-    'lunes': true,
-    'martes': true,
-    'miercoles': false,
-    'jueves': false,
-    'viernes': false,
-    'sabado': false,
-    'domingo': false,
-  };
+  TextEditingController objetivosActividad = new TextEditingController();
+  TextEditingController nombreActividad = new TextEditingController();
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController eCtrl = new TextEditingController();
+  final AlarmProvider alarm = new AlarmProvider();
+
+  Map<String, bool> values;
+
+  @override
+  void initState() { 
+    dbProvider = DBProvider.db;
+    values = {
+      'lunes': false,
+      'martes': false,
+      'miercoles': false,
+      'jueves': false,
+      'viernes': false,
+      'sabado': false,
+      'domingo': false,
+    };
+
+    super.initState();    
+  }
+
 
   @override
   Widget build(BuildContext ctxt) {
+
+    dataPre = ModalRoute.of(context).settings.arguments ?? {};
+
+    if(dataPre.isNotEmpty){
+      Cuidado item = dataPre["care_model"];
+      nombreActividad.text = dataPre["title"];
+      objetivosActividad.text = dataPre["description"];
+      time = TimeOfDay.fromDateTime(item.date);
+
+      if(!values.containsValue(true)){
+
+        // rellenando los dias en que suena la alarma
+        dbProvider.getAlarmsByCare(item.id).then((value){
+          print("bro");
+          value.forEach((element) {
+            print("Ok!!!");
+            values[parseDayWeek(element.time.weekday).toLowerCase()] = true;
+            print(values[parseDayWeek(element.time.weekday).toLowerCase()]);
+          });
+          
+          setState((){});
+        });
+
+      }
+    }
 
     return new Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 0,
-        title: Text('Nombre de la app'),
+        title: Text(dataPre.isEmpty? 'Agregar Cuidado':'Actualizar Cuidado'),
         actions: <Widget>[tresPuntos(context)],
       ),
       body: ListView(
@@ -50,19 +86,22 @@ class _AddCuidadoState extends State<AddCuidado> {
             children: <Widget>[
               ListTile(
                 leading: Image.asset("assets/imagenes/medicine.png"),
-                title: TextField(
-                  
-                  controller: nombreActividad,
-                  decoration: InputDecoration(
+                title: TextFormField(                  
+                  // controller: nombreActividad,             
+                  onChanged: (value)=>nombreActividad.text=value, 
+                  initialValue: nombreActividad.text ?? "",
+                  decoration: InputDecoration(                    
                     hintText: "Nombre del medicamento",
                   ),
                 ),
               ),
               ListTile(
                 leading: const Icon(Icons.table_chart),
-                title: TextField(
+                title: TextFormField(
                   maxLines: 5,
-                  controller: objetivosActividad,
+                  // controller: objetivosActividad, 
+                  onChanged: (value) => objetivosActividad.text = value,         
+                  initialValue: objetivosActividad.text ?? "",
                   decoration: InputDecoration(
                     hintText: "Descripción del medicamento",
                   ),
@@ -110,17 +149,26 @@ class _AddCuidadoState extends State<AddCuidado> {
                     color: Colors.amber,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: (){
-                      saveAlarm();
-                      // Navigator.pop(context);
-                    },
-                    child: Text("Guardar"),
+                    onPressed: saveAlarm,
+                    child: Text(dataPre.isEmpty? "Guardar":"Actualizar"),
                   ))
             ],
           ),
         ],
       ),
     );
+  }
+
+  String parseDayWeek(int day){
+    switch(day){
+      case 1: return "LUNES";
+      case 2: return "MARTES";
+      case 3: return "MIERCOLES";
+      case 4: return "JUEVES";
+      case 5: return "VIERNES";
+      case 6: return "SABADO";
+      default: return "DOMINGO";
+    }
   }
 
   int parseDay(String day){
@@ -141,6 +189,15 @@ class _AddCuidadoState extends State<AddCuidado> {
   }
 
   Future<void> saveAlarm() async {
+    if(dataPre.isNotEmpty){
+      Cuidado cuidado = dataPre['care_model'];
+      cuidado.estado = false;
+      await dbProvider.deleteCare(cuidado);
+    }
+    return await _newAlarm();
+  }
+
+  Future<void> _newAlarm() async {
     final date = DateTime.now();
 
     
@@ -165,17 +222,26 @@ class _AddCuidadoState extends State<AddCuidado> {
       descripcion: objetivosActividad.text
     );
 
+    await dbProvider.removeCuidado(dataPre["care_model"]);
     await dbProvider.nuevoCuidado(care);
     await care.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
  
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
+  
+    Navigator.of(context).pop();
   }
 
   Future showPicker() async {
     // Obteniendo hora de la alarma
-    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if(dataPre.isNotEmpty){
+      Cuidado cuidado = dataPre['care_model'];
+      time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(cuidado.date));
+    }
+    else{
+      time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    }
   }
   
 }

@@ -141,7 +141,6 @@ class _ActividadesState extends State<Actividades> {
               widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: Text("La actividad ${ok? "fue eliminada":"no pudo ser eliminada"}"),
               ));
-              setState((){});
               Navigator.of(context).pop();
             },
           )

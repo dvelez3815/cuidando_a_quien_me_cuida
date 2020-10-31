@@ -11,6 +11,7 @@ class AddActividades extends StatefulWidget {
 }
 
 class _AddActividadesState extends State<AddActividades> {
+  Map<String, dynamic> dataPre;
   DBProvider dbProvider = DBProvider.db;
   TextEditingController nombreActividad = new TextEditingController();
   TextEditingController objetivosActividad = new TextEditingController();
@@ -22,18 +23,48 @@ class _AddActividadesState extends State<AddActividades> {
   final TextEditingController eCtrl = new TextEditingController();
 
   TimeOfDay time;
-  Map<String, bool> values = {
-    'lunes': true,
-    'martes': true,
-    'miercoles': false,
-    'jueves': false,
-    'viernes': false,
-    'sabado': false,
-    'domingo': false,
-  };
+  Map<String, bool> values;
+
+  @override
+  void initState() { 
+    dbProvider = DBProvider.db;
+    values = {
+      'lunes': false,
+      'martes': false,
+      'miercoles': false,
+      'jueves': false,
+      'viernes': false,
+      'sabado': false,
+      'domingo': false,
+    };
+
+    super.initState();    
+  }
 
   @override
   Widget build(BuildContext ctxt) {
+
+    dataPre = ModalRoute.of(context).settings.arguments ?? {};
+
+    if(dataPre.isNotEmpty){
+      Actividad item = dataPre["activity_model"];
+      nombreActividad.text = dataPre["title"];
+      objetivosActividad.text = dataPre["description"];
+      time = TimeOfDay.fromDateTime(item.date);
+
+      if(!values.containsValue(true)){
+
+        // rellenando los dias en que suena la alarma
+        dbProvider.getAlarmsByActivity(item.id).then((value){
+          value.forEach((element) {
+            values[parseDayWeek(element.time.weekday).toLowerCase()] = true;
+          });
+          
+          setState((){});
+        });
+
+      }
+    }
 
     return new Scaffold(
       key: scaffoldKey,
@@ -49,18 +80,20 @@ class _AddActividadesState extends State<AddActividades> {
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.directions_run),
-                title: TextField(
-                  controller: nombreActividad,
-                  decoration: InputDecoration(
+                title: TextFormField(
+                  onChanged: (value)=>nombreActividad.text=value, 
+                  initialValue: nombreActividad.text ?? "",
+                  decoration: InputDecoration(                    
                     hintText: "Nombre de la actividad",
                   ),
                 ),
               ),
               ListTile(
                 leading: const Icon(Icons.table_chart),
-                title: TextField(
+                title: TextFormField(
                   maxLines: 5,
-                  controller: objetivosActividad,
+                  onChanged: (value) => objetivosActividad.text = value,         
+                  initialValue: objetivosActividad.text ?? "",
                   decoration: InputDecoration(
                     hintText: "Objetivos de la actividad",
                   ),
@@ -104,23 +137,32 @@ class _AddActividadesState extends State<AddActividades> {
 
 
               Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: RaisedButton(
-                  color: Colors.amber,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () {
-                    saveAlarm();
-                    // Navigator.pop(context);
-                  },
-                  child: Text("Guardar"),
-                )
-              )
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: RaisedButton(
+                    color: Colors.amber,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    onPressed: saveAlarm,
+                    child: Text(dataPre.isEmpty? "Guardar":"Actualizar"),
+                  ))
             ],
           ),
         ],
       ),
     );
+  }
+
+  
+  String parseDayWeek(int day){
+    switch(day){
+      case 1: return "LUNES";
+      case 2: return "MARTES";
+      case 3: return "MIERCOLES";
+      case 4: return "JUEVES";
+      case 5: return "VIERNES";
+      case 6: return "SABADO";
+      default: return "DOMINGO";
+    }
   }
 
   int parseDay(String day) {
@@ -154,6 +196,16 @@ class _AddActividadesState extends State<AddActividades> {
   }
 
   Future<void> saveAlarm() async {
+    if(dataPre.isNotEmpty){
+      Actividad cuidado = dataPre['activity_model'];
+      cuidado.estado = false;
+      await dbProvider.deleteActivity(cuidado);
+    }
+    return await _newAlarm();
+  }
+
+
+  Future<void> _newAlarm() async {
 
     AlarmModel model;
     final date = DateTime.now();
@@ -166,56 +218,52 @@ class _AddActividadesState extends State<AddActividades> {
       return;
     }
 
-    if(time != null){
-      
-      this.values.forEach((key, value) {
-        if (value) days.add(key);
-      });
+    this.values.forEach((key, value) {
+      if (value) days.add(key);
+    });
 
-      if (days.isEmpty) {
-        scaffoldKey.currentState.showSnackBar(
-            new SnackBar(content: Text("Debe seleccionar al menos un día")));
-        return;
-      }
-
-      // La creacion como tal     
-
-      model = new AlarmModel(
-          new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-          title: (nombreActividad.text ?? "").length > 0
-              ? nombreActividad.text
-              : "Sin título",
-          description: objetivosActividad.text);
-
+    if (days.isEmpty) {
+      scaffoldKey.currentState.showSnackBar(
+          new SnackBar(content: Text("Debe seleccionar al menos un día")));
+      return;
     }
 
+    // La creacion como tal     
+
+    model = new AlarmModel(
+        new DateTime(date.year, date.month, date.day, time.hour, time.minute),
+        title: (nombreActividad.text ?? "").length > 0
+            ? nombreActividad.text
+            : "Sin título",
+        description: objetivosActividad.text);
+
     Actividad activity = new Actividad(
-      model?.time ?? null,
+      model.time,
       days, // dias para notificar
       nombre: nombreActividad.text,
       descripcion: objetivosActividad.text
     );
 
-    await dbProvider.nuevaActividad(activity);
-    
-    if(time != null){
-      await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
-      scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text(
-            'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}'
-        )
-      ));
-    }
+    await dbProvider.removActividad(dataPre["activity_model"]);
+    await dbProvider.nuevaActividad(activity);    
+    await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text(
-            'La actividad se ha agregado'
-          )
-        ));
+      content: Text(
+          'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}'
+      )
+    ));
+    Navigator.of(context).pop();
   }
 
   Future showPicker() async {
     // Obteniendo hora de la alarma
-    time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if(dataPre.isNotEmpty){
+      Actividad cuidado = dataPre['activity_model'];
+      time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(cuidado.date));
+    }
+    else{
+      time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    }
   }
 }

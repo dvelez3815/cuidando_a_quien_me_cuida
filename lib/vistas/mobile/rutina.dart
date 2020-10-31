@@ -26,9 +26,9 @@ class Rutina extends StatelessWidget {
           if(!snapshot.hasData){
             return Center(child: CircularProgressIndicator());
           }
-          
+
           return ListView(
-            children: _listaContenido(snapshot.data),
+            children: _listaContenido(context, snapshot.data),
           );
         },
       ),
@@ -39,29 +39,7 @@ class Rutina extends StatelessWidget {
     );
   }
 
-  // Widget listaContenido(){
-  //   return Container(
-  //     // padding: EdgeInsets.only(top: 20),
-  //     child: FutureBuilder(
-  //       future: _listaContenido(),
-  //       builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
-  //         if(!snapshot.hasData){
-  //           return Center(child: CircularProgressIndicator());
-  //         }
-
-  //         if(snapshot.data.isEmpty){
-  //           return ListTile(title: Text("Sin datos"));
-  //         }
-          
-  //         return ListView(
-  //           children: snapshot.data,
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
-  List<Widget> _listaContenido(List<GlobalActivity> actividadesGenerales){
+  List<Widget> _listaContenido(BuildContext context, List<GlobalActivity> actividadesGenerales){
 
     // Ordenando por hora
     List<GlobalActivity> maniana = new List<GlobalActivity>();
@@ -91,16 +69,16 @@ class Rutina extends StatelessWidget {
 
 
     List<ListTile> actividadesManania = maniana.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesTarde = tarde.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesNoche = noche.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesND = noDefinida.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
 
 
@@ -122,15 +100,30 @@ class Rutina extends StatelessWidget {
 
   }
 
-  ListTile _createActivityTile(GlobalActivity item){
+  ListTile _createActivityTile(BuildContext context, GlobalActivity item){
     return new ListTile(
       title: Text(item.nombre ?? "Sin nombre"),
       subtitle: Text(item.descripcion ?? "No disponible"),
       trailing: RaisedButton.icon(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
-        onPressed: (){}, 
+        onPressed: (){
+          if(item is Actividad){
+            Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
+              "title": item.nombre,
+              "description": item.descripcion,
+              "activity_model": item
+            });
+          }
+          else{
+            Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
+              "title": item.nombre,
+              "description": item.descripcion,
+              "care_model": item
+            });
+          }
+        }, 
         icon: Icon(Icons.edit),
-        label: Text("Alarmas")
+        label: Text("Editar")
       ),
       leading: Column(
         children: [
@@ -160,15 +153,15 @@ class Rutina extends StatelessWidget {
         ),
         actions: [
           FlatButton.icon(
-            onPressed: ()=>Navigator.of(context).pushNamed(ADDCUIDADOS, arguments:true),
-            icon: Icon(Icons.delete_forever),
+            onPressed: ()=>Navigator.of(context).pushNamed(ADDCUIDADOS),
+            icon: Icon(Icons.emoji_emotions),
             label: Text("Cuidado")
           ),
           FlatButton.icon(
             onPressed: (){
-              Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: true);
+              Navigator.of(context).pushNamed(ADDACTIVIDADES);
             },
-            icon: Icon(Icons.delete_forever),
+            icon: Icon(Icons.directions_run),
             label: Text("Actividad")
           ),
         ],
