@@ -157,10 +157,10 @@ class _AddActividadesState extends State<AddActividades> {
     );
 
     Actividad activity = new Actividad(
-      days, // dias para notificar
       model.time,
-      nombreActividad.text,
-      objetivosActividad.text
+      days, // dias para notificar
+      nombre: nombreActividad.text,
+      descripcion: objetivosActividad.text
     );
 
     await dbProvider.nuevaActividad(activity);

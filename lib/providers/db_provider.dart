@@ -84,7 +84,7 @@ class DBProvider {
           "description VARCHAR NOT NULL,"
           "date VARCHAR NOT NULL,"
           "time VARCHAR NOT NULL,"
-          "estado INTEGER DEFAULT 0"
+          "active INTEGER DEFAULT 0"
           ");"
         );
         
@@ -125,13 +125,13 @@ class DBProvider {
 
         await db.execute(
           "CREATE TABLE cuidado("
-          "idCuidado INTEGER NOT NULL,"
+          "id INTEGER NOT NULL,"
           "nombre VARCHAR NOT NULL,"
           "descripcion VARCHAR NOT NULL,"
           "date VARCHAR NOT NULL," // "YYYY/MM/DD"
           "time VARCHAR NOT NULL," // "HH:MM"
           "active INTEGER DEFAULT 1,"
-          "CONSTRAINT pkCuidado PRIMARY KEY(idCuidado)"
+          "CONSTRAINT pkCuidado PRIMARY KEY(id)"
           ");"
         );
 
@@ -160,7 +160,7 @@ class DBProvider {
           "alarma_id INTEGER NOT NULL,"
           "cuidado_id INTEGER NOT NULL,"
           "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
-          "FOREIGN KEY(cuidado_id) REFERENCES cuidado(idCuidado) ON UPDATE CASCADE ON DELETE NO ACTION"
+          "FOREIGN KEY(cuidado_id) REFERENCES cuidado(id) ON UPDATE CASCADE ON DELETE NO ACTION"
           ");"
         );
       }
@@ -202,7 +202,7 @@ class DBProvider {
 
   Future<void> updateAlarmStateByActivity(int activityID, int state)async{
     final db = await database;
-    final String query = "UPDATE alarma SET active=? WHERE idCuidado in";
+    final String query = "UPDATE alarma SET active=? WHERE id in";
     final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE alarma_id=?)";
 
     await db.rawUpdate("$query $subQuery", [state, activityID]);
@@ -266,7 +266,7 @@ class DBProvider {
   
   Future<void> updateCareState(int careID, state)async{    
     final db = await database;
-    await db.rawUpdate("UPDATE cuidado SET active=? WHERE idCuidado=?", [state, careID]);
+    await db.rawUpdate("UPDATE cuidado SET active=? WHERE id=?", [state, careID]);
   }
 
   Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
@@ -420,9 +420,9 @@ class DBProvider {
     final res = await db.insert("cuidado", cuidado.toJson()); 
 
     // le pone un id a la cuidado si no lo tiene
-    if(cuidado.idCuidado == null){
-      final idCuidado = await db.rawQuery("select idCuidado from cuidado");
-      cuidado.idCuidado = idCuidado[idCuidado.length - 1]["id"];
+    if(cuidado.id == null){
+      final id = await db.rawQuery("select id from cuidado");
+      cuidado.id = id[id.length - 1]["id"];
     }
 
     if(res != 0){

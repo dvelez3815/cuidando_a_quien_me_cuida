@@ -16,13 +16,20 @@ class AlarmModel {
 
   static DBProvider db = DBProvider.db;
 
+  int generateID() {
+
+    final date = DateTime.now();
+    final secondsNow = date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
+
+    return secondsNow - 62832762060;
+  }
+
   AlarmModel(this.time, {this.title, this.description}) {
-    _id = generateID();
+    _id = this.generateID();
     print("$id");
     interval = 7;
     active=true;
   }
-
 
   static Future<void> showAlarm(int id) async {
 
@@ -64,8 +71,10 @@ class AlarmModel {
 
     if(this.time.compareTo(DateTime.now()) < 0){
       // si ya paso la hora, sonara maniana
-      Duration diff = DateTime.now().difference(this.time);
-      this.time = this.time.add(new Duration(days: diff.inDays + 1));
+      int diff = this.time.difference(DateTime.now()).inDays;
+      diff = diff<0? diff*(-1):diff;
+
+      this.time = this.time.add(new Duration(days: 7));
 
       this.time = new DateTime(this.time.year, this.time.month, this.time.day, this.time.hour, this.time.minute);
     }
@@ -86,13 +95,6 @@ class AlarmModel {
     await AndroidAlarmManager.cancel(idAlarm ?? _id);
   }
 
-  static int generateID() {
-
-    final date = DateTime.now();
-    final secondsNow = date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
-
-    return secondsNow - 62832762060;
-  }
 
   Map<String, dynamic> toJson()=>{
     "id":    _id,
