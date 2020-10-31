@@ -244,7 +244,8 @@ class _AddActividadesState extends State<AddActividades> {
       descripcion: objetivosActividad.text
     );
 
-    await dbProvider.removActividad(dataPre["activity_model"]);
+    if(dataPre.isNotEmpty) await dbProvider.removActividad(dataPre["activity_model"]);
+    
     await dbProvider.nuevaActividad(activity);    
     await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 

@@ -222,7 +222,8 @@ class _AddCuidadoState extends State<AddCuidado> {
       descripcion: objetivosActividad.text
     );
 
-    await dbProvider.removeCuidado(dataPre["care_model"]);
+    if(dataPre.isNotEmpty) await dbProvider.removeCuidado(dataPre["care_model"]);
+    
     await dbProvider.nuevoCuidado(care);
     await care.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
