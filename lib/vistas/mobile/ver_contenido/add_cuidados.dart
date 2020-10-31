@@ -20,9 +20,6 @@ class _AddCuidadoState extends State<AddCuidado> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final AlarmProvider alarm = new AlarmProvider();
 
-  // 
-  bool fullInterface;
-
   List<String> litems = [];
   final TextEditingController eCtrl = new TextEditingController();
 
@@ -39,8 +36,6 @@ class _AddCuidadoState extends State<AddCuidado> {
 
   @override
   Widget build(BuildContext ctxt) {
-
-    fullInterface = ModalRoute.of(context).settings.arguments ?? false;
 
     return new Scaffold(
       key: scaffoldKey,
@@ -76,42 +71,38 @@ class _AddCuidadoState extends State<AddCuidado> {
               SizedBox(
                 height: 25,
               ),
-              fullInterface?Column(
+              ListTile(
+                title: RichText(
+                  text: TextSpan(
+                      text:
+                          "Seleccione los días en los cuales el paciente tomará el medicamento",
+                      style: TextStyle(color: Colors.grey, fontSize: 18)),
+                ),
+              ),
+              Column(
+                children: values.keys.map((String key) {
+                  return new CheckboxListTile(
+                    title: new Text(key),
+                    value: values[key],
+                    onChanged: (bool value) {
+                      setState(() {
+                        values[key] = value;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ListTile(
-                    title: RichText(
-                      text: TextSpan(
-                          text:
-                              "Seleccione los días en los cuales el paciente tomará el medicamento",
-                          style: TextStyle(color: Colors.grey, fontSize: 18)),
-                    ),
-                  ),
-                  Column(
-                    children: values.keys.map((String key) {
-                      return new CheckboxListTile(
-                        title: new Text(key),
-                        value: values[key],
-                        onChanged: (bool value) {
-                          setState(() {
-                            values[key] = value;
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FlatButton.icon(
-                          onPressed: showPicker,
-                          color: Colors.green,
-                          icon: Icon(Icons.timer),
-                          label: Text('Establecer hora')),
-                    ],
-                  ),
+                  FlatButton.icon(
+                      onPressed: showPicker,
+                      color: Colors.green,
+                      icon: Icon(Icons.timer),
+                      label: Text('Establecer hora')),
                 ],
-              ):Container(),
+              ),
               
               Container(
                   width: MediaQuery.of(context).size.width * 0.5,

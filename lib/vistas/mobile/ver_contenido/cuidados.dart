@@ -7,6 +7,8 @@ import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Cuidados extends StatefulWidget {
   
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Cuidados({Key key}) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class _CuidadosState extends State<Cuidados> {
   @override
   Widget build(BuildContext context) {    
     return Scaffold(
+      key: widget._scaffoldKey,
       appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context)        
       ],),      
@@ -65,20 +68,44 @@ class _CuidadosState extends State<Cuidados> {
 
                 final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
-                  value: item.estado,
-                  onChanged: (status){
-                    item.estado = status;
-                    setState(() {});
-                  },
-                  subtitle: Text(item.descripcion),
-                  title: Text("${item.nombre ?? "Sin nombre"}"),
-                  secondary: Column(
-                    children: [
-                      Icon(Icons.alarm),
-                      Text("${item.date.hour}:${item.date.minute}"),
-                    ],
-                  ),
+                widgets.addAll(snapshot.data.map((item)=>Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SwitchListTile(
+                            value: item.estado,
+                            onChanged: (status){
+                              item.estado = status;
+                              setState(() {});
+                            },
+                            subtitle: Text(item.descripcion),
+                            title: Text("${item.nombre ?? "Sin nombre"}"),
+                            
+                            secondary: Column(
+                              children: [
+                                Icon(Icons.alarm),
+                                Text("${item.date.hour}:${item.date.minute}"),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: (){},
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.redAccent),
+                              onPressed: ()=>_onDeleteCare(item)
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
                 )).toList());
 
                 return Column(
@@ -93,4 +120,43 @@ class _CuidadosState extends State<Cuidados> {
       
     );
   }
+
+
+  Future<bool> _deleteCare(Cuidado cuidado) async {
+    cuidado.estado = false;
+    return await dbProvider.deleteCare(cuidado);
+  }
+
+  void _onDeleteCare(Cuidado cuidado){
+
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("¡Atención!"),
+        content: Text("Está a punto de eliminar este cuidado, ¿desea continuar?"),
+        actions: [
+          FlatButton.icon(
+            icon: Icon(Icons.cancel),
+            label: Text("Cancelar"),
+            onPressed: ()=>Navigator.of(context).pop(),
+          ),
+          FlatButton.icon(
+            icon: Icon(Icons.check_circle, color: Colors.red),
+            label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+            onPressed: ()async{
+              final ok = await _deleteCare(cuidado);
+    
+              setState((){});
+
+              widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
+                content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
+              ));
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );    
+  }
+
 }

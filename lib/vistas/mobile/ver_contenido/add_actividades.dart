@@ -15,9 +15,6 @@ class _AddActividadesState extends State<AddActividades> {
   TextEditingController nombreActividad = new TextEditingController();
   TextEditingController objetivosActividad = new TextEditingController();
 
-  // Esto es para la interfaz completa o parcial
-  bool fullInterface = false;
-
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final AlarmProvider alarm = new AlarmProvider();
 
@@ -37,11 +34,6 @@ class _AddActividadesState extends State<AddActividades> {
 
   @override
   Widget build(BuildContext ctxt) {
-
-    fullInterface = ModalRoute.of(context).settings.arguments ?? false;
-
-    print("Full interface $fullInterface");
-    print("Modal route ${ModalRoute.of(context).settings.arguments}");
 
     return new Scaffold(
       key: scaffoldKey,
@@ -78,57 +70,52 @@ class _AddActividadesState extends State<AddActividades> {
                 height: 25,
               ),
 
-
-              fullInterface?Column(
-                children: [
-                  ListTile(
-                    title: RichText(
-                      text: TextSpan(
-                          text:
-                              "Seleccione los días en los cuales la actividad se realizara",
-                          style: TextStyle(color: Colors.grey, fontSize: 18)),
-                    ),
-                  ),
-                  Column(                
-                    children: values.keys.map((String key) {
-                      return new CheckboxListTile(
-                        title: new Text(key),
-                        value: values[key],
-                        onChanged: (bool value) {
-                          setState(() {
-                            values[key] = value;
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: FlatButton.icon(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        onPressed: showPicker,
-                        color: Colors.green,
-                        icon: Icon(Icons.timer),
-                        label: Text('Establecer hora')),
-                  ),
-                ],
-              ):Container(),
-
+              ListTile(
+                title: RichText(
+                  text: TextSpan(
+                      text:
+                          "Seleccione los días en los cuales la actividad se realizara",
+                      style: TextStyle(color: Colors.grey, fontSize: 18)),
+                ),
+              ),
+              Column(                
+                children: values.keys.map((String key) {
+                  return new CheckboxListTile(
+                    title: new Text(key),
+                    value: values[key],
+                    onChanged: (bool value) {
+                      setState(() {
+                        values[key] = value;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: FlatButton.icon(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    onPressed: showPicker,
+                    color: Colors.green,
+                    icon: Icon(Icons.timer),
+                    label: Text('Establecer hora')),
+              ),
 
 
               Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: RaisedButton(
-                    color: Colors.amber,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {
-                      saveAlarm();
-                      // Navigator.pop(context);
-                    },
-                    child: Text("Guardar"),
-                  ))
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: RaisedButton(
+                  color: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: () {
+                    saveAlarm();
+                    // Navigator.pop(context);
+                  },
+                  child: Text("Guardar"),
+                )
+              )
             ],
           ),
         ],

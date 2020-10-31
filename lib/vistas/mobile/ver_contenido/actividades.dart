@@ -6,6 +6,9 @@ import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 class Actividades extends StatefulWidget {
+  
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Actividades({Key key}) : super(key: key);
 
   @override
@@ -62,22 +65,44 @@ class _ActividadesState extends State<Actividades> {
 
                 final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
-                  value: item.estado,
-                  onChanged: item.date == null? null:(status){
-                    setState(() {
-                      item.estado = status;
-                    });
-                  },
-                  subtitle: Text("${item.descripcion}"),
-                  title: Text("${item.nombre ?? "Sin nombre"}"),
-                  secondary: Column(
-                    children: [
-                      Icon(Icons.alarm),
-                      Text("${item.date.hour}:${item.date.minute}"),
-                    ],
-                  ),
-
+                widgets.addAll(snapshot.data.map((item)=>Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SwitchListTile(
+                            value: item.estado,
+                            onChanged: item.date == null? null:(status){
+                              setState(() {
+                                item.estado = status;
+                              });
+                            },
+                            subtitle: Text("${item.descripcion}"),
+                            title: Text("${item.nombre ?? "Sin nombre"}"),
+                            secondary: Column(
+                              children: [
+                                Icon(Icons.alarm),
+                                Text("${item.date.hour}:${item.date.minute}"),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: (){},
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.redAccent),
+                              onPressed: ()=>_onDeleteActivity(item)
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Divider()
+                  ],
                 )).toList());
                 return Column(
                   children: widgets,
@@ -90,21 +115,39 @@ class _ActividadesState extends State<Actividades> {
       
     );
   }
+
+  Future<bool> _deleteActivity(Actividad actividad) async {
+    actividad.estado = false;
+    return await dbProvider.deleteActivity(actividad);
+  }
+
+  void _onDeleteActivity(Actividad item) {
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("¡Atención!"),
+        content: Text("Está a punto de eliminar esta actividad, ¿desea continuar?"),
+        actions: [
+          FlatButton.icon(
+            icon: Icon(Icons.cancel),
+            label: Text("Cancelar"),
+            onPressed: ()=>Navigator.of(context).pop(),
+          ),
+          FlatButton.icon(
+            icon: Icon(Icons.check_circle, color: Colors.red),
+            label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+            onPressed: ()async{
+              final ok = await _deleteActivity(item);
+              widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
+                content: Text("La actividad ${ok? "fue eliminada":"no pudo ser eliminada"}"),
+              ));
+              setState((){});
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      )
+    );
+  }
 }
 
-/*
-
-    // cancelando alarma anterior
-    // await AndroidAlarmManager.cancel(alarmID);
-    AlarmModel model = new AlarmModel(
-      new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-      title: "Alarma", description: "Body"
-    );
-
-    await model.save();
-
-    scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')
-    ));
-  }
-}*/
