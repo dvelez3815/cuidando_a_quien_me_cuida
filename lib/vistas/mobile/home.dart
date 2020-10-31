@@ -1,7 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_week/calendar_week.dart';
-import 'package:flutter_calendar_week/model/decoration_item.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart' as constantesRutas;
