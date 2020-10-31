@@ -200,8 +200,8 @@ class DBProvider {
   Future<List<AlarmModel>> getAlarmsByActivity(int activityID) async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.rawQuery(
-      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?)",
-      [activityID]
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?) and active=?",
+      [activityID, 1]
     );
 
     return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
@@ -310,8 +310,8 @@ class DBProvider {
   Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
     final db = await database;
     List<Map<String, dynamic>> res = await db.rawQuery(
-      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)",
-      [careID]
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?) AND active=?",
+      [careID, 1]
     );
 
     return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
@@ -337,7 +337,7 @@ class DBProvider {
 
     List<AlarmModel> events = new List<AlarmModel>();
 
-    List<AlarmModel> raw = (await db.query('alarma')).map((i)=>AlarmModel.fromJson(i)).toList();
+    List<AlarmModel> raw = (await db.rawQuery('select * from alarma where active=?', [1])).map((i)=>AlarmModel.fromJson(i)).toList();
 
     raw.forEach((element) {
       if(element.time.weekday == weekday){
@@ -545,6 +545,7 @@ class DBProvider {
       init.addAll(todosCuidados);
     }
 
+    todoElContenido.clear();
     todoElContenido.addAll(init);
     todoContenidoSink(init);
   }

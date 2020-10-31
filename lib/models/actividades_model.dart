@@ -11,8 +11,9 @@ class Actividad extends GlobalActivity{
   Future<void> setAlarms()async{
     daysToNotify.forEach((day)async{
       print("Alarma para el día ${parseDayFromString(day)}");
+      final _date = AlarmModel.calculateDiff(DateTime.now(), parseDayFromString(day));
       final AlarmModel alarm = new AlarmModel(
-        new DateTime(date.year, date.month, parseDayFromString(day), date.hour, date.minute),
+        new DateTime(_date.year, _date.month, _date.month, _date.day, date.hour, date.minute),
         title: "Recordatorio", description: this.nombre
       );
       await alarm.save();
@@ -24,16 +25,14 @@ class Actividad extends GlobalActivity{
   Future<void> chainStateUpdate()async{
     List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
 
-    if(this.date != null){
-      alarms.forEach((element)async{
-        if(this.estado){
-          await element.reactivate();
-        }else{
-          await element.cancelAlarm();
-        }
-        await db.updateAlarmState(element.id, this.estado?1:0);
-      });
-    }
+    alarms.forEach((element)async{
+      if(this.estado){
+        await element.reactivate();
+      }else{
+        await element.cancelAlarm();
+      }
+      await db.updateAlarmState(element.id, this.estado?1:0);
+    });
 
     await db.updateActivityState(this.id, this.estado);
   }

@@ -67,17 +67,23 @@ class AlarmModel {
     await db.updateAlarmState(_id, (state ?? this.active)? 1:0);
   }
 
+  static DateTime calculateDiff(DateTime current, int targetWeekDay){
+
+    int _currentDay = current.weekday;
+
+    if(targetWeekDay < _currentDay){
+      targetWeekDay +=7;
+    }
+
+    int diff =  targetWeekDay - _currentDay;
+
+    return current.add(new Duration(days: diff,));
+  }
+
   Future<void> reactivate({int idAlarm}) async {
 
-    if(this.time.compareTo(DateTime.now()) < 0){
-      // si ya paso la hora, sonara maniana
-      int diff = this.time.difference(DateTime.now()).inDays;
-      diff = diff<0? diff*(-1):diff;
-
-      this.time = this.time.add(new Duration(days: 7));
-
-      this.time = new DateTime(this.time.year, this.time.month, this.time.day, this.time.hour, this.time.minute);
-    }
+    this.time = calculateDiff(DateTime.now(), this.time.weekday);
+    print("Final "+this.time.toString());
 
     await AndroidAlarmManager.periodic(
       // Duration(days: interval), 

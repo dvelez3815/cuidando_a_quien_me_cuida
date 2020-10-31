@@ -28,6 +28,7 @@ class _ActividadesState extends State<Actividades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget._scaffoldKey,
       appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context)        
       ],),      

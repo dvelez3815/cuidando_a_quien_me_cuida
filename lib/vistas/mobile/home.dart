@@ -585,7 +585,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       last.add(j.day);
     }
     rowValueList.add(last);
-    //print(rowValueList);
     return rowValueList;
   }
 
@@ -637,7 +636,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                     DateTime actual = DateTime(anio, mes,dia);
 
                     int dSemana = actual.weekday;
-                    print(dSemana);
                     List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
                     List<Actividad> actividadesDB = (await _db.getActividades()) ?? [];
                     List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
