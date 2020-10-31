@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/models/actividades_model.dart';
+import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
@@ -102,9 +103,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   Animatable<Color> _monthColorTween =
       ColorTween(begin: Color(0xffEC520B), end: Color(0x00EC520B));
 
-
+  DBProvider dbProvider = DBProvider.db;
   @override
   void initState() {
+    dbProvider = DBProvider.db;
     // calendar is not expanded initially
     _expanded = false;
     showDate = displayDate;
@@ -596,13 +598,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            calendarWeekday('Lunes'),
-            calendarWeekday('Martes'),
-            calendarWeekday('Miercoles'),
-            calendarWeekday('Jueves'),
-            calendarWeekday('Viernes'),
-            calendarWeekday('Sabado'),
-            calendarWeekday('Domingo'),
+            calendarWeekday('Lun'),
+            calendarWeekday('Mar'),
+            calendarWeekday('Mie'),
+            calendarWeekday('Jue'),
+            calendarWeekday('Vie'),
+            calendarWeekday('Sab'),
+            calendarWeekday('Dom'),
           ],
         ),
       ),
@@ -639,23 +641,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                     List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
                     List<Actividad> actividadesDB = (await _db.getActividades()) ?? [];
                     List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
+                    
 
                     if(actividadesDB.length > 0)
                       actividadesGenerales.addAll(actividadesDB);
                     if(cuidadosDB.length > 0)
                       actividadesGenerales.addAll(cuidadosDB);
 
-                    //filtrado
-                    List<String> mostrar = List<String>();
+                      List<AlarmModel> actividades  = new List<AlarmModel>();
+                      actividades.addAll(await _db.eventsByWeekday(dSemana));
+
+                      actividades.forEach((element) {
+                        print(element.title);
+                      });
                     
-                    for (var item in actividadesGenerales) {
-                      if(item.date.weekday == dSemana){
-                        mostrar.add(item.nombre+"\n");
-                      }  
-                      print(item.date);
-                      
-                    } 
-                    mostrarActividades(mostrar, context);
                   },
                   child: Text( //Rojo si tiene actividades
                       rowValueList[i][j].toString(),
