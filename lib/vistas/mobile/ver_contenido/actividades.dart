@@ -65,25 +65,6 @@ class _ActividadesState extends State<Actividades> {
 
                 final List<Widget> widgets = new List<Widget>();
 
-<<<<<<< HEAD
-                widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
-                  value: item.estado,
-                  onChanged: item.date == null? null:(status){
-                    setState(() {
-                      item.estado = status;
-                    });
-                  },
-                  subtitle: Text("${item.descripcion}"),
-                  title: Text("${item.nombre ?? "Sin nombre"}"),
-                  secondary: Column(
-                    children: [
-                      Icon(Icons.alarm),
-                      item.date!= null?Text("${item.date.hour}:${item.date.minute}")
-                        :Text("--:--")
-                    ],
-                  ),
-
-=======
                 widgets.addAll(snapshot.data.map((item)=>Column(
                   children: [
                     Row(
@@ -122,7 +103,6 @@ class _ActividadesState extends State<Actividades> {
                     ),
                     Divider()
                   ],
->>>>>>> 1f7f0fbfba8a67cd250d874a0025debcf9dd292b
                 )).toList());
                 return Column(
                   children: widgets,
