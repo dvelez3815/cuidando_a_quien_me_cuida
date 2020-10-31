@@ -81,7 +81,7 @@ class DBProvider {
           "CREATE TABLE Actividad("
           "id INTEGER PRIMARY KEY,"
           "nombre VARCHAR NOT NULL,"
-          "description VARCHAR NOT NULL,"
+          "descripcion VARCHAR NOT NULL,"
           "date VARCHAR NOT NULL,"
           "time VARCHAR NOT NULL,"
           "active INTEGER DEFAULT 0"
@@ -297,14 +297,13 @@ class DBProvider {
     return res;
   }
   
-  Future getActividades() async {
+  Future<List<Actividad>> getActividades() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("Actividad");
     if(res.isNotEmpty){
       actividades.clear();
       actividades = res.map((f)=>Actividad.fromJson(f)).toList();
       actividadSink(actividades);
-      print(actividades);
     }
     return actividades;
   }
@@ -433,7 +432,7 @@ class DBProvider {
     return res == 0;
   }
 
-  Future getCuidados() async {
+  Future<List<Cuidado>> getCuidados() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("cuidado");
 
@@ -442,5 +441,7 @@ class DBProvider {
       cuidados = res.map((f)=>Cuidado.fromJson(f)).toList();
       cuidadoSink(cuidados);
     }
+    print("Hola");
+    return cuidados;
   }
 }

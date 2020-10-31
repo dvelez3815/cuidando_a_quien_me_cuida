@@ -1,9 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_week/calendar_week.dart';
-import 'package:flutter_calendar_week/model/decoration_item.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart' as constantesRutas;
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
 import 'package:utm_vinculacion/texto_app/const_textos.dart';
@@ -622,33 +621,39 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                       ? Color(0xffFFA68A)
                       : Colors.transparent),
               child: Center(
-                child: ListTile(
+                child:GestureDetector(
                   onTap: (){
-                    mostrarAlerta("Prueba", context);
+                    mostrarAlerta("Alerta"+rowValueList[i][j].toString()+"f", context);
+                    
+
+                    // Ordenando por hora
+                    List<GlobalActivity> maniana = new List<GlobalActivity>();
+                    List<GlobalActivity> tarde = new List<GlobalActivity>();
+                    List<GlobalActivity> noche = new List<GlobalActivity>();
                   },
-                  title: Text( //Rojo si tiene actividades
-                    rowValueList[i][j].toString(),
-                    style: (rowValueList[i][j] == DateTime.now().day &&
-                            start.month == DateTime.now().month &&
-                            start.year == DateTime.now().year) &&
-                            !((i == 0 && rowValueList[i][j] > 7) || (i >= 4 && rowValueList[i][j] < 7))
-                        ? TextStyle(
-                          fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          )
-                        //Grey out the previous month's and next month's values or dates
-                        : TextStyle(
-                          fontSize: 9,
-                            fontWeight: FontWeight.normal,
-                            color: ((i == 0 && rowValueList[i][j] > 7) ||
-                                    (i >= 4 && rowValueList[i][j] < 7))
-                                ? Colors.grey
-                                : Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: Text( //Rojo si tiene actividades
+
+                      rowValueList[i][j].toString(),
+                      style: (rowValueList[i][j] == DateTime.now().day &&
+                              start.month == DateTime.now().month &&
+                              start.year == DateTime.now().year) &&
+                              !((i == 0 && rowValueList[i][j] > 7) || (i >= 4 && rowValueList[i][j] < 7))
+                          ? TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )
+                          //Grey out the previous month's and next month's values or dates
+                          : TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: ((i == 0 && rowValueList[i][j] > 7) ||
+                                      (i >= 4 && rowValueList[i][j] < 7))
+                                  ? Colors.grey
+                                  : Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                ),
                 ),
               )),
-        ));
+        );
       }
       Widget temp = Padding(
           //this padding seems important
