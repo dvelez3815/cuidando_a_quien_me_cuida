@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
@@ -13,11 +12,26 @@ class Rutina extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    _db.initTodasActividades().then((i)=>print("Todas las actividades inicializadas"));
+
     return Scaffold(
       appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
         tresPuntos(context)        
       ],),
-      body: listaContenido(),
+      // body: listaContenido(),
+      body: StreamBuilder(
+        stream: _db.todoContenidoStream,
+        builder: (BuildContext context, AsyncSnapshot<List<GlobalActivity>> snapshot){
+          if(!snapshot.hasData){
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return ListView(
+            children: _listaContenido(context, snapshot.data),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_to_photos),
         onPressed: ()=>onPressedEvent(context),
@@ -25,40 +39,7 @@ class Rutina extends StatelessWidget {
     );
   }
 
-  Widget listaContenido(){
-    return Container(
-      // padding: EdgeInsets.only(top: 20),
-      child: FutureBuilder(
-        future: _listaContenido(),
-        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot){
-          if(!snapshot.hasData){
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if(snapshot.data.isEmpty){
-            return ListTile(title: Text("Sin datos"));
-          }
-          
-          return ListView(
-            children: snapshot.data,
-          );
-        },
-      ),
-    );
-  }
-
-  Future<List<Widget>> _listaContenido()async{
-
-
-    List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
-    List<Actividad> actividadesDB = (await _db.getActividades()) ?? [];
-    List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
-
-    if(actividadesDB.length > 0)
-      actividadesGenerales.addAll(actividadesDB);
-    if(cuidadosDB.length > 0)
-      actividadesGenerales.addAll(cuidadosDB);
-
+  List<Widget> _listaContenido(BuildContext context, List<GlobalActivity> actividadesGenerales){
 
     // Ordenando por hora
     List<GlobalActivity> maniana = new List<GlobalActivity>();
@@ -66,8 +47,6 @@ class Rutina extends StatelessWidget {
     List<GlobalActivity> noche = new List<GlobalActivity>();
     List<GlobalActivity> noDefinida = new List<GlobalActivity>();
 
-    
-    print("Aqui bro");
     // Filtrando todo 
     for(int i=0; i<actividadesGenerales.length; ++i){
 
@@ -85,27 +64,23 @@ class Rutina extends StatelessWidget {
         noche.add(actividadesGenerales[i]);
       }
     }
-
-    print("Here");
     
     final List<Widget> contenido = [];
 
 
     List<ListTile> actividadesManania = maniana.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesTarde = tarde.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesNoche = noche.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
     List<ListTile> actividadesND = noDefinida.map((item){
-      return _createActivityTile(item);
+      return _createActivityTile(context, item);
     }).toList();
 
-    
-    print("98");
 
     if(actividadesNoche.isEmpty) actividadesNoche.add(ListTile(title: Text("Sin actividades"), trailing: Icon(Icons.sentiment_dissatisfied)));
     if(actividadesTarde.isEmpty) actividadesTarde.add(ListTile(title: Text("Sin actividades"), trailing: Icon(Icons.sentiment_dissatisfied)));
@@ -125,15 +100,30 @@ class Rutina extends StatelessWidget {
 
   }
 
-  ListTile _createActivityTile(GlobalActivity item){
+  ListTile _createActivityTile(BuildContext context, GlobalActivity item){
     return new ListTile(
       title: Text(item.nombre ?? "Sin nombre"),
       subtitle: Text(item.descripcion ?? "No disponible"),
       trailing: RaisedButton.icon(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
-        onPressed: (){}, 
+        onPressed: (){
+          if(item is Actividad){
+            Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
+              "title": item.nombre,
+              "description": item.descripcion,
+              "activity_model": item
+            });
+          }
+          else{
+            Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
+              "title": item.nombre,
+              "description": item.descripcion,
+              "care_model": item
+            });
+          }
+        }, 
         icon: Icon(Icons.edit),
-        label: Text("Alarmas")
+        label: Text("Editar")
       ),
       leading: Column(
         children: [
@@ -163,19 +153,20 @@ class Rutina extends StatelessWidget {
         ),
         actions: [
           FlatButton.icon(
-            onPressed: ()=>Navigator.of(context).pushNamed(ADDCUIDADOS, arguments:true),
-            icon: Icon(Icons.delete_forever),
+            onPressed: ()=>Navigator.of(context).pushNamed(ADDCUIDADOS),
+            icon: Icon(Icons.emoji_emotions),
             label: Text("Cuidado")
           ),
           FlatButton.icon(
             onPressed: (){
-              Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: true);
+              Navigator.of(context).pushNamed(ADDACTIVIDADES);
             },
-            icon: Icon(Icons.delete_forever),
+            icon: Icon(Icons.directions_run),
             label: Text("Actividad")
           ),
         ],
       )
     );
   }
+
 }

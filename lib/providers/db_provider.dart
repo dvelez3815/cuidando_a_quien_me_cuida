@@ -3,11 +3,12 @@ import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:utm_vinculacion/models/actividades_model.dart';
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/comida_model.dart';
 import 'package:utm_vinculacion/models/cuidado_model.dart';
-
+import 'package:utm_vinculacion/models/global_activity.dart';
 export 'package:utm_vinculacion/models/actividades_model.dart';
 
 class DBProvider {
@@ -20,12 +21,14 @@ class DBProvider {
   List<Comida>comidas        = new List<Comida>();
   List<Cuidado>cuidados      = new List<Cuidado>();
   List<AlarmModel> alarmas   = new List<AlarmModel>();
+  List<GlobalActivity> todoElContenido = new List<GlobalActivity>();
 
   // uso de streams
   final _streamControllerActividades = new StreamController<List<Actividad>>.broadcast();
   final _streamControllerComidas     = new StreamController<List<Comida>>.broadcast();
   final _streamControllerCuidados    = new StreamController<List<Cuidado>>.broadcast();
   final _streamControllerAlarmas     = new StreamController<List<AlarmModel>>.broadcast();
+  final _streamControllerTodoElContenido     = new StreamController<List<GlobalActivity>>.broadcast();
 
   /*
    * Estos métodos lo que hacen es retornar una función llamándola con
@@ -46,6 +49,9 @@ class DBProvider {
   Function(List<Comida>) get comidaSink => _streamControllerComidas.sink.add;
   Stream<List<Comida>> get comidaStream => _streamControllerComidas.stream;
 
+  Function(List<GlobalActivity>) get todoContenidoSink => _streamControllerTodoElContenido.sink.add;
+  Stream<List<GlobalActivity>> get todoContenidoStream => _streamControllerTodoElContenido.stream;
+
   // método para cerrrar el stream controller
   // El '?' pregunta si no es null, o si no es vacío
   void dispose(){
@@ -53,6 +59,7 @@ class DBProvider {
     _streamControllerComidas?.close();
     _streamControllerCuidados?.close();
     _streamControllerAlarmas?.close();
+    _streamControllerTodoElContenido?.close();
   }
 
   DBProvider._();
@@ -248,6 +255,37 @@ class DBProvider {
     return alarmas;
   }
 
+  ///***************************** Cuidados *****************************
+  Future<int> removeCuidado(Cuidado cuidado) async {
+    final db = await database;
+    final res = await db.rawDelete("DELETE FROM cuidado WHERE id=?", [cuidado.id]);
+
+    if(res > 0){
+      cuidados.remove(cuidado);
+      todoElContenido.remove(cuidado);
+      cuidadoSink(cuidados);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
+  
+  Future<int> nuevoCuidado(Cuidado cuidado) async {
+    final db = await database;
+    final res = await db.insert("cuidado", cuidado.toJson()); 
+
+    if(res != 0){
+
+      cuidados.add(cuidado);
+      cuidadoSink(cuidados);
+
+      todoElContenido.add(cuidado);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
+
   Future<void> newCareAlarm(int careID, int alarmID)async{
     final db = await database;
     await db.insert('cuidadosAlarmas', {
@@ -279,8 +317,38 @@ class DBProvider {
     return res.map((alarm)=>AlarmModel.fromJson(alarm)).toList();
   }
   
+  Future<bool> deleteCare(Cuidado care)async{
+    final db = await database;
+
+    int status = await db.rawDelete("DELETE FROM cuidado WHERE id=?", [care.id]);
+    if(status>0){
+      status += await db.rawDelete("DELETE FROM cuidadosAlarmas WHERE cuidado_id=?", [care.id]);
+    }
+
+    cuidados.remove(care);
+    todoElContenido.remove(care);
+    cuidadoSink(cuidados);
+
+    return status>0;
+  }
+
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
+
+  Future<int> removActividad(Actividad cuidado) async {
+    final db = await database;
+    final res = await db.rawDelete("DELETE FROM actividad WHERE id=?", [cuidado.id]);
+
+    if(res > 0){
+      actividades.remove(cuidado);
+      todoElContenido.remove(cuidado);
+      actividadSink(actividades);
+      todoContenidoSink(todoElContenido);
+    }
+
+    return res;
+  }
+
   Future<int> nuevaActividad(Actividad actividad) async {
 
     final db = await database;
@@ -293,6 +361,9 @@ class DBProvider {
     if(res != 0){
       actividades.add(actividad);
       actividadSink(actividades);
+
+      todoElContenido.add(actividad);
+      todoContenidoSink(todoElContenido);
     }
     return res;
   }
@@ -307,6 +378,21 @@ class DBProvider {
       print(actividades);
     }
     return actividades;
+  }
+
+  Future<bool> deleteActivity(Actividad actividad)async{
+    final db = await database;
+
+    int status = await db.rawDelete("DELETE FROM actividad WHERE id=?", [actividad.id]);
+    if(status>0){
+      status += await db.rawDelete("DELETE FROM cuidadosAlarmas WHERE cuidado_id=?", [actividad.id]);
+    }
+
+    actividades.remove(actividad);
+    todoElContenido.remove(actividad);
+    actividadSink(actividades);
+
+    return status>0;
   }
 
   Future<int> eliminarToDos() async {
@@ -419,23 +505,6 @@ class DBProvider {
     }
   }
 
-  Future nuevoCuidado(Cuidado cuidado) async {
-    final db = await database;
-    final res = await db.insert("cuidado", cuidado.toJson()); 
-
-    // le pone un id a la cuidado si no lo tiene
-    if(cuidado.id == null){
-      final id = await db.rawQuery("select id from cuidado");
-      cuidado.id = id[id.length - 1]["id"];
-    }
-
-    if(res != 0){
-      cuidados.add(cuidado);
-      cuidadoSink(cuidados);
-    }
-    return res == 0;
-  }
-
   Future<List<Cuidado>> getCuidados() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("cuidado");
@@ -446,5 +515,21 @@ class DBProvider {
       cuidadoSink(cuidados);
     }
     return cuidados;
+  }
+
+  Future<void> initTodasActividades() async{
+    final todasActividades = await getActividades();
+    final todosCuidados = await getCuidados();
+
+    List<GlobalActivity> init = new List<GlobalActivity>();
+
+    if(todasActividades.isNotEmpty){
+      init.addAll(todasActividades);
+    }
+    if(todosCuidados.isNotEmpty){
+      init.addAll(todosCuidados);
+    }
+
+    todoContenidoSink(init);
   }
 }
