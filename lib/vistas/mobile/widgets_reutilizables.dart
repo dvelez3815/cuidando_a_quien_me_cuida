@@ -52,13 +52,14 @@ void mostrarActividades(List<String> actv, context){
 }
 
 List<Widget> actividades(List<String> actv){
-  List<Widget> widg = List<Widget>(); 
+  print(actv.toString());
+  List<Widget> actvi = List<Widget>(); 
 
-  actv.forEach((element) {
-    print("dara");
-    print(element);
+  actv.forEach((e) {
+    actvi.add(Container(child: Text(e),));
   });
-return widg;
+  
+  return actvi;
 }
 
 void mostrarAlerta(mensaje, context){
