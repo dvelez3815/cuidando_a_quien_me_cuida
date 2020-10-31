@@ -217,7 +217,7 @@ class DBProvider {
 
   Future<void> updateActivityState(int activityID, state)async{    
     final db = await database;
-    await db.rawUpdate("UPDATE actividad SET estado=? WHERE id=?", [state, activityID]);
+    await db.rawUpdate("UPDATE actividad SET active=? WHERE id=?", [state, activityID]);
   }
 
   Future<void> updateAlarmState(int id, int active)async{
