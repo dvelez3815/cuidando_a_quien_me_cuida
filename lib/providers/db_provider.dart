@@ -337,7 +337,7 @@ class DBProvider {
 
     List<AlarmModel> events = new List<AlarmModel>();
 
-    List<AlarmModel> raw = (await db.rawQuery('alarma')).map((i)=>AlarmModel.fromJson(i));
+    List<AlarmModel> raw = (await db.query('alarma')).map((i)=>AlarmModel.fromJson(i)).toList();
 
     raw.forEach((element) {
       if(element.time.weekday == weekday){
