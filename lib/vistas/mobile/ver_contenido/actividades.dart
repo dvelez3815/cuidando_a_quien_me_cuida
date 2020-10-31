@@ -64,7 +64,7 @@ class _ActividadesState extends State<Actividades> {
 
                 widgets.addAll(snapshot.data.map((item)=>SwitchListTile(
                   value: item.estado,
-                  onChanged: (status){
+                  onChanged: item.date == null? null:(status){
                     setState(() {
                       item.estado = status;
                     });
@@ -77,7 +77,7 @@ class _ActividadesState extends State<Actividades> {
                       Text("${item.date.hour}:${item.date.minute}"),
                     ],
                   ),
-                  
+
                 )).toList());
                 return Column(
                   children: widgets,
