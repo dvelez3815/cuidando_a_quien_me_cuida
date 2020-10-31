@@ -82,8 +82,8 @@ class DBProvider {
           "id INTEGER PRIMARY KEY,"
           "nombre VARCHAR NOT NULL,"
           "descripcion VARCHAR NOT NULL,"
-          "date VARCHAR NOT NULL,"
-          "time VARCHAR NOT NULL,"
+          "date VARCHAR NULL,"
+          "time VARCHAR NULL,"
           "active INTEGER DEFAULT 0"
           ");"
         );
@@ -128,8 +128,8 @@ class DBProvider {
           "id INTEGER NOT NULL,"
           "nombre VARCHAR NOT NULL,"
           "descripcion VARCHAR NOT NULL,"
-          "date VARCHAR NOT NULL," // "YYYY/MM/DD"
-          "time VARCHAR NOT NULL," // "HH:MM"
+          "date VARCHAR NULL," // "YYYY/MM/DD"
+          "time VARCHAR NULL," // "HH:MM"
           "active INTEGER DEFAULT 1,"
           "CONSTRAINT pkCuidado PRIMARY KEY(id)"
           ");"
@@ -443,7 +443,6 @@ class DBProvider {
       cuidados = res.map((f)=>Cuidado.fromJson(f)).toList();
       cuidadoSink(cuidados);
     }
-    print("Hola");
     return cuidados;
   }
 }

@@ -26,13 +26,19 @@ Route<dynamic> generarRutas(RouteSettings routeSettings){
       return MaterialPageRoute(builder: (BuildContext context)=>Cuidados());
 
     case(constantesRutas.ADDCUIDADOS):
-      return MaterialPageRoute(builder: (BuildContext context)=>AddCuidado());
+      return MaterialPageRoute(
+        builder: (BuildContext context)=>AddCuidado(),
+        settings: RouteSettings(arguments: routeSettings.arguments)
+      );
 
     case(constantesRutas.ACTIVIDADES):
       return MaterialPageRoute(builder: (BuildContext context)=>Actividades());
 
     case(constantesRutas.ADDACTIVIDADES):
-      return MaterialPageRoute(builder: (BuildContext context)=>AddActividades());
+      return MaterialPageRoute(
+        builder: (BuildContext context)=>AddActividades(),        
+        settings: RouteSettings(arguments: routeSettings.arguments)
+      );
 
     case(constantesRutas.RECETAS):
       return MaterialPageRoute(builder: (BuildContext context)=>Recetas());

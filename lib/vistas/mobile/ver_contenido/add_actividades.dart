@@ -15,6 +15,9 @@ class _AddActividadesState extends State<AddActividades> {
   TextEditingController nombreActividad = new TextEditingController();
   TextEditingController objetivosActividad = new TextEditingController();
 
+  // Esto es para la interfaz completa o parcial
+  bool fullInterface = false;
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final AlarmProvider alarm = new AlarmProvider();
 
@@ -34,6 +37,12 @@ class _AddActividadesState extends State<AddActividades> {
 
   @override
   Widget build(BuildContext ctxt) {
+
+    fullInterface = ModalRoute.of(context).settings.arguments ?? false;
+
+    print("Full interface $fullInterface");
+    print("Modal route ${ModalRoute.of(context).settings.arguments}");
+
     return new Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -68,38 +77,46 @@ class _AddActividadesState extends State<AddActividades> {
               SizedBox(
                 height: 25,
               ),
-              ListTile(
-                title: RichText(
-                  text: TextSpan(
-                      text:
-                          "Seleccione los días en los cuales la actividad se realizara",
-                      style: TextStyle(color: Colors.grey, fontSize: 18)),
-                ),
-              ),
-              Column(
-                
-                children: values.keys.map((String key) {
-                  return new CheckboxListTile(
-                    title: new Text(key),
-                    value: values[key],
-                    onChanged: (bool value) {
-                      setState(() {
-                        values[key] = value;
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: FlatButton.icon(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: showPicker,
-                    color: Colors.green,
-                    icon: Icon(Icons.timer),
-                    label: Text('Establecer hora')),
-              ),
+
+
+              fullInterface?Column(
+                children: [
+                  ListTile(
+                    title: RichText(
+                      text: TextSpan(
+                          text:
+                              "Seleccione los días en los cuales la actividad se realizara",
+                          style: TextStyle(color: Colors.grey, fontSize: 18)),
+                    ),
+                  ),
+                  Column(                
+                    children: values.keys.map((String key) {
+                      return new CheckboxListTile(
+                        title: new Text(key),
+                        value: values[key],
+                        onChanged: (bool value) {
+                          setState(() {
+                            values[key] = value;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: FlatButton.icon(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        onPressed: showPicker,
+                        color: Colors.green,
+                        icon: Icon(Icons.timer),
+                        label: Text('Establecer hora')),
+                  ),
+                ],
+              ):Container(),
+
+
+
               Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: RaisedButton(
@@ -108,7 +125,7 @@ class _AddActividadesState extends State<AddActividades> {
                         borderRadius: BorderRadius.circular(20)),
                     onPressed: () {
                       saveAlarm();
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                     },
                     child: Text("Guardar"),
                   ))
@@ -150,6 +167,11 @@ class _AddActividadesState extends State<AddActividades> {
   }
 
   Future<void> saveAlarm() async {
+
+    AlarmModel model;
+    final date = DateTime.now();
+    final List<String> days = new List<String>();
+
     // Validaciones
     if (nombreActividad.text.length < 4 || objetivosActividad.text.length < 4) {
       scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -157,43 +179,52 @@ class _AddActividadesState extends State<AddActividades> {
       return;
     }
 
-    final List<String> days = new List<String>();
-    this.values.forEach((key, value) {
-      if (value) days.add(key);
-    });
+    if(time != null){
+      
+      this.values.forEach((key, value) {
+        if (value) days.add(key);
+      });
 
-    if (days.isEmpty) {
-      scaffoldKey.currentState.showSnackBar(
-          new SnackBar(content: Text("Debe seleccionar al menos un día")));
-      return;
+      if (days.isEmpty) {
+        scaffoldKey.currentState.showSnackBar(
+            new SnackBar(content: Text("Debe seleccionar al menos un día")));
+        return;
+      }
+
+      // La creacion como tal     
+
+      model = new AlarmModel(
+          new DateTime(date.year, date.month, date.day, time.hour, time.minute),
+          title: (nombreActividad.text ?? "").length > 0
+              ? nombreActividad.text
+              : "Sin título",
+          description: objetivosActividad.text);
+
     }
 
-    // La creacion como tal
-    final date = DateTime.now();
-
-    AlarmModel model = new AlarmModel(
-        new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        title: (nombreActividad.text ?? "").length > 0
-            ? nombreActividad.text
-            : "Sin título",
-        description: objetivosActividad.text);
-
     Actividad activity = new Actividad(
-      model.time,
+      model?.time ?? null,
       days, // dias para notificar
       nombre: nombreActividad.text,
       descripcion: objetivosActividad.text
     );
 
     await dbProvider.nuevaActividad(activity);
-    await activity
-        .setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
-
-    // await model.save(); // esto guarda todo en SQLite
+    
+    if(time != null){
+      await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(
+            'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}'
+        )
+      ));
+    }
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text(
-            'La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
+            'La actividad se ha agregado'
+          )
+        ));
   }
 
   Future showPicker() async {

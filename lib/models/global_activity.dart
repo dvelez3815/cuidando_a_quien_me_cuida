@@ -23,10 +23,10 @@ abstract class GlobalActivity {
     descripcion = json['descripcion'];
     setState(json['active'] == 1);
     
-    List<int> date = json["date"].toString().split("/").map((i)=>int.parse(i)).toList();
-    List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
+    List<int> date = json["date"]==null? null:json["date"].toString().split("/").map((i)=>int.parse(i)).toList();
+    List<int> time = json["time"]==null? null:json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
 
-    this.date = new DateTime(date[0], date[1], date[2], time[0], time[1]);
+    this.date = date==null? null:new DateTime(date[0], date[1], date[2], time[0], time[1]);
     
   }
 

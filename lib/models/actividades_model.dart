@@ -24,14 +24,16 @@ class Actividad extends GlobalActivity{
   Future<void> chainStateUpdate()async{
     List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
 
-    alarms.forEach((element)async{
-      if(this.estado){
-        await element.reactivate();
-      }else{
-        await element.cancelAlarm();
-      }
-      await db.updateAlarmState(element.id, this.estado?1:0);
-    });
+    if(this.date != null){
+      alarms.forEach((element)async{
+        if(this.estado){
+          await element.reactivate();
+        }else{
+          await element.cancelAlarm();
+        }
+        await db.updateAlarmState(element.id, this.estado?1:0);
+      });
+    }
 
     await db.updateActivityState(this.id, this.estado);
   }
@@ -44,8 +46,8 @@ class Actividad extends GlobalActivity{
       "nombre"     : nombre,
       "descripcion": descripcion,
       "active"     : this.estado? 1:0,
-      "date"       : "${date.year}/${date.month}/${date.day}",
-      "time"       : "${date.hour}:${date.minute}",
+      "date"       : this.date==null? null:"${date.year}/${date.month}/${date.day}",
+      "time"       : this.date==null? null:"${date.hour}:${date.minute}",
     };
   }
 
