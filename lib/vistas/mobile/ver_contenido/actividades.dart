@@ -74,7 +74,8 @@ class _ActividadesState extends State<Actividades> {
                   secondary: Column(
                     children: [
                       Icon(Icons.alarm),
-                      Text("${item.date.hour}:${item.date.minute}"),
+                      item.date!= null?Text("${item.date.hour}:${item.date.minute}")
+                        :Text("--:--")
                     ],
                   ),
 

@@ -34,6 +34,30 @@ Icon convertirStringIcono(String icono){
       return Icon(Icons.favorite_border);
   }
 }
+void mostrarActividades(List<String> actv, context){
+  showDialog(context: context,barrierDismissible: true,
+  builder: (BuildContext context){
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text("Mensaje"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: actividades(actv)
+      ),
+      actions: <Widget>[
+        FlatButton(onPressed: (){Navigator.pop(context);}, child: Text("Ok"))
+      ],
+    );
+  });  
+}
+
+List<Widget> actividades(List<String> actv){
+  List<Widget> actv = List<Widget>(); 
+  actv.map((e) {
+    actv.add(Container(child: Text('$e'),));
+  });
+return actv;
+}
 
 void mostrarAlerta(mensaje, context){
 

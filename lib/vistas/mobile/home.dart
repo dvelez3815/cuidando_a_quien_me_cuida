@@ -2,7 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:utm_vinculacion/models/actividades_model.dart';
+import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
+import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart' as constantesRutas;
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
 import 'package:utm_vinculacion/texto_app/const_textos.dart';
@@ -304,6 +307,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   }
 
   Widget opcion2(Size mediaQuery) {
+    
     double scaleFactor = MediaQuery.of(context).size.width / pWidth;
     double calendarWidth = MediaQuery.of(context).size.width * 0.85;
     return Column(
@@ -622,17 +626,38 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                       : Colors.transparent),
               child: Center(
                 child:GestureDetector(
-                  onTap: (){
-                    mostrarAlerta("Alerta"+rowValueList[i][j].toString()+"f", context);
+                  onTap: ()async {
+                    final DBProvider _db = DBProvider.db;
+                    int mes = showDate.month;
+                    int anio = showDate.year;
+                    int dia = rowValueList[i][j];
                     
+                    DateTime actual = DateTime(anio, mes,dia);
 
-                    // Ordenando por hora
-                    List<GlobalActivity> maniana = new List<GlobalActivity>();
-                    List<GlobalActivity> tarde = new List<GlobalActivity>();
-                    List<GlobalActivity> noche = new List<GlobalActivity>();
+                    int dSemana = actual.weekday;
+                    print(dSemana);
+                    List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
+                    List<Actividad> actividadesDB = (await _db.getActividades()) ?? [];
+                    List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
+
+                    if(actividadesDB.length > 0)
+                      actividadesGenerales.addAll(actividadesDB);
+                    if(cuidadosDB.length > 0)
+                      actividadesGenerales.addAll(cuidadosDB);
+
+                    //filtrado
+                    List<String> mostrar = List<String>();
+                    
+                    for (var item in actividadesGenerales) {
+                      if(item.date.weekday == dSemana){
+                        mostrar.add(item.nombre+"\n");
+                      }  
+                      print(item.date);
+                      
+                    } 
+                    mostrarActividades(mostrar, context);
                   },
                   child: Text( //Rojo si tiene actividades
-
                       rowValueList[i][j].toString(),
                       style: (rowValueList[i][j] == DateTime.now().day &&
                               start.month == DateTime.now().month &&
