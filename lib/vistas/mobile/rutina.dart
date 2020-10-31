@@ -87,7 +87,7 @@ class _Rutina extends State<Rutina> {
         title: Text(item.nombre ?? "Sin nombre"),
         subtitle: Text(item.descripcion ?? "No disponible"),
         trailing: Text("${item.date.hour}:${item.date.minute}"),
-        leading: Icon((item is Cuidado)? Icons.medical_services:Icons.volunteer_activism),
+        leading: Icon((item is Cuidado)? Icons.brightness_medium:Icons.brightness_medium),
       );
     }).toList();
     List<ListTile> actividadesTarde = tarde.map((item){
@@ -95,7 +95,7 @@ class _Rutina extends State<Rutina> {
         title: Text(item.nombre ?? "Sin nombre"),
         subtitle: Text(item.descripcion ?? "No disponible"),
         trailing: Text("${item.date.hour}:${item.date.minute}"),
-        leading: Icon((item is Cuidado)? Icons.medical_services:Icons.volunteer_activism),
+        leading: Icon((item is Cuidado)? Icons.brightness_medium:Icons.brightness_medium),
       );
     }).toList();
     List<ListTile> actividadesNoche = noche.map((item){
@@ -103,7 +103,7 @@ class _Rutina extends State<Rutina> {
         title: Text(item.nombre ?? "Sin nombre"),
         subtitle: Text(item.descripcion ?? "No disponible"),
         trailing: Text("${item.date.hour}:${item.date.minute}"),
-        leading: Icon((item is Cuidado)? Icons.medical_services:Icons.volunteer_activism),
+        leading: Icon((item is Cuidado)? Icons.brightness_medium:Icons.brightness_medium),
       );
     }).toList();
     
