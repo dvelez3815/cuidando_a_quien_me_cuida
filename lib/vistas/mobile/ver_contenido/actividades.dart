@@ -73,10 +73,9 @@ class _ActividadesState extends State<Actividades> {
                         Expanded(
                           child: SwitchListTile(
                             value: item.estado,
-                            onChanged: item.date == null? null:(status){
-                              setState(() {
-                                item.estado = status;
-                              });
+                            onChanged: (status){
+                              item.estado = status;
+                              setState(() {});
                             },
                             subtitle: Text("${item.descripcion}"),
                             title: Text("${item.nombre ?? "Sin nombre"}"),
@@ -92,7 +91,13 @@ class _ActividadesState extends State<Actividades> {
                           children: [
                             IconButton(
                               icon: Icon(Icons.edit),
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
+                                  "title": item.nombre,
+                                  "description": item.descripcion,
+                                  "activity_model": item
+                                });
+                              },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.redAccent),
@@ -139,6 +144,7 @@ class _ActividadesState extends State<Actividades> {
             label: Text("Eliminar", style: TextStyle(color: Colors.red)),
             onPressed: ()async{
               final ok = await _deleteActivity(item);
+              await dbProvider.eliminaActividadAlarmas(item);
               widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: Text("La actividad ${ok? "fue eliminada":"no pudo ser eliminada"}"),
               ));

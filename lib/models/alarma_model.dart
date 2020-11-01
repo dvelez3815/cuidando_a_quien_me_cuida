@@ -26,7 +26,6 @@ class AlarmModel {
 
   AlarmModel(this.time, {this.title, this.description}) {
     _id = this.generateID();
-    print("$id");
     interval = 7;
     active=true;
   }
@@ -83,10 +82,8 @@ class AlarmModel {
   Future<void> reactivate({int idAlarm}) async {
 
     this.time = calculateDiff(DateTime.now(), this.time.weekday);
-    print("Final "+this.time.toString());
 
     await AndroidAlarmManager.periodic(
-      // Duration(days: interval), 
       Duration(days: this.interval),
       idAlarm ?? _id,
       showAlarm,

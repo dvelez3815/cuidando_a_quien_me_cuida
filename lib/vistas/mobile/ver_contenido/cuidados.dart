@@ -23,12 +23,13 @@ class _CuidadosState extends State<Cuidados> {
 
   @override
   void initState() {
-    dbProvider.getCuidados();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {    
+    dbProvider.getCuidados();
+
     return Scaffold(
       key: widget._scaffoldKey,
       appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
@@ -94,7 +95,13 @@ class _CuidadosState extends State<Cuidados> {
                           children: [
                             IconButton(
                               icon: Icon(Icons.edit),
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
+                                  "title": item.nombre,
+                                  "description": item.descripcion,
+                                  "care_model": item
+                                });
+                              },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete, color: Colors.redAccent),
@@ -145,6 +152,7 @@ class _CuidadosState extends State<Cuidados> {
             label: Text("Eliminar", style: TextStyle(color: Colors.red)),
             onPressed: ()async{
               final ok = await _deleteCare(cuidado);
+              await dbProvider.eliminaCuidadoAlarmas(cuidado);
               widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
               ));

@@ -302,15 +302,17 @@ class DBProvider {
     await db.rawUpdate("$query $subQuery", [state, careID]);
   }
   
-  Future<void> updateCareState(int careID, state)async{    
+  Future<void> updateCareState(int careID, state)async{   
+    print("Actualizando a $state"); 
     final db = await database;
-    await db.rawUpdate("UPDATE cuidado SET active=? WHERE id=?", [state, careID]);
+    final res = await db.rawUpdate("UPDATE cuidado SET active=? WHERE id=?", [state, careID]);
+    print("$res valores afectados");
   }
 
   Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
     final db = await database;
     List<Map<String, dynamic>> res = await db.rawQuery(
-      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?) AND active=?",
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?) AND active=? ORDER BY date desc",
       [careID, 1]
     );
 
@@ -349,6 +351,32 @@ class DBProvider {
   }
   /// ************************** Actividades ****************************/
   // si retorna 0 es error
+
+  Future<void> eliminaActividadAlarmas(Actividad actividad)async{
+    final db = await database;
+
+    await db.rawDelete(
+      "DELETE FROM alarma WHERE id in(SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?)",
+      [actividad.id]
+    );
+
+    await db.rawDelete(
+      "DELETE FROM actividadesAlarmas WHERE actividad_id=?", [actividad.id]
+    );
+  }
+
+  Future<void> eliminaCuidadoAlarmas(Cuidado cuidado)async{
+    final db = await database;
+
+    await db.rawDelete(
+      "DELETE FROM alarma WHERE id in(SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)",
+      [cuidado.id]
+    );
+
+    await db.rawDelete(
+      "DELETE FROM cuidadosAlarmas WHERE cuidado_id=?", [cuidado.id]
+    );
+  }
 
   Future<int> removActividad(Actividad cuidado) async {
     final db = await database;

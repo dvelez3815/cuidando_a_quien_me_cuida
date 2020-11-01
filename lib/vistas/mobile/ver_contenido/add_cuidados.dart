@@ -57,14 +57,10 @@ class _AddCuidadoState extends State<AddCuidado> {
       time = TimeOfDay.fromDateTime(item.date);
 
       if(!values.containsValue(true)){
-
         // rellenando los dias en que suena la alarma
         dbProvider.getAlarmsByCare(item.id).then((value){
-          print("bro");
           value.forEach((element) {
-            print("Ok!!!");
-            values[parseDayWeek(element.time.weekday).toLowerCase()] = true;
-            print(values[parseDayWeek(element.time.weekday).toLowerCase()]);
+            values.update(parseDayWeek(element.time.weekday).toLowerCase(), (value) => true);
           });
           
           setState((){});
@@ -125,7 +121,7 @@ class _AddCuidadoState extends State<AddCuidado> {
                     value: values[key],
                     onChanged: (bool value) {
                       setState(() {
-                        values[key] = value;
+                        values.update(key, (_) => value);
                       });
                     },
                   );
@@ -136,22 +132,24 @@ class _AddCuidadoState extends State<AddCuidado> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FlatButton.icon(
-                      onPressed: showPicker,
-                      color: Colors.green,
-                      icon: Icon(Icons.timer),
-                      label: Text('Establecer hora')),
+                    onPressed: showPicker,
+                    color: Colors.green,
+                    icon: Icon(Icons.timer),
+                    label: Text('Establecer hora')
+                  ),
                 ],
               ),
               
               Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: RaisedButton(
-                    color: Colors.amber,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPressed: saveAlarm,
-                    child: Text(dataPre.isEmpty? "Guardar":"Actualizar"),
-                  ))
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: RaisedButton(
+                  color: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  onPressed: saveAlarm,
+                  child: Text(dataPre.isEmpty? "Guardar":"Actualizar"),
+                )
+              )
             ],
           ),
         ],
@@ -189,7 +187,7 @@ class _AddCuidadoState extends State<AddCuidado> {
   }
 
   Future<void> saveAlarm() async {
-    if(dataPre.isNotEmpty){
+    if(dataPre.containsKey("care_model")){
       Cuidado cuidado = dataPre['care_model'];
       cuidado.estado = false;
       await dbProvider.deleteCare(cuidado);
@@ -200,9 +198,13 @@ class _AddCuidadoState extends State<AddCuidado> {
   Future<void> _newAlarm() async {
     final date = DateTime.now();
 
-    
     final List<String> daysToNotify = new List<String>();
-    this.values.forEach((key, value) {if(value) daysToNotify.add(key);});
+
+    this.values.forEach((key, value) {
+      if(value) daysToNotify.add(key);
+    });
+
+    print("Days to notify "+daysToNotify.toString());
 
     if(daysToNotify.isEmpty) {
       scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
@@ -211,7 +213,7 @@ class _AddCuidadoState extends State<AddCuidado> {
 
     AlarmModel model = new AlarmModel(
         new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        title: (nombreActividad.text ?? "").length>0? nombreActividad.text:"Sin título",
+        title: nombreActividad.text ?? "",
         description: objetivosActividad.text
     );
 
@@ -222,12 +224,15 @@ class _AddCuidadoState extends State<AddCuidado> {
       descripcion: objetivosActividad.text
     );
 
-    if(dataPre.isNotEmpty) await dbProvider.removeCuidado(dataPre["care_model"]);
+    if(dataPre.isNotEmpty){
+       Cuidado _care = dataPre["care_model"];
+       await dbProvider.removeCuidado(_care);
+       await dbProvider.eliminaCuidadoAlarmas(_care);
+    }
     
     await dbProvider.nuevoCuidado(care);
     await care.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
- 
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));
   

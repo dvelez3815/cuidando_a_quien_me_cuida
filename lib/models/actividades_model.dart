@@ -10,7 +10,6 @@ class Actividad extends GlobalActivity{
   @override
   Future<void> setAlarms()async{
     daysToNotify.forEach((day)async{
-      print("Alarma para el día ${parseDayFromString(day)}");
       final _date = AlarmModel.calculateDiff(DateTime.now(), parseDayFromString(day));
       final AlarmModel alarm = new AlarmModel(
         new DateTime(_date.year, _date.month, _date.month, _date.day, date.hour, date.minute),
@@ -37,7 +36,9 @@ class Actividad extends GlobalActivity{
     await db.updateActivityState(this.id, this.estado);
   }
 
-  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json, (estado)=>{estado = estado});
+  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json){
+    this._estado = json['active']==1;
+  }
 
   Map<String, dynamic> toJson(){
     return <String, dynamic>{

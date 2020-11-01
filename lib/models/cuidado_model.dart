@@ -8,7 +8,9 @@ class Cuidado extends GlobalActivity{
 
   Cuidado(DateTime date, List<String> daysToNotify, {String nombre, String descripcion}):super(date, daysToNotify, nombre:nombre, descripcion:descripcion);
 
-  Cuidado.fromJson(Map<String, dynamic> json) : super.fromJson(json, (estado)=>{estado == estado});
+  Cuidado.fromJson(Map<String, dynamic> json):super.fromJson(json){
+    this._estado = json['active']==1;
+  }
 
   Map<String, dynamic> toJson(){
     return <String, dynamic>{
@@ -23,9 +25,10 @@ class Cuidado extends GlobalActivity{
 
   Future<void> setAlarms()async{
     daysToNotify.forEach((day)async{
-      print("Alarma para el día ${parseDayFromString(day)}");
+      
+      final _date = AlarmModel.calculateDiff(DateTime.now(), parseDayFromString(day));
       final AlarmModel alarm = new AlarmModel(
-        new DateTime(date.year, date.month, parseDayFromString(day), date.hour, date.minute),
+        new DateTime(_date.year, _date.month, _date.year, date.hour, date.minute),
         title: this.nombre, description: this.descripcion
       );
       await alarm.save();
@@ -50,8 +53,8 @@ class Cuidado extends GlobalActivity{
   }
 
   get estado =>_estado;
+
   set estado(bool status) {
-    print("Entrar");
     this._estado = status;
     chainStateUpdate();
   }

@@ -16,12 +16,11 @@ abstract class GlobalActivity {
     this.id = generateID(); // Esto es tremendamente necesario
   }
 
-  GlobalActivity.fromJson(Map<String, dynamic> json, Function(bool) setState){
+  GlobalActivity.fromJson(Map<String, dynamic> json){
 
     id = json['id'];
     nombre = json['nombre'];
     descripcion = json['descripcion'];
-    setState(json['active'] == 1);
     
     List<int> date = json["date"]==null? null:json["date"].toString().split("/").map((i)=>int.parse(i)).toList();
     List<int> time = json["time"]==null? null:json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
