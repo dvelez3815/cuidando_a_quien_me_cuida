@@ -112,14 +112,33 @@ class _AddCuidadoState extends State<AddCuidado> with EventAC{
     );
   }
 
-  Future<void> saveAlarm() async {
+  Future<void> saveAlarm() async {  
     // What I actually do, is to delete the current event and its alarms
     // and then I create a new one with the new data
     if(updateData.containsKey("care_model")){
       Cuidado cuidado = updateData['care_model'];
-      cuidado.estado = false; // I do this to delete all alarms of this events
-      await dbProvider.deleteCare(cuidado);
-      await dbProvider.deleteCareAlarm(cuidado);
+
+      final List<String> daysActive = new List<String>();
+
+      this.daysToNotify.forEach((key, value) {
+        if(value) daysActive.add(key);
+      });
+
+      await cuidado.update({
+        "days": daysActive.toString(),
+        "nombre": this.nombreActividad.text,
+        "descripcion": this.objetivosActividad.text
+      });
+
+      this.scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("La alarma fué actualizada")
+      ));
+    
+      Navigator.of(context).pop();
+      return;
+      // cuidado.estado = false; // I do this to delete all alarms of this events
+      // await dbProvider.deleteCare(cuidado);
+      // await dbProvider.deleteCareAlarm(cuidado);
     }
 
     return await _newAlarm();
@@ -128,14 +147,14 @@ class _AddCuidadoState extends State<AddCuidado> with EventAC{
   Future<void> _newAlarm() async {
 
     // This will contains only the days to notify
-    final List<String> daysToNotify = new List<String>();
+    final List<String> daysActive = new List<String>();
 
     this.daysToNotify.forEach((key, value) {
-      if(value) daysToNotify.add(key);
+      if(value) daysActive.add(key);
     });
 
     // At least one day should be selected
-    if(daysToNotify.isEmpty) {
+    if(daysActive.isEmpty) {
       scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
       return;
     }
@@ -143,12 +162,11 @@ class _AddCuidadoState extends State<AddCuidado> with EventAC{
     // Creating the model
     Cuidado care = new Cuidado(
       this.time,
-      daysToNotify, // this is not the class attribute
+      daysActive, // this is not the class attribute
       nombre: this.nombreActividad.text ?? "Sin título",
       descripcion: this.objetivosActividad.text ?? "Sin objetivos"
     );
 
-    await care.createAlarms(); // this will create all alarms needed
     await care.save(); // this save this care in local database
 
     this.scaffoldKey.currentState.showSnackBar(SnackBar(

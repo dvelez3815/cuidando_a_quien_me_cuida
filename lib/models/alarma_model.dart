@@ -72,6 +72,7 @@ class AlarmModel {
       this._id,
       helpers.showAlarmNotification,
       startAt: date,
+      exact: true,
       wakeup: true,
       rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
     );

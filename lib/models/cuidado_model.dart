@@ -25,7 +25,7 @@ class Cuidado extends GlobalActivity{
   @override
   Future<bool> update(Map<String, dynamic> params) async {
     final careUpdated = await db.updateCare(params, this.id);
-    String rawDays = params["days"];    
+    String rawDays = params["days"] ?? [];    
 
     // If it's not 0, it means that someting change
     if(rawDays.compareTo(this.daysToNotify.toString()) != 0) {
@@ -64,8 +64,15 @@ class Cuidado extends GlobalActivity{
 
   @override
   Future<bool> delete() async {
-    this.estado = false;
-    return (await db.deleteCare(this)) && (await db.deleteCareAlarm(this));
+    List<AlarmModel> alarms = await db.getAlarmsByCare(this.id);
+
+    alarms.forEach((element)async{
+      print(element.id.toString()+" a ser eliminada");
+      await element.delete();
+    });
+
+    // This will delete the care and all its dependencies
+    return await db.deleteCareAlarm(this);
   }
 
   ////////////////////////////// Functions //////////////////////////////
@@ -91,16 +98,14 @@ class Cuidado extends GlobalActivity{
     List<AlarmModel> alarms = await db.getAlarmsByCare(this.id);
 
     alarms.forEach((element)async{
-      if(this.estado){
+      if(this._estado){
         await element.activate();
       }else{
         await element.desactivate();
       }
-      // This do not delete anything, it just change the state of this alarm
-      // in the database
-      await db.updateAlarmStateByCare(element.id, this.estado?1:0);
     });
 
+    await db.updateAlarmStateByCare(this.id, this._estado?1:0);
     await db.updateCare({"active": this._estado?1:0}, this.id);
   }
 

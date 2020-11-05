@@ -312,7 +312,7 @@ class DBProvider {
   Future<void> updateAlarmStateByActivity(int activityID, int state)async{
     final db = await database;
     final String query = "UPDATE alarma SET active=? WHERE id in";
-    final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE alarma_id=?)";
+    final String subQuery = "(SELECT alarma_id FROM actividadesAlarmas WHERE actividad_id=?)";
 
     await db.rawUpdate("$query $subQuery", [state, activityID]);
   }
@@ -372,8 +372,8 @@ class DBProvider {
   /// asociated with the careID you provide
   Future<void> updateAlarmStateByCare(int careID, int state)async{
     final db = await database;
-    final String query = "UPDATE cuidado SET active=? WHERE id in";
-    final String subQuery = "(SELECT alarma_id FROM cuidadosAlarmas WHERE alarma_id=?)";
+    final String query = "UPDATE alarma SET active=? WHERE id in";
+    final String subQuery = "(SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)";
 
     await db.rawUpdate("$query $subQuery", [state, careID]);
   }

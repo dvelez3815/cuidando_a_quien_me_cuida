@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/rutas/const_rutas.dart';
@@ -61,65 +62,29 @@ class _CuidadosState extends State<Cuidados> {
                 )
               ],
             ),
-            StreamBuilder(
-              stream: dbProvider.cuidadoStream,
-              builder: (BuildContext context, AsyncSnapshot<List<Cuidado>> snapshot){
+            SingleChildScrollView(
+              child: StreamBuilder(
+                stream: dbProvider.cuidadoStream,
+                builder: (BuildContext context, AsyncSnapshot<List<Cuidado>> snapshot){
 
-                if(!snapshot.hasData) return sinDatos();
+                  if(!snapshot.hasData) return Center(child: CircularProgressIndicator());                
+                  if(snapshot.data.isEmpty) return sinDatos();
 
-                final List<Widget> widgets = new List<Widget>();
+                  final List<Widget> widgets = new List<Widget>();
 
-                widgets.addAll(snapshot.data.map((item)=>Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SwitchListTile(
-                            value: item.estado,
-                            onChanged: (status){
-                              item.estado = status;
-                              setState(() {});
-                            },
-                            subtitle: Text(item.descripcion),
-                            title: Text("${item.nombre ?? "Sin nombre"}"),
-                            
-                            secondary: Column(
-                              children: [
-                                Icon(Icons.alarm),
-                                Text("${item.time.hour}:${item.time.minute}"),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: (){
-                                Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
-                                  "title": item.nombre,
-                                  "description": item.descripcion,
-                                  "care_model": item
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.delete, color: Colors.redAccent),
-                              onPressed: ()=>_onDeleteCare(item)
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    Divider()
-                  ],
-                )).toList());
+                  widgets.addAll(snapshot.data.map((item)=>Column(
+                    children: [
+                      alarmTileHead(item),
+                      alarmTileBody(item, context),
+                      Divider()
+                    ],
+                  )).toList());
 
-                return Column(
-                  children: widgets,
-                );
-
-              },
+                  return Column(
+                    children: widgets,
+                  );
+                },
+              ),
             ),
           ],
         )
@@ -128,10 +93,136 @@ class _CuidadosState extends State<Cuidados> {
     );
   }
 
+  Widget alarmTileBody(Cuidado item, BuildContext context) {
+    return ListTile(
+      title: _daysListView(item, context),
+      trailing: IconButton(
+        icon: Icon(Icons.settings),
+        onPressed: ()=>showEditDeleteOptions(item),
+      )
+    );
+  }
+
+  SingleChildScrollView _daysListView(Cuidado item, BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: item.daysToNotify.map((day){
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),
+            margin: EdgeInsets.only(right: 5.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              color: Theme.of(context).accentColor
+            ),
+            child: Text(
+              day.toUpperCase(), 
+              style: TextStyle(
+                color: Theme.of(context).canvasColor,
+                fontSize: 10.0
+              ),
+            )
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget alarmTileHead(Cuidado item) {
+    return SwitchListTile(
+      value: item.estado,
+      onChanged: (status){
+        item.estado = status;
+        setState(() {});
+      },
+      subtitle: Text(item.descripcion),
+      title: Text("${item.nombre ?? "Sin nombre"}"),
+      secondary: _showTimeCareInfo(item),
+    );
+  }
+
+  Column _showTimeCareInfo(Cuidado item) {
+    return Column(
+      children: [            
+        Icon(Icons.alarm),
+        Text("${item.time.hour}:${item.time.minute}"), 
+      ],
+    );
+  }
+
+  void showEditDeleteOptions(Cuidado item) {
+    showModalBottomSheet(
+      context: context, 
+      isDismissible: true,
+      builder: (context){
+        return SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ListTile(
+                    title: Text("Detalles del cuidado"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.cancel),
+                      onPressed: ()=>Navigator.of(context).pop()
+                    ),
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text("Cuidado"),
+                    subtitle: Text(item.nombre,),
+                  ),
+                  ListTile(
+                    title: Text("Descripción"),
+                    subtitle: Text(item.descripcion,),
+                  ),
+                  ListTile(
+                    title: Text("Días para notificar"),
+                    subtitle: _daysListView(item, context)
+                  ),
+                  ListTile(
+                    title: Text("Hora para notificar"),
+                    subtitle: Text("${item.time.hour}:${item.time.minute}")
+                  ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      FlatButton.icon(
+                        icon: Icon(Icons.edit),
+                        label: Text("Editar"),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
+                            "title": item.nombre,
+                            "description": item.descripcion,
+                            "care_model": item
+                          });
+                        },
+                      ),
+                      FlatButton.icon(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          _onDeleteCare(item);
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+          ),
+        );
+      }
+    );
+  }
 
   Future<bool> _deleteCare(Cuidado cuidado) async {
-    cuidado.estado = false;
-    return await dbProvider.deleteCare(cuidado);
+    return await cuidado.delete();
   }
 
   void _onDeleteCare(Cuidado cuidado){
@@ -152,7 +243,6 @@ class _CuidadosState extends State<Cuidados> {
             label: Text("Eliminar", style: TextStyle(color: Colors.red)),
             onPressed: ()async{
               final ok = await _deleteCare(cuidado);
-              await dbProvider.deleteCareAlarm(cuidado);
               widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
               ));
