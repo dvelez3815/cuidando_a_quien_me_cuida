@@ -57,7 +57,7 @@ class _AddActividadesState extends State<AddActividades> {
         // rellenando los dias en que suena la alarma
         dbProvider.getAlarmsByActivity(item.id).then((value){
           value.forEach((element) {
-            values[parseDayWeek(element.time.weekday).toLowerCase()] = true;
+            values[parseDayWeek(element.date.weekday).toLowerCase()] = true;
           });
           
           setState((){});
@@ -229,25 +229,25 @@ class _AddActividadesState extends State<AddActividades> {
     }
 
     // La creacion como tal     
-
+    // AlarmModel.calculateDiff(DateTime.now(), targetWeekDay)
     model = new AlarmModel(
         new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        title: (nombreActividad.text ?? "").length > 0
+       (nombreActividad.text ?? "").length > 0
             ? nombreActividad.text
             : "Sin título",
-        description: objetivosActividad.text);
+        objetivosActividad.text);
 
     Actividad activity = new Actividad(
-      model.time,
+      model.date,
       days, // dias para notificar
       nombre: nombreActividad.text,
       descripcion: objetivosActividad.text
     );
 
-    if(dataPre.isNotEmpty) await dbProvider.removActividad(dataPre["activity_model"]);
+    if(dataPre.isNotEmpty) await dbProvider.deleteActivity(dataPre["activity_model"]);
     
-    await dbProvider.nuevaActividad(activity);    
-    await activity.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+    await dbProvider.newActivity(activity);    
+    await activity.createAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(

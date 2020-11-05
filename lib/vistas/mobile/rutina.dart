@@ -13,7 +13,7 @@ class Rutina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    _db.initTodasActividades().then((i)=>print("Todas las actividades inicializadas"));
+    _db.initAllEvents().then((i)=>print("Todas las actividades inicializadas"));
 
     return Scaffold(
       appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[

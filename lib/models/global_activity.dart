@@ -1,3 +1,4 @@
+import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/providers/db_provider.dart';
 
 abstract class GlobalActivity {
@@ -10,10 +11,9 @@ abstract class GlobalActivity {
 
   DBProvider db = DBProvider.db;
 
-  static const List<String> days = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
 
   GlobalActivity(this.date, this.daysToNotify, {this.nombre, this.descripcion}){
-    this.id = generateID(); // Esto es tremendamente necesario
+    this.id = helpers.generateID(); // Esto es tremendamente necesario
   }
 
   GlobalActivity.fromJson(Map<String, dynamic> json){
@@ -29,17 +29,10 @@ abstract class GlobalActivity {
     
   }
 
-  int generateID() {
-
-    final date = DateTime.now();
-    final secondsNow = date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
-
-    return secondsNow - 62832762060;
-  }
-
-  int parseDayFromString(String day)=>days.indexOf(day) + 1;
-
-  Future<void> setAlarms();
+  Future<bool> save();
+  Future<bool> update(Map<String, dynamic> params);
+  Future<bool> delete();
+  Future<void> createAlarms();
   Future<void> chainStateUpdate();
 
 }

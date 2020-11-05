@@ -1,129 +1,106 @@
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:utm_vinculacion/providers/alarms_provider.dart';
+import 'package:utm_vinculacion/helpers/helpers.dart' as helpers; 
 import 'package:utm_vinculacion/providers/db_provider.dart';
 
 class AlarmModel {
-  int _id;
-  String title;
-  String description;
-  DateTime time;
-  bool active;
-  int interval;
+  int _id; 
+  String _title; // part of payload
+  String _description; // part of payload
+  DateTime _time; // time where this alarm has to notify
+  bool _active; // if this alarm is active or not
+  int _interval; // this is the repetition rate for alarms
 
+  // this is the seed for id generation
   static final DateTime referenceDateId = new DateTime(2020, 1, 1, 1, 1, 1);
-
   static DBProvider db = DBProvider.db;
 
-  int generateID() {
-
-    final date = DateTime.now();
-    final secondsNow = date.year*31104000+date.month*2592000+date.day*86400+date.hour*3600+date.minute*60+date.second+date.microsecond;
-
-    return secondsNow - 62832762060;
+  //////////////////////////////// Constructor ////////////////////////////////
+  AlarmModel(this._time, this._title, this._description) {
+    this._id = helpers.generateID();
+    this._interval = 7; // repeat it every 7 days (every week)
+    this._active=true;  // at the beginning all alarms will be active
   }
 
-  AlarmModel(this.time, {this.title, this.description}) {
-    _id = this.generateID();
-    interval = 7;
-    active=true;
+  ////////////////////////////// CRUD in database //////////////////////////////
+  
+  /// This method will create an alarm in local database. If you want to relate
+  /// this with a care or an activity you need to go to that model and search for
+  /// that method.
+  /// @interval variable will storage the frequency of repetition measured in days.
+  Future<bool> save({int interval}) async {    
+    this._interval = interval ?? this._interval;
+    return await db.nuevaAlarma(this);
   }
 
-  static Future<void> showAlarm(int id) async {
-
-    // buscando la alarma en la DB
-    AlarmModel alarm = await db.getAlarma(id);
-
-    if(alarm == null) return;
-
-    final localNotification = FlutterLocalNotificationsPlugin();
-    await localNotification.show(
-      alarm.id, alarm.title, alarm.description, 
-      NotificationDetails(AlarmProvider.androidChannel, AlarmProvider.iOSChannel),
-      payload: id.toString()
-    );
-    // await AlarmProvider.playSong();
-  }
-
-  ///
-  /// _interval_ es cada cuanto tiempo sonara la alarma
-  /// En caso de desastre, tocara reiniciar el celular :'(
-  Future<void> save({int interval=7})async{
-
-    this.interval = interval ?? this.interval;
-
-    await reactivate();
-    await db.nuevaAlarma(this);
-  }
-
-  Future<void> updateState({bool state})async{
-    if((state ?? this.active)){
-      await this.reactivate();
-    }else{
-      await this.cancelAlarm();
-    }
-    await db.updateAlarmState(_id, (state ?? this.active)? 1:0);
-  }
-
-  static DateTime calculateDiff(DateTime current, int targetWeekDay){
-
-    int _currentDay = current.weekday;
-
-    if(targetWeekDay < _currentDay){
-      targetWeekDay +=7;
-    }
-
-    int diff =  targetWeekDay - _currentDay;
-
-    return current.add(new Duration(days: diff,));
-  }
-
-  Future<void> reactivate({int idAlarm}) async {
-
-    this.time = calculateDiff(DateTime.now(), this.time.weekday);
-
-    await AndroidAlarmManager.periodic(
-      Duration(days: this.interval),
-      idAlarm ?? _id,
-      showAlarm,
-      startAt: this.time,
-      wakeup: true,
-      rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
-    );
-  }
-
-  // Cancelando la alarma (no implementada aun)
-  Future<void> cancelAlarm({int idAlarm})async{
-    await AndroidAlarmManager.cancel(idAlarm ?? _id);
-  }
-
-
-  Map<String, dynamic> toJson()=>{
-    "id":    _id,
-    "title": title,
-    "body":  description,
-    "active": (active ?? true)? 1:0,
-    "date": "${time.year}/${time.month}/${time.day}",
-    "time": "${time.hour}:${time.minute}"
-  };
-
-  AlarmModel.fromJson(Map<String, dynamic> json) {
+  /// You need to provide a map with the response of the database
+  AlarmModel.readFromDB(Map<String, dynamic> json) {
     this._id = json["id"];
-    this.title = json["title"];
-    this.description = json["body"];
-    this.active = json["active"]==1;
+    this._title = json["title"];
+    this._description = json["body"];
+    this._active = json["active"]==1;
 
     List<int> date = json["date"].toString().split("/").map((i){
       print("Imprimiendo fecha: $i");
       return int.parse(i);
     }).toList();
+
     List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
 
-    this.time = new DateTime(date[0], date[1], date[2], time[0], time[1]);
-    this.interval = 7;
+    this._time = new DateTime(date[0], date[1], date[2], time[0], time[1]);
+    this._interval = json["interval"] ?? 7;
   }
 
-  int get id =>_id;
+  /// In params you need to specify which fields you want to change. ID
+  /// are not allowed to change.
+  Future<bool> update(Map<String, dynamic> params) async {
+    return await db.updateAlarm(params, this._id);
+  }
+
+  Future<bool> delete() async {
+    bool res = await db.deleteAlarm(this._id);
+    return res && (await AndroidAlarmManager.cancel(this._id));
+  }
+
+  /////////////////////////////// Funtionality ///////////////////////////////
+  /// This method will create and schedule a service in android OS to be
+  /// notifyed at an specific time.
+  Future<void> activate() async {    
+    this._time = helpers.nextDateAlarm(DateTime.now(), this._time.weekday);
+
+    await AndroidAlarmManager.periodic(
+      Duration(days: this._interval),
+      this._id,
+      helpers.showAlarmNotification,
+      startAt: this._time,
+      wakeup: true,
+      rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
+    );
+  }
+
+  /// You can use this to pause/cancel/delete an alarm from the operative system
+  Future<bool> desactivate() async => await AndroidAlarmManager.cancel(this._id);
+
+  /// Will create a json to storage it in database
+  Map<String, dynamic> toJson()=>{
+    "id":    this._id,
+    "title": this._title,
+    "body":  this._description,
+    "interval": this._interval,
+    "active": (this._active ?? true)? 1:0,
+    "date": "${this._time.year}/${this._time.month}/${this._time.day}",
+    "time": "${this._time.hour}:${this._time.minute}",
+  };
+
+  ////////////////////////////////////// Getters //////////////////////////////////////
+  int get id => this._id;
+  String get title => this._title;
+  String get description => this._description;
+  bool get status => this._active;
+  DateTime get date => this._time;
+
+  ////////////////////////////////////// Setters //////////////////////////////////////
+  set title(String title) => this._title = title;
+  set description(String desc) => this._description = desc;
 
 }

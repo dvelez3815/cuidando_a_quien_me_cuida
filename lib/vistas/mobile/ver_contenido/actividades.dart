@@ -21,7 +21,7 @@ class _ActividadesState extends State<Actividades> {
 
   @override
   void initState() {
-    dbProvider.getActividades();
+    dbProvider.getActivities();
     super.initState();
   }
 

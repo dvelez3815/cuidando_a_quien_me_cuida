@@ -1,23 +1,41 @@
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
+import 'package:utm_vinculacion/providers/db_provider.dart';
 
 class Actividad extends GlobalActivity{
   
+  final db = DBProvider.db;  
   bool _estado = true;
 
   Actividad(DateTime date, List<String> daysToNotify, {String nombre, String descripcion}):super(date, daysToNotify, nombre:nombre, descripcion:descripcion);
   
+  /////////////////////////////////// CRUD ///////////////////////////////////
+  Future<bool> save() async {
+    final res = await this.createAlarms();
+    return res && (await db.newActivity(this));
+  }
+
+  Future<bool> update(Map<String, dynamic> params) async {
+    // TODO update alarms if its state change
+    return await db.updateActivity(params, this.id);
+  }
+
+  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json){
+    this._estado = json['active']==1;
+  }
+
+  Future<bool> delete() async {
+    this._estado = false;
+    await chainStateUpdate();
+
+    return (await db.deleteActivity(this)) && (await db.eliminaActividadAlarmas(this));
+  }
+
+  ////////////////////////////// Functionality //////////////////////////////
   @override
-  Future<void> setAlarms()async{
-    daysToNotify.forEach((day)async{
-      final _date = AlarmModel.calculateDiff(DateTime.now(), parseDayFromString(day));
-      final AlarmModel alarm = new AlarmModel(
-        new DateTime(_date.year, _date.month, _date.month, _date.day, date.hour, date.minute),
-        title: "Recordatorio", description: this.nombre
-      );
-      await alarm.save();
-      await db.newActivityAlarm(this.id, alarm.id);
-    });
+  Future<bool> createAlarms() async {
+    // TODO: create alarms and save it in db
+    return true;
   }
 
   @override
@@ -26,19 +44,17 @@ class Actividad extends GlobalActivity{
 
     alarms.forEach((element)async{
       if(this.estado){
-        await element.reactivate();
+        await element.activate();
       }else{
-        await element.cancelAlarm();
+        await element.desactivate();
       }
-      await db.updateAlarmState(element.id, this.estado?1:0);
+      // TODO: complete this
+      // await db.updateAlarmState(element.id, this.estado?1:0);
     });
 
-    await db.updateActivityState(this.id, this.estado);
+    await db.updateActivity({"active": this._estado?1:0}, this.id);
   }
 
-  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json){
-    this._estado = json['active']==1;
-  }
 
   Map<String, dynamic> toJson(){
     return <String, dynamic>{
@@ -51,7 +67,10 @@ class Actividad extends GlobalActivity{
     };
   }
 
+  /////////////////////////////// Getters ///////////////////////////////
   get estado =>_estado;
+
+  /////////////////////////////// Setters ///////////////////////////////
   set estado(bool status) {
     this._estado = status;
     chainStateUpdate();

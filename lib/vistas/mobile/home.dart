@@ -637,7 +637,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
 
                     int dSemana = actual.weekday;
                     List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
-                    List<Actividad> actividadesDB = (await _db.getActividades()) ?? [];
+                    List<Actividad> actividadesDB = (await _db.getActivities()) ?? [];
                     List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
                     
 

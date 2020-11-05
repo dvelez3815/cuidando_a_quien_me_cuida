@@ -60,7 +60,7 @@ class _AddCuidadoState extends State<AddCuidado> {
         // rellenando los dias en que suena la alarma
         dbProvider.getAlarmsByCare(item.id).then((value){
           value.forEach((element) {
-            values.update(parseDayWeek(element.time.weekday).toLowerCase(), (value) => true);
+            values.update(parseDayWeek(element.date.weekday).toLowerCase(), (value) => true);
           });
           
           setState((){});
@@ -213,12 +213,12 @@ class _AddCuidadoState extends State<AddCuidado> {
 
     AlarmModel model = new AlarmModel(
         new DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        title: nombreActividad.text ?? "",
-        description: objetivosActividad.text
+        nombreActividad.text ?? "",
+        objetivosActividad.text
     );
 
     Cuidado care = new Cuidado(
-      model.time,
+      model.date,
       daysToNotify,
       nombre: nombreActividad.text,
       descripcion: objetivosActividad.text
@@ -226,12 +226,12 @@ class _AddCuidadoState extends State<AddCuidado> {
 
     if(dataPre.isNotEmpty){
        Cuidado _care = dataPre["care_model"];
-       await dbProvider.removeCuidado(_care);
-       await dbProvider.eliminaCuidadoAlarmas(_care);
+       await dbProvider.deleteCare(_care);
+       await dbProvider.deleteCareAlarm(_care);
     }
     
     await dbProvider.nuevoCuidado(care);
-    await care.setAlarms(); // esto crea multiples alarmas y las guarda en SQLite
+    await care.createAlarms(); // esto crea multiples alarmas y las guarda en SQLite
 
     scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('La alarma sonara el ${date.day}/${date.month}/${date.year} a las ${time.hour}:${time.minute}')));

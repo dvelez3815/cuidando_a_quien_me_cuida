@@ -152,7 +152,7 @@ class _CuidadosState extends State<Cuidados> {
             label: Text("Eliminar", style: TextStyle(color: Colors.red)),
             onPressed: ()async{
               final ok = await _deleteCare(cuidado);
-              await dbProvider.eliminaCuidadoAlarmas(cuidado);
+              await dbProvider.deleteCareAlarm(cuidado);
               widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
               ));
