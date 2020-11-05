@@ -1,7 +1,8 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
+import 'package:utm_vinculacion/providers/db_provider.dart';
 
 
 const List<String> days = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
@@ -34,7 +35,9 @@ DateTime nextDateAlarm(DateTime current, int targetWeekDay){
 }
 
 /// This will show the alarm at the notification bar of your cellphone
-Future<void> showAlarmNotification(AlarmModel alarm) async {
+Future<void> showAlarmNotification(int id) async {
+
+  final alarm = await DBProvider.db.getAlarma(id);
 
   if(alarm == null) return;
 
@@ -50,7 +53,12 @@ Future<void> showAlarmNotification(AlarmModel alarm) async {
 int parseDayFromString(String day)=>days.indexOf(day) + 1;
 
 Future<void> initDatabase(Database db, int version) async{
-  await db.execute(".import recursosexternos/database.sql");
+
+  String script = await rootBundle.loadString("recursosexternos/database.sql", cache: false);
+
+  script.split(";").forEach((String query)async{
+    await db.execute(query+";");
+  });
 }
 
 String parseDayWeek(int day){

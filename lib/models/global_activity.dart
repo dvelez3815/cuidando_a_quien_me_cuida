@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+
 import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/providers/db_provider.dart';
 
@@ -22,12 +21,16 @@ abstract class GlobalActivity {
   GlobalActivity.fromJson(Map<String, dynamic> json){
 
     List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
+    String days = json['days'] ?? "[]";
+    days = days.replaceAll("[", "");
+    days = days.replaceAll("]", "");
+    days = days.replaceAll(" ", "");
 
     this.id = json['id'];
     this.nombre = json['nombre'];
     this.descripcion = json['descripcion'];
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
-    this.daysToNotify = List<String>.from(jsonDecode(json['days']));
+    this.daysToNotify = days.split(",");
     
   }
 

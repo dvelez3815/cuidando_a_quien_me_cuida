@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
@@ -46,17 +45,11 @@ class EventAC {
     time = care.time;
     
     // if there are no days to notify, then put one by default
-    if(!daysToNotify.containsValue(true)){
-      // setting days where alarms need to be active
-      dbProvider.getAlarmsByCare(care.id).then((value){
-        value.forEach((element) {
-          daysToNotify.update(helpers.parseDayWeek(element.dayToNotify).toLowerCase(), (value) => true);
-        });
-        
-        setState((){});
-      });
-    
-    }
+    care.daysToNotify.forEach((element) {
+      daysToNotify[element.toLowerCase()] = true;
+    });
+
+    setState((){});
   }
 
   ////////////////////////// Interface functions //////////////////////////

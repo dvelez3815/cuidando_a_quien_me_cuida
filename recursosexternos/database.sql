@@ -1,11 +1,10 @@
--- Creating tables
 CREATE TABLE Actividad(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR NOT NULL,
     descripcion VARCHAR NOT NULL,
-    date VARCHAR NULL,
+    days VARCHAR NULL,
     time VARCHAR NULL,
-    active INTEGER DEFAULT 0
+    active INTEGER DEFAULT 1
 );
         
 CREATE TABLE Ingrediente(
@@ -41,7 +40,7 @@ CREATE TABLE cuidado(
     id INTEGER NOT NULL,
     nombre VARCHAR NOT NULL,
     descripcion VARCHAR NOT NULL,
-    date VARCHAR NULL, -- YYYY/MM/DD
+    days VARCHAR NULL,
     time VARCHAR NULL, -- HH:MM
     active INTEGER DEFAULT 1,
     CONSTRAINT pkCuidado PRIMARY KEY(id)
@@ -70,5 +69,3 @@ CREATE TABLE cuidadosAlarmas(
     FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY(cuidado_id) REFERENCES cuidado(id) ON UPDATE CASCADE ON DELETE NO ACTION
  );
-
- -- Insert data after this line

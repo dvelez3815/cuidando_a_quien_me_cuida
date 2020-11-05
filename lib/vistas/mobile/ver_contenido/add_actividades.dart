@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/providers/alarms_provider.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
 import 'package:utm_vinculacion/texto_app/const_textos.dart';

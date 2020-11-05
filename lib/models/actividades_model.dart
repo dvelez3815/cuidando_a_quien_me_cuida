@@ -20,9 +20,45 @@ class Actividad extends GlobalActivity{
     return res && (await db.newActivity(this));
   }
 
+  /// params need to be in the database format
   Future<bool> update(Map<String, dynamic> params) async {
-    // TODO update alarms if its state change
-    return await db.updateActivity(params, this.id);
+
+    final activityUpdated = await db.updateActivity(params, this.id);
+    String rawDays = params["days"];    
+
+    // If it's not 0, it means that someting change
+    if(rawDays.compareTo(this.daysToNotify.toString()) != 0) {
+      await db.eliminaActividadAlarmas(this);
+      await activityUpdated.createAlarms(); // creating new alarms
+    }    
+    else {
+      Map<String, dynamic> updateAlarmParams = new Map<String, dynamic>();
+
+      if(params.containsKey("active")){
+        updateAlarmParams.addAll({"active": params["active"]});
+      }
+      if(params.containsKey("nombre")){
+        updateAlarmParams.addAll({"title": params["nombre"]});
+      }
+      if(params.containsKey("descripcion")){
+        updateAlarmParams.addAll({"body": params["descripcion"]});
+      }
+      if(params.containsKey("time")){
+        updateAlarmParams.addAll({"time": params["time"]});
+      }
+
+      if(updateAlarmParams.isNotEmpty){
+        final alarms = await db.getAlarmsByActivity(this.id);
+        
+        // updating all alarms
+        alarms.forEach((AlarmModel element)async{
+          await element.update(updateAlarmParams);
+        });
+      }
+      
+    }
+
+    return true;
   }
 
   Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json){
@@ -30,9 +66,7 @@ class Actividad extends GlobalActivity{
   }
 
   Future<bool> delete() async {
-    this._estado = false;
-    await chainStateUpdate();
-
+    this.estado = false; // this will trigger the setter and update all alarms status
     return (await db.deleteActivity(this)) && (await db.eliminaActividadAlarmas(this));
   }
 
@@ -64,8 +98,9 @@ class Actividad extends GlobalActivity{
       }else{
         await element.desactivate();
       }
-      // TODO: complete this
-      // await db.updateAlarmState(element.id, this.estado?1:0);
+      // This do not delete anything, it just change the state of this alarm
+      // in the database
+      await db.updateAlarmStateByActivity(element.id, this.estado?1:0);
     });
 
     await db.updateActivity({"active": this._estado?1:0}, this.id);

@@ -61,6 +61,7 @@ class DBProvider {
 
   // This will create a database instance or return an existing one
   Future<Database> get database async {
+
     if(_database != null){
       return _database;
     }
@@ -80,7 +81,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onOpen: (db){},
       onCreate: helpers.initDatabase
     );
@@ -188,7 +189,7 @@ class DBProvider {
     return res>0;
   }
 
-  Future<bool> updateCare(Map<String, dynamic> params, int id) async {
+  Future<Cuidado> updateCare(Map<String, dynamic> params, int id) async {
     final db = await database;
 
     // you can't change the ID
@@ -205,7 +206,7 @@ class DBProvider {
       await getCuidados();
     }
 
-    return res > 0;
+    return Cuidado.fromJson((await db.query("cuidado", where: "id=?", whereArgs: [id]))[0]);
   }
 
   Future<List<Cuidado>> getCuidados() async {
@@ -252,7 +253,7 @@ class DBProvider {
     return res>0;
   }
 
-  Future<bool> updateActivity(Map<String, dynamic> params, int id) async {
+  Future<Actividad> updateActivity(Map<String, dynamic> params, int id) async {
     final db = await database;
 
     // you can't change the ID
@@ -269,7 +270,7 @@ class DBProvider {
       await getActivities();
     }
 
-    return res > 0;
+    return Actividad.fromJson((await db.query("actividad", where: "id=?", whereArgs: [id]))[0]);
   }
 
   Future<List<Actividad>> getActivities() async {
@@ -381,7 +382,7 @@ class DBProvider {
   Future<List<AlarmModel>> getAlarmsByCare(int careID)async{
     final db = await database;
     List<Map<String, dynamic>> res = await db.rawQuery(
-      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?) AND active=? ORDER BY date desc",
+      "SELECT * FROM alarma WHERE id IN (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?) AND active=? ORDER BY day, time desc",
       [careID, 1]
     );
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/models/cuidado_model.dart';
 import 'package:utm_vinculacion/vistas/mobile/ver_contenido/eventos.dart';
 
