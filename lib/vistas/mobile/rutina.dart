@@ -50,14 +50,11 @@ class Rutina extends StatelessWidget {
     // Filtrando todo 
     for(int i=0; i<actividadesGenerales.length; ++i){
 
-      if(actividadesGenerales[i].date == null){
-        noDefinida.add(actividadesGenerales[i]);
-      }
       print("Holaaaaa");
-      if(actividadesGenerales[i].date.hour>=6 && actividadesGenerales[i].date.hour<12){
+      if(actividadesGenerales[i].time.hour>=6 && actividadesGenerales[i].time.hour<12){
         maniana.add(actividadesGenerales[i]);
       }
-      else if(actividadesGenerales[i].date.hour >=12 && actividadesGenerales[i].date.hour<19){
+      else if(actividadesGenerales[i].time.hour >=12 && actividadesGenerales[i].time.hour<19){
         tarde.add(actividadesGenerales[i]);
       }
       else{        
@@ -127,7 +124,7 @@ class Rutina extends StatelessWidget {
       ),
       leading: Column(
         children: [
-          Text("${item.date.hour}:${item.date.minute}"),
+          Text("${item.time.hour}:${item.time.minute}"),
         ],
       ),
     );

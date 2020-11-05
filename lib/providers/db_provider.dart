@@ -399,7 +399,7 @@ class DBProvider {
     List<AlarmModel> raw = (await db.rawQuery('select * from alarma where active=?', [1])).map((i)=>AlarmModel.readFromDB(i)).toList();
 
     raw.forEach((element) {
-      if(element.date.weekday == weekday){
+      if(element.dayToNotify == weekday){
         events.add(element);
       }
     });

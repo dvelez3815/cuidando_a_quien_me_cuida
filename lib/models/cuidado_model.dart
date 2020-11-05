@@ -1,11 +1,15 @@
-import 'package:utm_vinculacion/models/global_activity.dart';
+import 'package:flutter/material.dart';
 
+import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
+import 'package:utm_vinculacion/models/global_activity.dart';
 import 'alarma_model.dart';
 
 class Cuidado extends GlobalActivity{
 
   bool _estado = true;
-  Cuidado(DateTime date, List<String> daysToNotify, {String nombre, String descripcion}):super(date, daysToNotify, nombre:nombre, descripcion:descripcion);
+  Cuidado(TimeOfDay time, List<String> daysToNotify, {String nombre, String descripcion}):super(
+    time, daysToNotify, nombre:nombre, descripcion:descripcion
+  );
 
   ///////////////////////////////// CRUD /////////////////////////////////
   Cuidado.fromJson(Map<String, dynamic> json):super.fromJson(json){
@@ -35,8 +39,19 @@ class Cuidado extends GlobalActivity{
   ////////////////////////////// Functions //////////////////////////////
   @override
   Future<bool> createAlarms() {
-    // TODO: implement createAlarms
-    throw UnimplementedError();
+    this.daysToNotify.forEach((String element)async{
+      AlarmModel alarm = new AlarmModel(
+        helpers.parseDay(element), // day to be notified
+        this.time, // time to be notified
+        this.nombre,
+        this.descripcion
+      );
+
+      await alarm.save();
+      await db.newCareAlarm(this.id, alarm.id);
+    });
+
+    return Future.value(true);
   }
 
   @override
@@ -58,15 +73,14 @@ class Cuidado extends GlobalActivity{
   }
 
   
-
   Map<String, dynamic> toJson(){
     return <String, dynamic>{
       "id"         : id,
       "nombre"     : nombre,
       "descripcion": descripcion,
       "active"     : this.estado? 1:0,
-      "date"       : "${date.year}/${date.month}/${date.day}",
-      "time"       : "${date.hour}:${date.minute}",
+      "time"       : "${this.time.hour}:${this.time.minute}",
+      "days"       : this.daysToNotify.toString()
     };
   }
 

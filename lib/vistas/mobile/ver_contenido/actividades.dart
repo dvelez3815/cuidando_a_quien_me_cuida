@@ -82,7 +82,7 @@ class _ActividadesState extends State<Actividades> {
                             secondary: Column(
                               children: [
                                 Icon(Icons.alarm),
-                                Text("${item.date.hour}:${item.date.minute}"),
+                                Text("${item.time.hour}:${item.time.minute}"),
                               ],
                             ),
                           ),

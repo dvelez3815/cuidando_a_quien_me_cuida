@@ -34,7 +34,7 @@ class _AlarmsViewState extends State<AlarmsView> {
             itemBuilder: (context, index){
 
               AlarmModel data = snapshot.data[index];
-              print("${data.date.toString()}");
+              print("${data.time.toString()}");
               return SwitchListTile(
                 // onChanged: (change)async{
 
@@ -50,7 +50,7 @@ class _AlarmsViewState extends State<AlarmsView> {
                 secondary: Column(
                   children: [
                     Icon(Icons.alarm),
-                    Text("${data.date.hour}:${data.date.minute < 10? "0":""}${data.date.minute}"),
+                    Text("${data. time.hour}:${data.time.minute < 10? "0":""}${data.time.minute}"),
                   ],
                 ),
               );

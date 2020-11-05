@@ -50,91 +50,33 @@ Future<void> showAlarmNotification(AlarmModel alarm) async {
 int parseDayFromString(String day)=>days.indexOf(day) + 1;
 
 Future<void> initDatabase(Database db, int version) async{
-  await db.execute(
-    "CREATE TABLE Actividad("
-    "id INTEGER PRIMARY KEY,"
-    "nombre VARCHAR NOT NULL,"
-    "descripcion VARCHAR NOT NULL,"
-    "date VARCHAR NULL,"
-    "time VARCHAR NULL,"
-    "active INTEGER DEFAULT 0"
-    ");"
-  );
-        
-  await db.execute(
-    "CREATE TABLE Ingrediente("
-    "id INTEGER PRIMARY KEY,"
-    "nombre VARCHAR NOT NULL"
-    ");"
-  );
+  await db.execute(".import recursosexternos/database.sql");
+}
 
-  await db.execute(
-    "CREATE TABLE Comida("
-    "id INTEGER PRIMARY KEY,"
-    "nombre VARCHAR NOT NULL,"
-    "descripcion VARCHAR NOT NULL,"
-    "preparacion VARCHAR NOT NULL,"
-    "total VARCHAR NOT NULL,"
-    "calorias VARCHAR NOT NULL,"
-    "coccion VARCHAR NOT NULL,"
-    "comensales VARCHAR NOT NULL,"
-    "tipo VARCHAR NOT NULL,"
-    "urlImagen VARCHAR,"
-    "rutaVista VARCHAR"
-    ");"
-  );
+String parseDayWeek(int day){
+  switch(day){
+    case 1: return "LUNES";
+    case 2: return "MARTES";
+    case 3: return "MIERCOLES";
+    case 4: return "JUEVES";
+    case 5: return "VIERNES";
+    case 6: return "SABADO";
+    default: return "DOMINGO";
+  }
+}
 
-  await db.execute(
-    "CREATE TABLE ComidaIngrediente("
-    "idComida INTEGER NOT NULL,"
-    "idIngrediente VARCHAR NOT NULL,"
-    "CONSTRAINT pkComidaIngrediente PRIMARY KEY(idComida, idIngrediente),"
-    "CONSTRAINT fkComida FOREIGN KEY(idComida) REFERENCES Comida(id) "
-    "ON UPDATE CASCADE ON DELETE NO ACTION,"
-    "CONSTRAINT fkIngrediente FOREIGN KEY(idIngrediente) REFERENCES Ingrediente(nombre) "
-    "ON UPDATE CASCADE ON DELETE NO ACTION"
-    ");"
-  );
+int parseDay(String day){
+  int returnDay = 1;
 
-  await db.execute(
-    "CREATE TABLE cuidado("
-    "id INTEGER NOT NULL,"
-    "nombre VARCHAR NOT NULL,"
-    "descripcion VARCHAR NOT NULL,"
-    "date VARCHAR NULL," // "YYYY/MM/DD"
-    "time VARCHAR NULL," // "HH:MM"
-    "active INTEGER DEFAULT 1,"
-    "CONSTRAINT pkCuidado PRIMARY KEY(id)"
-    ");"
-  );
+  switch(day.toUpperCase()){
+    case "LUNES": returnDay=1; break;
+    case "MARTES": returnDay=2; break;
+    case "MIERCOLES": returnDay=3; break;
+    case "JUEVES": returnDay=4; break;
+    case "VIERNES": returnDay=5; break;
+    case "SABADO": returnDay=6; break;
+    case "DOMINGO": returnDay=7; break;
+  }
 
-  await db.execute(
-    "CREATE TABLE alarma("
-    "id INTEGER PRIMARY KEY,"
-    "title VARCHAR NULL DEFAULT \"Sin título\","
-    "body VARCHAR NULL DEFAULT \"Sin descripción\","
-    "date VARCHAR NOT NULL," // "YYYY/MM/DD"
-    "time VARCHAR NOT NULL," // "HH:MM"
-    "active INTEGER DEFAULT 1,"
-    "interval INTEGER DEFAULT 7"
-    ");"
-  );
-
-  await db.execute(
-    "CREATE TABLE actividadesAlarmas("
-    "alarma_id INTEGER NOT NULL,"
-    "actividad_id INTEGER NOT NULL,"
-    "FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
-    "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION"
-    ");"
-  );
-
-  await db.execute(
-    "CREATE TABLE cuidadosAlarmas("
-    "alarma_id INTEGER NOT NULL,"
-    "cuidado_id INTEGER NOT NULL,"
-    "FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,"
-    "FOREIGN KEY(cuidado_id) REFERENCES cuidado(id) ON UPDATE CASCADE ON DELETE NO ACTION"
-    ");"
-  );
+  return returnDay;
 }

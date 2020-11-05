@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/models/alarma_model.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/providers/db_provider.dart';
@@ -7,7 +10,9 @@ class Actividad extends GlobalActivity{
   final db = DBProvider.db;  
   bool _estado = true;
 
-  Actividad(DateTime date, List<String> daysToNotify, {String nombre, String descripcion}):super(date, daysToNotify, nombre:nombre, descripcion:descripcion);
+  Actividad(TimeOfDay time, List<String> daysToNotify, {String nombre, String descripcion}):super(
+    time, daysToNotify, nombre:nombre, descripcion:descripcion
+  );
   
   /////////////////////////////////// CRUD ///////////////////////////////////
   Future<bool> save() async {
@@ -34,8 +39,19 @@ class Actividad extends GlobalActivity{
   ////////////////////////////// Functionality //////////////////////////////
   @override
   Future<bool> createAlarms() async {
-    // TODO: create alarms and save it in db
-    return true;
+      this.daysToNotify.forEach((String element)async{
+      AlarmModel alarm = new AlarmModel(
+        helpers.parseDay(element), // day to be notified
+        this.time, // time to be notified
+        this.nombre,
+        this.descripcion
+      );
+
+      await alarm.save();
+      await db.newActivityAlarm(this.id, alarm.id);
+    });
+
+    return Future.value(true);
   }
 
   @override
@@ -55,15 +71,14 @@ class Actividad extends GlobalActivity{
     await db.updateActivity({"active": this._estado?1:0}, this.id);
   }
 
-
   Map<String, dynamic> toJson(){
     return <String, dynamic>{
       "id"         : id,
       "nombre"     : nombre,
       "descripcion": descripcion,
       "active"     : this.estado? 1:0,
-      "date"       : this.date==null? null:"${date.year}/${date.month}/${date.day}",
-      "time"       : this.date==null? null:"${date.hour}:${date.minute}",
+      "time"       : "${this.time.hour}:${this.time.minute}",
+      "days"       : this.daysToNotify.toString()
     };
   }
 
