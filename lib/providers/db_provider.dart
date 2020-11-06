@@ -171,7 +171,6 @@ class DBProvider {
   }
   
 
-
   //////////////////////////////// Care ////////////////////////////////
   Future<bool> nuevoCuidado(Cuidado cuidado) async {
     final db = await database;
@@ -199,14 +198,20 @@ class DBProvider {
 
     final res = await db.update("cuidado", params, where: "id=?", whereArgs: [id]);
     
+    Cuidado newCare = Cuidado.fromJson((await db.query("cuidado", where: "id=?", whereArgs: [id]))[0]);
+
     // updating streams and temporal data
     if(res > 0) {
-      final modelToDelete = cuidados.firstWhere((element) => element.id==id);
-      cuidados.remove(modelToDelete);
+      cuidados.removeWhere((element) => element.id==id);
       await getCuidados();
+
+      // updating reference in all content list
+      todoElContenido.removeWhere((element) => element.id==id);
+      todoElContenido.add(newCare);
+      todoContenidoSink(todoElContenido);
     }
 
-    return Cuidado.fromJson((await db.query("cuidado", where: "id=?", whereArgs: [id]))[0]);
+    return newCare;
   }
 
   Future<List<Cuidado>> getCuidados() async {
@@ -216,8 +221,8 @@ class DBProvider {
     if(res.isNotEmpty){
       cuidados.clear();
       cuidados = res.map((f)=>Cuidado.fromJson(f)).toList();
-      cuidadoSink(cuidados);
     }
+    cuidadoSink(cuidados);
     return cuidados;
   }
 
@@ -262,15 +267,21 @@ class DBProvider {
     }
 
     final res = await db.update("actividad", params, where: "id=?", whereArgs: [id]);
-    
+    Actividad newActivity = Actividad.fromJson((await db.query("actividad", where: "id=?", whereArgs: [id]))[0]);
+
     // updating streams and temporal data
     if(res > 0) {
       final modelToDelete = actividades.firstWhere((element) => element.id==id);
       actividades.remove(modelToDelete);
       await getActivities();
+
+      // updating dependencies
+      todoElContenido.removeWhere((element) => element.id == id);
+      todoElContenido.add(newActivity);
+      todoContenidoSink(todoElContenido);
     }
 
-    return Actividad.fromJson((await db.query("actividad", where: "id=?", whereArgs: [id]))[0]);
+    return newActivity;
   }
 
   Future<List<Actividad>> getActivities() async {
@@ -280,8 +291,8 @@ class DBProvider {
     if(res.isNotEmpty){
       actividades.clear();
       actividades = res.map((f)=>Actividad.fromJson(f)).toList();
-      actividadSink(actividades);
     }
+    actividadSink(actividades);
     return actividades;
 
   }
@@ -335,9 +346,11 @@ class DBProvider {
       [actividad.id]
     );
 
-    res += await db.rawDelete(
-      "DELETE FROM actividadesAlarmas WHERE actividad_id=?", [actividad.id]
-    );
+    if(res > 0){
+      res += await db.rawDelete(
+        "DELETE FROM actividadesAlarmas WHERE actividad_id=?", [actividad.id]
+      );
+    }
 
     return res > 0;
   }
@@ -353,16 +366,22 @@ class DBProvider {
   }
 
   Future<bool> deleteCareAlarm(Cuidado care)async{
+    print("Eliminando alarmas del cuidado");
     final db = await database;
 
     int status = await db.rawDelete("DELETE FROM cuidado WHERE id=?", [care.id]);
+    print("Se eliminaron "+status.toString()+" registros");
+
     if(status>0){
-      status += await db.rawDelete("DELETE FROM cuidadosAlarmas WHERE cuidado_id=?", [care.id]);
+      status = await db.rawDelete("DELETE FROM alarma WHERE id in (SELECT alarma_id FROM cuidadosAlarmas WHERE cuidado_id=?)", [care.id]);
+      status = await db.rawDelete("DELETE FROM cuidadosAlarmas WHERE cuidado_id=?", [care.id]);
+
+      cuidados.remove(care);
+      todoElContenido.remove(care);
     }
 
-    cuidados.remove(care);
-    todoElContenido.remove(care);
     cuidadoSink(cuidados);
+    todoContenidoSink(todoElContenido);
 
     return status>0;
   }

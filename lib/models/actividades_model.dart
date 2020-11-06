@@ -7,20 +7,21 @@ import 'package:utm_vinculacion/providers/db_provider.dart';
 
 class Actividad extends GlobalActivity{
   
-  final db = DBProvider.db;  
-  bool _estado = true;
+  final db = DBProvider.db;
 
   Actividad(TimeOfDay time, List<String> daysToNotify, {String nombre, String descripcion}):super(
     time, daysToNotify, nombre:nombre, descripcion:descripcion
   );
   
   /////////////////////////////////// CRUD ///////////////////////////////////
+  @override
   Future<bool> save() async {
     final res = await this.createAlarms();
     return res && (await db.newActivity(this));
   }
 
   /// params need to be in the database format
+  @override
   Future<bool> update(Map<String, dynamic> params) async {
 
     final activityUpdated = await db.updateActivity(params, this.id);
@@ -61,13 +62,21 @@ class Actividad extends GlobalActivity{
     return true;
   }
 
-  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json){
-    this._estado = json['active']==1;
-  }
+  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json);
 
+  @override
   Future<bool> delete() async {
-    this.estado = false; // this will trigger the setter and update all alarms status
-    return (await db.deleteActivity(this)) && (await db.eliminaActividadAlarmas(this));
+
+    List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
+
+    alarms.forEach((element)async{
+      await element.desactivate();
+    });
+
+    await db.eliminaActividadAlarmas(this); // delete all alarms of this object
+    await db.deleteActivity(this); // delete current activity
+
+    return true;
   }
 
   ////////////////////////////// Functionality //////////////////////////////
@@ -98,12 +107,10 @@ class Actividad extends GlobalActivity{
       }else{
         await element.desactivate();
       }
-      // This do not delete anything, it just change the state of this alarm
-      // in the database
-      await db.updateAlarmStateByActivity(element.id, this.estado?1:0);
     });
 
-    await db.updateActivity({"active": this._estado?1:0}, this.id);
+    await db.updateAlarmStateByActivity(this.id, this.estado?1:0);
+    await db.updateActivity({"active": this.estado?1:0}, this.id);
   }
 
   Map<String, dynamic> toJson(){
@@ -117,12 +124,5 @@ class Actividad extends GlobalActivity{
     };
   }
 
-  /////////////////////////////// Getters ///////////////////////////////
-  get estado =>_estado;
 
-  /////////////////////////////// Setters ///////////////////////////////
-  set estado(bool status) {
-    this._estado = status;
-    chainStateUpdate();
-  }
 }

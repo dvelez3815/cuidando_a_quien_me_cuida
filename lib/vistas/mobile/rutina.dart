@@ -50,7 +50,6 @@ class Rutina extends StatelessWidget {
     // Filtrando todo 
     for(int i=0; i<actividadesGenerales.length; ++i){
 
-      print("Holaaaaa");
       if(actividadesGenerales[i].time.hour>=6 && actividadesGenerales[i].time.hour<12){
         maniana.add(actividadesGenerales[i]);
       }
@@ -108,14 +107,14 @@ class Rutina extends StatelessWidget {
             Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
               "title": item.nombre,
               "description": item.descripcion,
-              "activity_model": item
+              "model_data": item
             });
           }
           else{
             Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
               "title": item.nombre,
               "description": item.descripcion,
-              "care_model": item
+              "model_data": item
             });
           }
         }, 

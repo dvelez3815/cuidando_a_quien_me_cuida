@@ -10,6 +10,7 @@ abstract class GlobalActivity {
   String descripcion;
   List<String> daysToNotify;
   TimeOfDay time; // time to be notified
+  bool _estado = true;
 
   DBProvider db = DBProvider.db;
 
@@ -27,6 +28,7 @@ abstract class GlobalActivity {
     days = days.replaceAll(" ", "");
 
     this.id = json['id'];
+    this._estado = json['active']==1;
     this.nombre = json['nombre'];
     this.descripcion = json['descripcion'];
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
@@ -40,4 +42,12 @@ abstract class GlobalActivity {
   Future<void> createAlarms();
   Future<void> chainStateUpdate();
 
+  /////////////////////////////// Getters ///////////////////////////////
+  get estado =>_estado;
+
+  /////////////////////////////// Setters ///////////////////////////////
+  set estado(bool status) {
+    this._estado = status;
+    chainStateUpdate();
+  }
 }

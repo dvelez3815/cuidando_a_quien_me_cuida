@@ -6,15 +6,12 @@ import 'alarma_model.dart';
 
 class Cuidado extends GlobalActivity{
 
-  bool _estado = true;
   Cuidado(TimeOfDay time, List<String> daysToNotify, {String nombre, String descripcion}):super(
     time, daysToNotify, nombre:nombre, descripcion:descripcion
   );
 
   ///////////////////////////////// CRUD /////////////////////////////////
-  Cuidado.fromJson(Map<String, dynamic> json):super.fromJson(json){
-    this._estado = json['active']==1;
-  }
+  Cuidado.fromJson(Map<String, dynamic> json):super.fromJson(json);
 
   @override
   Future<bool> save() async {
@@ -67,12 +64,13 @@ class Cuidado extends GlobalActivity{
     List<AlarmModel> alarms = await db.getAlarmsByCare(this.id);
 
     alarms.forEach((element)async{
-      print(element.id.toString()+" a ser eliminada");
-      await element.delete();
+      await element.desactivate();
     });
 
-    // This will delete the care and all its dependencies
-    return await db.deleteCareAlarm(this);
+    await db.deleteCareAlarm(this); // delete all alarms of this object
+    await db.deleteCare(this); // delete current activity
+
+    return true;
   }
 
   ////////////////////////////// Functions //////////////////////////////
@@ -98,15 +96,15 @@ class Cuidado extends GlobalActivity{
     List<AlarmModel> alarms = await db.getAlarmsByCare(this.id);
 
     alarms.forEach((element)async{
-      if(this._estado){
+      if(this.estado){
         await element.activate();
       }else{
         await element.desactivate();
       }
     });
 
-    await db.updateAlarmStateByCare(this.id, this._estado?1:0);
-    await db.updateCare({"active": this._estado?1:0}, this.id);
+    await db.updateAlarmStateByCare(this.id, this.estado?1:0);
+    await db.updateCare({"active": this.estado?1:0}, this.id);
   }
 
   
@@ -119,15 +117,6 @@ class Cuidado extends GlobalActivity{
       "time"       : "${this.time.hour}:${this.time.minute}",
       "days"       : this.daysToNotify.toString()
     };
-  }
-
-  /////////////////////////////// Getters ///////////////////////////////
-  get estado =>_estado;
-
-  /////////////////////////////// Setters ///////////////////////////////
-  set estado(bool status) {
-    this._estado = status;
-    chainStateUpdate();
   }
 
 }
