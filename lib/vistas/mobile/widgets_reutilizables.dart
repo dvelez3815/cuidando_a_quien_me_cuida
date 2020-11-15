@@ -3,6 +3,7 @@ import 'package:utm_vinculacion/routes/const_rutas.dart';
 
 Widget tresPuntos(context) { //este es para el icono de hamburguesa de 3 puntos
   return PopupMenuButton<String>(
+    icon: Icon(Icons.settings, color: Colors.white),
     onSelected: (val) => handleClick(val, context),
     itemBuilder: (BuildContext context) {
       return ['Configuraciones'].map((String choice) {

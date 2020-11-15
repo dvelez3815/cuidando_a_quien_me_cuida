@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/routes/const_rutas.dart';
+import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 import 'package:utm_vinculacion/widgets/widget.banner.dart';
 import 'package:utm_vinculacion/widgets/widget.carousel_slider.dart';
 
@@ -64,10 +65,7 @@ class _HomeState extends State<Home> {
                   icon: Icon(Icons.calendar_today, color: Colors.white),
                   onPressed: (){},
                 ),
-                IconButton(
-                  icon: Icon(Icons.settings, color: Colors.white), 
-                  onPressed: (){}
-                )
+                tresPuntos(context)
               ],
             )
           ],
@@ -83,7 +81,7 @@ class _HomeState extends State<Home> {
         padding: EdgeInsets.all(15.0),
         color: Colors.orange[400],
         child: Text(
-          "MIS ACTIVIDADES",
+          "MIS EVENTOS",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onPressed: (){
@@ -98,37 +96,40 @@ class _HomeState extends State<Home> {
       children: [
         TableRow(
           children: [
-            _getOptCard("Actividades", "Sugerencias para ti"),
-            _getOptCard("Música", "Reproducción a un click"),
+            _getOptCard("Actividades", "Sugerencias para ti", ACTIVIDADES),
+            _getOptCard("Música", "Reproducción a un click", ACTIVIDADES),
           ]
         ),
         TableRow(
           children: [
-            _getOptCard("Recetas", "Disfruta de grandes comidas"),
-            _getOptCard("Bienestar", "Tu bienestar es importante"),
+            _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS),
+            _getOptCard("Bienestar", "Tu bienestar es importante", CUIDADO),
           ]
         )
       ],
     );
   }
 
-  Widget _getOptCard(String title, String body) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-      height: 140,
-      decoration: BoxDecoration(
-        border: Border.all(width: 2.0, color: Colors.orange[400]),
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ListTile(
-            title: Text(title.toUpperCase()), 
-            subtitle: Text(body, style: TextStyle(fontSize: 10.0)),
-          ),
-          Icon(Icons.shield, size: 30.0,)
-        ],
+  Widget _getOptCard(String title, String body, String route) {
+    return GestureDetector(
+      onTap: ()=>Navigator.of(context).pushNamed(route),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        height: 140,
+        decoration: BoxDecoration(
+          border: Border.all(width: 2.0, color: Colors.orange[400]),
+          borderRadius: BorderRadius.circular(10.0)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ListTile(
+              title: Text(title.toUpperCase()), 
+              subtitle: Text(body, style: TextStyle(fontSize: 10.0)),
+            ),
+            Icon(Icons.shield, size: 30.0,)
+          ],
+        ),
       ),
     );
   }

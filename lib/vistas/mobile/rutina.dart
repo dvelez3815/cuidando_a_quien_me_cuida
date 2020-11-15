@@ -3,8 +3,8 @@ import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/const_rutas.dart';
-import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
+import 'package:utm_vinculacion/widgets/widget.circular_banner.dart';
 
 
 class Rutina extends StatelessWidget {
@@ -17,21 +17,24 @@ class Rutina extends StatelessWidget {
     _db.initAllEvents().then((i)=>print("Todas las actividades inicializadas"));
 
     return Scaffold(
-      appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
-        tresPuntos(context)        
-      ],),
-      // body: listaContenido(),
-      body: StreamBuilder(
-        stream: _db.todoContenidoStream,
-        builder: (BuildContext context, AsyncSnapshot<List<GlobalActivity>> snapshot){
-          if(!snapshot.hasData){
-            return Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          _getBanner(context, MediaQuery.of(context).size),
+          Expanded(
+            child: StreamBuilder(
+              stream: _db.todoContenidoStream,
+              builder: (BuildContext context, AsyncSnapshot<List<GlobalActivity>> snapshot){
+                if(!snapshot.hasData){
+                  return Center(child: CircularProgressIndicator());
+                }
 
-          return ListView(
-            children: _listaContenido(context, snapshot.data),
-          );
-        },
+                return ListView(
+                  children: _listaContenido(context, snapshot.data),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_to_photos),
@@ -79,9 +82,9 @@ class Rutina extends StatelessWidget {
     }).toList();
 
 
-    if(actividadesNoche.isEmpty) actividadesNoche.add(ListTile(title: Text("Sin actividades"), trailing: Icon(Icons.sentiment_dissatisfied)));
-    if(actividadesTarde.isEmpty) actividadesTarde.add(ListTile(title: Text("Sin actividades"), trailing: Icon(Icons.sentiment_dissatisfied)));
-    if(actividadesManania.isEmpty) actividadesManania.add(ListTile(title: Text("Sin actividades"), trailing: Icon(Icons.sentiment_dissatisfied)));
+    if(actividadesNoche.isEmpty) actividadesNoche.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
+    if(actividadesTarde.isEmpty) actividadesTarde.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
+    if(actividadesManania.isEmpty) actividadesManania.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
 
     
     // maniana
@@ -89,9 +92,24 @@ class Rutina extends StatelessWidget {
     if(noDefinida.isNotEmpty){
       contenido.add(_titleListTile("Sin hora definida", null, actividadesND));
     }
-    contenido.add(_titleListTile("Mañana", Icon(Icons.wb_sunny,color: Colors.yellow,), actividadesManania));
-    contenido.add(_titleListTile("Tarde", Icon(Icons.wb_sunny,color: Colors.yellow,), actividadesTarde));
-    contenido.add(_titleListTile("Noche", Icon(Icons.delete,color: Colors.yellow,), actividadesNoche));
+    contenido.add(_titleListTile(
+        "Mañana",
+        Icon(Icons.wb_sunny, color: Theme.of(context).accentColor), 
+        actividadesManania
+        )
+    );
+    contenido.add(_titleListTile(
+        "Tarde",
+        Icon(Icons.wb_cloudy , color: Theme.of(context).accentColor),
+        actividadesTarde
+        )
+    );
+    contenido.add(_titleListTile(
+        "Noche",
+        Icon(Icons.nights_stay,color: Theme.of(context).accentColor),
+        actividadesNoche
+      )
+    );
 
     return contenido;
 
@@ -163,6 +181,39 @@ class Rutina extends StatelessWidget {
           ),
         ],
       )
+    );
+  }
+
+  Widget _getBanner(BuildContext context, Size size) {
+    return Container(
+      width: size.width,
+      height: size.height*0.3,
+      child: CustomPaint(
+        painter: CircularBannerWidget(),
+        child: Column(
+          children: [
+            SafeArea(
+              child: ListTile(
+                title: Text("Cuidando a quien me cuida", style: TextStyle(color: Colors.white)),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white), 
+                  onPressed: ()=>Navigator.of(context).pop()
+                ),
+                trailing: tresPuntos(context),
+              ),
+            ),
+            SizedBox(height: size.height*0.05),
+            Text(
+              "MIS EVENTOS",
+              style: TextStyle(
+                fontSize: 25.0, 
+                fontWeight: FontWeight.bold,
+                color: Colors.white
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 

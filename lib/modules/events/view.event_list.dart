@@ -12,6 +12,7 @@ class ShowEventList {
 
   Widget listaContenido(BuildContext context, Function setState, GlobalKey<ScaffoldState> scaffoldKey, bool isCare){
     return Container(
+      color: Colors.transparent,
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10.0),
         child: Column(
@@ -51,7 +52,7 @@ class ShowEventList {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          "Cuidados",
+          isCare? "Cuidados":"Actividades",
           style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
         ),
         Spacer(),
@@ -81,19 +82,17 @@ class ShowEventList {
       child: Row(
         children: item.daysToNotify.map((day){
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),
             margin: EdgeInsets.only(right: 5.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              color: Theme.of(context).accentColor
+            child: CircleAvatar(
+              radius: 12.0,            
+              child: Text(
+                day != "miercoles"? day[0].toUpperCase(): "X", 
+                style: TextStyle(
+                  color: Colors.grey[300],
+                  fontSize: 10.0
+                ),
+              )
             ),
-            child: Text(
-              day.toUpperCase(), 
-              style: TextStyle(
-                color: Theme.of(context).canvasColor,
-                fontSize: 10.0
-              ),
-            )
           );
         }).toList(),
       ),

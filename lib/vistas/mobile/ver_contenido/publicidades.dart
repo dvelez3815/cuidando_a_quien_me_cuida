@@ -10,7 +10,13 @@ class Item1 extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(width: MediaQuery.of(context).size.width*0.4,child: Text(PUBLICIDAD1,textAlign: TextAlign.justify,)),
+          Container(
+            width: MediaQuery.of(context).size.width*0.4,
+            child: Text(
+              PUBLICIDAD1,
+              textAlign: TextAlign.justify,              
+            )
+          ),
           Container(
               child: Icon(
             Icons.wb_sunny,
