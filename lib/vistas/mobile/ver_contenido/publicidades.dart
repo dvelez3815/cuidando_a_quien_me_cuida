@@ -15,7 +15,7 @@ class Item1 extends StatelessWidget {
               child: Icon(
             Icons.wb_sunny,
             size: 50,
-            color: Colors.orangeAccent,
+            color: Colors.black,
           ))
         ],
       ),
@@ -37,7 +37,7 @@ class Item2 extends StatelessWidget {
               child: Icon(
             Icons.wb_sunny,
             size: 50,
-            color: Colors.orangeAccent,
+            color: Colors.black,
           ))
         ],
       ),
@@ -59,7 +59,7 @@ class Item3 extends StatelessWidget {
               child: Icon(
             Icons.wb_sunny,
             size: 50,
-            color: Colors.orangeAccent,
+            color: Colors.black,
           ))
         ],
       ),
@@ -81,7 +81,7 @@ class Item4 extends StatelessWidget {
               child: Icon(
             Icons.wb_sunny,
             size: 50,
-            color: Colors.orangeAccent,
+            color: Colors.black,
           ))
         ],
       ),

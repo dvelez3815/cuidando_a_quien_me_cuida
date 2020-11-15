@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:utm_vinculacion/providers/contenido_provider.dart';
+import 'package:utm_vinculacion/providers/provider.content.dart';
 import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 

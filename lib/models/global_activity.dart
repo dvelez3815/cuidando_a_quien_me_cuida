@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
-import 'package:utm_vinculacion/providers/db_provider.dart';
+import 'package:utm_vinculacion/modules/database/provider.database.dart';
 
 abstract class GlobalActivity {
 

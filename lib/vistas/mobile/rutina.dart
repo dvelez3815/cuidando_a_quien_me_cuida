@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/models/global_activity.dart';
-import 'package:utm_vinculacion/providers/db_provider.dart';
-import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/modules/activity/model.activity.dart';
+import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/routes/const_rutas.dart';
 import 'package:utm_vinculacion/texto_app/const_textos.dart';
 import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 

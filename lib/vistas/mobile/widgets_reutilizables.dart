@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/rutas/const_rutas.dart';
+import 'package:utm_vinculacion/routes/const_rutas.dart';
+
 Widget tresPuntos(context) { //este es para el icono de hamburguesa de 3 puntos
   return PopupMenuButton<String>(
     onSelected: (val) => handleClick(val, context),
