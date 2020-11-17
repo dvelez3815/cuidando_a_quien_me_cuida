@@ -3,6 +3,7 @@ import 'package:utm_vinculacion/modules/activity/screen.activity.dart';
 import 'package:utm_vinculacion/modules/activity/view.add_activity.dart';
 import 'package:utm_vinculacion/modules/care/screen.care.dart';
 import 'package:utm_vinculacion/modules/care/view.add_care.dart';
+import 'package:utm_vinculacion/modules/dates/screen.calendar.dart';
 import 'package:utm_vinculacion/modules/events/screen.event.dart';
 import 'package:utm_vinculacion/modules/food/screen.food.dart';
 import 'package:utm_vinculacion/modules/food/view.add_food.dart';
@@ -24,6 +25,7 @@ Map<String, Widget Function(BuildContext)> getRoutes() {
     constantesRutas.ADDPLATOS: (_)=>AddPlatos(),
     constantesRutas.INFO_COMIDA: (_)=>InfoReceta(),
     constantesRutas.SETTINGS: (_)=>SettingsPage(),
-    constantesRutas.MUSICA: (_)=>MusicScreen()
+    constantesRutas.MUSICA: (_)=>MusicScreen(),
+    constantesRutas.CALENDAR: (_)=>CalendarScreen(),
   };
 }

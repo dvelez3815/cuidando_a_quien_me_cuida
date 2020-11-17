@@ -10,3 +10,4 @@ const String INFO_COMIDA = "info_comida";
 const String RECETAS = 'recetas';
 const String SETTINGS = "settings";
 const String MUSICA = "music";
+const String CALENDAR = "calendar";

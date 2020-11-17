@@ -15,7 +15,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
   @override
   Widget build(BuildContext context) {
     
-    final List cardList = carouselContent(context);
+    final List<Widget> cardList = carouselContent(context);
 
     return Container(
       child: _getSlider(cardList),
@@ -43,10 +43,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                 height: MediaQuery.of(context).size.height * 0.30,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.only(right: 10.0),
-                child: Card(
-                  color: Colors.green[300],
-                  child: card,
-                ),
+                child: card
               );
             });
           }).toList(),

@@ -6,7 +6,7 @@ class CircularBannerWidget extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final painter = new Paint();
 
-    painter.color = Colors.deepPurple;
+    painter.color = Colors.indigo[900];
     painter.style = PaintingStyle.fill;
     painter.strokeWidth = 1.0;
 
