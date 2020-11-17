@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/texto_app/const_textos.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 import 'model.food.dart';
 
@@ -52,7 +51,7 @@ class _AddPlatosState extends State<AddPlatos> {
     return new Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text(NOMBREAPP),
+          title: Text("Cuidando a quien me cuida"),
           actions: <Widget>[tresPuntos(context)],
         ),
         body: ListView(children: <Widget>[

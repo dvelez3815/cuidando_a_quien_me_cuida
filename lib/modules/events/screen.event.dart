@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/routes/const_rutas.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
-import 'package:utm_vinculacion/widgets/widget.circular_banner.dart';
+import 'package:utm_vinculacion/routes/route.names.dart';
+import 'package:utm_vinculacion/widgets/components/header.dart';
+
+import 'model.events.dart';
 
 
 class Rutina extends StatelessWidget {
@@ -15,11 +15,12 @@ class Rutina extends StatelessWidget {
   Widget build(BuildContext context) {
 
     _db.initAllEvents().then((i)=>print("Todas las actividades inicializadas"));
-
+    final size = MediaQuery.of(context).size;
+    
     return Scaffold(
       body: Column(
         children: [
-          _getBanner(context, MediaQuery.of(context).size),
+          getHeader(context, size, "MIS EVENTOS"),
           Expanded(
             child: StreamBuilder(
               stream: _db.todoContenidoStream,
@@ -184,37 +185,5 @@ class Rutina extends StatelessWidget {
     );
   }
 
-  Widget _getBanner(BuildContext context, Size size) {
-    return Container(
-      width: size.width,
-      height: size.height*0.3,
-      child: CustomPaint(
-        painter: CircularBannerWidget(),
-        child: Column(
-          children: [
-            SafeArea(
-              child: ListTile(
-                title: Text("Cuidando a quien me cuida", style: TextStyle(color: Colors.white)),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white), 
-                  onPressed: ()=>Navigator.of(context).pop()
-                ),
-                trailing: tresPuntos(context),
-              ),
-            ),
-            SizedBox(height: size.height*0.05),
-            Text(
-              "MIS EVENTOS",
-              style: TextStyle(
-                fontSize: 25.0, 
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
+  
 }

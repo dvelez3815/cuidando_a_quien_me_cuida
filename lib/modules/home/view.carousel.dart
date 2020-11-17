@@ -1,10 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/vistas/mobile/ver_contenido/publicidades.dart';
+import 'package:utm_vinculacion/modules/home/view.carousel_content.dart';
 
 class CarouselWidget extends StatefulWidget {
-
-  final List cardList = [Item1(), Item2(), Item3(), Item4()];
 
   @override
   _CarouselWidgetState createState() => _CarouselWidgetState();
@@ -16,12 +14,15 @@ class _CarouselWidgetState extends State<CarouselWidget> {
 
   @override
   Widget build(BuildContext context) {
+    
+    final List cardList = carouselContent(context);
+
     return Container(
-      child: _getSlider(),
+      child: _getSlider(cardList),
     );
   }
 
-  Widget _getSlider() {
+  Widget _getSlider(List<Widget> cardList) {
     return Column(
       children: [
         CarouselSlider(                  
@@ -36,7 +37,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
               _currentIndex = index;
             });
           },
-          items: widget.cardList.map((card) {
+          items: cardList.map((card) {
             return Builder(builder: (BuildContext context) {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.30,
@@ -53,7 +54,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
         
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: map<Widget>(widget.cardList, (index, url) {
+          children: map<Widget>(cardList, (index, url) {
             return Container(
               width: 10.0,
               height: 10.0,

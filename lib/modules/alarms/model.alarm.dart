@@ -1,8 +1,8 @@
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/global/helpers.dart';
 
 import 'helper.alarm.dart';
 
@@ -21,7 +21,7 @@ class AlarmModel {
 
   //////////////////////////////// Constructor ////////////////////////////////
   AlarmModel(this._dayToNotify, this._time, this._title, this._description) {
-    this._id = helpers.generateID();
+    this._id = generateID();
     this._interval = 7; // repeat it every 7 days (every week)
     this._active=true;  // at the beginning all alarms will be active
   }

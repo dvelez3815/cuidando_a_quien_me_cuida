@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/provider.alarm.dart';
 import 'package:utm_vinculacion/modules/care/model.care.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+
+import 'model.events.dart';
 
 class EventAC {
 

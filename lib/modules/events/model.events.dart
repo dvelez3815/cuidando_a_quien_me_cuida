@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/helpers/helpers.dart' as helpers;
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/global/helpers.dart';
 
 abstract class GlobalActivity {
 
@@ -16,7 +16,7 @@ abstract class GlobalActivity {
 
 
   GlobalActivity(this.time, this.daysToNotify, {this.nombre, this.descripcion}){
-    this.id = helpers.generateID(); // Esto es tremendamente necesario
+    this.id = generateID(); // Esto es tremendamente necesario
   }
 
   GlobalActivity.fromJson(Map<String, dynamic> json){

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import 'package:utm_vinculacion/models/user_preferences.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/user_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
 

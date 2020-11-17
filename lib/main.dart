@@ -2,10 +2,11 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'models/user_preferences.dart';
+import 'package:utm_vinculacion/modules/global/settings.dart';
+import 'package:utm_vinculacion/user_preferences.dart';
 import 'modules/alarms/provider.alarm.dart';
 
-import 'routes/rutas.dart' as rutas;
+import 'routes/routes.dart' as rutas;
 
 void main() async {
   // Esto es para que los widgets tengan prioridad en la carga
@@ -16,6 +17,9 @@ void main() async {
   UserPreferences pref = new UserPreferences();
   // await DBProvider.db.initDB();
   await pref.initPrefs();
+
+  final AppSettings appSettings = new AppSettings();
+  await appSettings.initState();
 
   runApp(MyApp());
 }
@@ -41,10 +45,10 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: [const Locale('en', 'US'), const Locale('es', 'ES')],
           debugShowCheckedModeBanner: false,
-          onGenerateRoute: rutas.generarRutas,
           darkTheme: ThemeData.dark(),
           themeMode: (UserPreferences().darkMode ?? false)? ThemeMode.dark:ThemeMode.light,
           initialRoute: '/',
+          routes: rutas.getRoutes(),
         );
       },
     );

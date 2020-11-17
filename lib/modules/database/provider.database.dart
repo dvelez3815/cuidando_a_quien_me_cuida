@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/care/model.care.dart';
+import 'package:utm_vinculacion/modules/events/model.events.dart';
 import 'package:utm_vinculacion/modules/food/model.food.dart';
 
 import 'helper.database.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/texto_app/const_textos.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 import 'model.food.dart';
 
@@ -13,9 +12,13 @@ class InfoReceta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(elevation: 0,title: Text(NOMBREAPP), actions: <Widget>[
-        tresPuntos(context)        
-      ],),      
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("Cuidando a quien me cuida"), 
+        actions: <Widget>[
+          tresPuntos(context)        
+        ],
+      ),      
       body: ListView(
         children: [
           Column(

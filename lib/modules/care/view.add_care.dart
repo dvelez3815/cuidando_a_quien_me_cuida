@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/events/view.events.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
 
 import 'model.care.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/dates/helper.date.dart';
+import 'package:utm_vinculacion/modules/events/model.events.dart';
 
 class Cuidado extends GlobalActivity{
 

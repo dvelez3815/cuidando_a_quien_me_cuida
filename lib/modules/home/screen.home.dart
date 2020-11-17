@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/routes/const_rutas.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
+import 'package:utm_vinculacion/modules/home/view.carousel.dart';
+import 'package:utm_vinculacion/routes/route.names.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 import 'package:utm_vinculacion/widgets/widget.banner.dart';
-import 'package:utm_vinculacion/widgets/widget.carousel_slider.dart';
 
 
 class Home extends StatefulWidget {
@@ -85,7 +85,7 @@ class _HomeState extends State<Home> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onPressed: (){
-          Navigator.of(context).pushNamed(RUTINA);
+          Navigator.of(context).pushNamed(EVENTS);
         },
       ),
     );
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
         TableRow(
           children: [
             _getOptCard("Actividades", "Sugerencias para ti", ACTIVIDADES),
-            _getOptCard("Música", "Reproducción a un click", ACTIVIDADES),
+            _getOptCard("Música", "Reproducción a un click", MUSICA),
           ]
         ),
         TableRow(

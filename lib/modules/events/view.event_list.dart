@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:utm_vinculacion/models/global_activity.dart';
 import 'package:utm_vinculacion/modules/care/model.care.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/routes/const_rutas.dart';
-import 'package:utm_vinculacion/vistas/mobile/widgets_reutilizables.dart';
+import 'package:utm_vinculacion/routes/route.names.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
+
+import 'model.events.dart';
 
 class ShowEventList {
 
@@ -159,7 +160,6 @@ class ShowEventList {
                         icon: Icon(Icons.edit),
                         label: Text("Editar"),
                         onPressed: (){
-                          Navigator.of(context).pop();
                           Navigator.of(context).pushNamed(
                             (item is Cuidado)? ADDCUIDADOS:ADDACTIVIDADES, 
                             arguments: {
@@ -173,7 +173,6 @@ class ShowEventList {
                         icon: Icon(Icons.delete, color: Colors.red),
                         label: Text("Eliminar", style: TextStyle(color: Colors.red)),
                         onPressed: (){
-                          Navigator.of(context).pop();
                           _onDeleteCare(context, item, scaffoldKey);
                         },
                       )
@@ -193,30 +192,40 @@ class ShowEventList {
 
   void _onDeleteCare(BuildContext context, GlobalActivity item, GlobalKey<ScaffoldState> scaffoldKey){
 
+    bool deleting = false;
+
     showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text("¡Atención!"),
-        content: Text("Está a punto de eliminar est${(item is Cuidado)? "e cuidado":"a actividad"}, ¿desea continuar?"),
-        actions: [
-          FlatButton.icon(
-            icon: Icon(Icons.cancel),
-            label: Text("Cancelar"),
-            onPressed: ()=>Navigator.of(context).pop(),
-          ),
-          FlatButton.icon(
-            icon: Icon(Icons.check_circle, color: Colors.red),
-            label: Text("Eliminar", style: TextStyle(color: Colors.red)),
-            onPressed: ()async{
-              Navigator.of(context).pop();
-              final ok = await deleteEvent(item);
-              scaffoldKey.currentState.showSnackBar(new SnackBar(
-                content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
-              ));
-            },
-          )
-        ],
-      )
+      builder: (contextInternal){
+        return AlertDialog(
+          title: Text("¡Atención!"),
+          content: Text("Está a punto de eliminar est${(item is Cuidado)? "e cuidado":"a actividad"}, ¿desea continuar?"),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.cancel),
+              label: Text("Cancelar"),
+              onPressed: ()=>Navigator.of(contextInternal).pop(),
+            ),
+            FlatButton.icon(
+              icon: Icon(Icons.check_circle, color: Colors.red),
+              label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+              onPressed: ()async{
+                if(!deleting){
+                  final ok = await deleteEvent(item);
+
+                  scaffoldKey.currentState.showSnackBar(new SnackBar(
+                    content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
+                    duration: Duration(seconds: 2),
+                  ));
+
+                  Navigator.of(contextInternal).pop();
+                  Navigator.of(context).pop();
+                }
+              },
+            )
+          ],
+        );
+      }, 
     );    
   }
 }
