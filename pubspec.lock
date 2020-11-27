@@ -134,6 +134,13 @@ packages:
       url: "https://github.com/mduccc/flutter_calendar_week"
     source: git
     version: "0.0.1"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   flutter_local_notifications:
     dependency: "direct main"
     description:

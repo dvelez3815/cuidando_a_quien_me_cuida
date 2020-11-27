@@ -2,12 +2,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:utm_vinculacion/modules/music/model.playlist.dart';
 import 'package:http/http.dart' as http;
 
 import 'model.music.dart';
 
 class MusicProvider {
+
+  final String apiKey = DotEnv().env['API_KEY_YT'];
 
   // Singleton
   static MusicProvider _instance;
@@ -56,7 +59,7 @@ class MusicProvider {
 // 0993390490
   Future<List<MusicModel>> loadMusicList(String playlistID) async {
     
-    final url = "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=AIzaSyAl1kiIpX-nJzwttFqxRt9QVZSSsRKqzss&maxResults=10";
+    final url = "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=      &maxResults=10";
     print("**************"+playlistID);
     final res = await http.get(url);
     final Map<String, dynamic> decoded = json.decode(res.body);

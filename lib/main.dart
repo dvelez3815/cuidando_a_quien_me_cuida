@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/modules/music/provider.music.dart';
@@ -16,6 +17,7 @@ void main() async {
   final AppSettings appSettings = new AppSettings();
   final UserPreferences pref = new UserPreferences();
   
+  await DotEnv().load('.env');
 
   MusicProvider().init();
   await AndroidAlarmManager.initialize();

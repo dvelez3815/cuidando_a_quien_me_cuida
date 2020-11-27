@@ -30,6 +30,7 @@ dependencies:
   flutter_local_notifications: ^1.4.4+4
   carousel_slider: ^1.4.1
   flutter_svg: ^0.19.1
+  flutter_dotenv: ^2.1.0
   flutter_calendar_week:
     git:
       url: https://github.com/mduccc/flutter_calendar_week
@@ -59,6 +60,7 @@ flutter:
   assets:
     - assets/imagenes/
     - assets/
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
