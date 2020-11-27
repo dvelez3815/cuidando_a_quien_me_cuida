@@ -97,10 +97,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       body: Column(
         children: [
           getHeader(context, size, "CALENDARIO"),
+          SizedBox(height: 15.0),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white, 
-              borderRadius: BorderRadius.circular(15)
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -108,7 +109,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width / 1.1,
-                  height: 50,
+                  // height: 50,
                   child: Padding(
                     padding: EdgeInsets.only(
                       top: 13*scaleFactor, bottom: 8*scaleFactor, 
@@ -124,14 +125,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                           child: IconButton(
                             enableFeedback: _expanded,
                             splashRadius: _expanded ? 15.0 : 0.001,
-                            icon: AnimatedBuilder(
-                              animation: _arrowColor,
-                              builder: (BuildContext context, Widget child) =>
-                                  SvgPicture.asset(
-                                'assets/imagenes/derecha.svg',
-                                color: _arrowColor.value,
-                              ),
-                            ),
+                            icon: _leftRightArrow(),
                             onPressed: () {
                               if (_expanded) {
                                 DateTime curr = showDate;
@@ -231,12 +225,24 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     );
   }
 
+  AnimatedBuilder _leftRightArrow() {
+    return AnimatedBuilder(
+      animation: _arrowColor,
+      builder: (BuildContext context, Widget child) =>
+          SvgPicture.asset(
+        'assets/imagenes/derecha.svg',
+        color: _arrowColor.value,
+      ),
+    );
+  }
+
   Widget _getFormattedDate(double scaleFactor) {
     return Text(
       formatDate(showDate),
       style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.bold,
+        color: Colors.black
       ),
       textScaleFactor: scaleFactor,
     );

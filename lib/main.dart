@@ -3,6 +3,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
+import 'package:utm_vinculacion/modules/music/provider.music.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 import 'modules/alarms/provider.alarm.dart';
 
@@ -11,15 +12,15 @@ import 'routes/routes.dart' as rutas;
 void main() async {
   // Esto es para que los widgets tengan prioridad en la carga
   WidgetsFlutterBinding.ensureInitialized();
-  await AndroidAlarmManager.initialize();
-
-  // Preferencias de usuario que se almacenan en cache
-  UserPreferences pref = new UserPreferences();
-  // await DBProvider.db.initDB();
-  await pref.initPrefs();
-
+  
   final AppSettings appSettings = new AppSettings();
+  final UserPreferences pref = new UserPreferences();
+  
+
+  MusicProvider().init();
+  await AndroidAlarmManager.initialize();
   await appSettings.initState();
+  await pref.initPrefs();
 
   runApp(MyApp());
 }
