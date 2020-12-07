@@ -11,6 +11,8 @@ import 'model.music.dart';
 class MusicProvider {
 
   final String apiKey = DotEnv().env['API_KEY_YT'];
+  final String url = "https://www.googleapis.com/youtube/v3/";
+  final List<String> playElements = new List<String>();
 
   // Singleton
   static MusicProvider _instance;
@@ -25,7 +27,7 @@ class MusicProvider {
   MusicProvider._();
 
 
-  final playlistYTUrl = "https://www.googleapis.com/youtube/v3/playlists?part=id,contentDetails,player,contentDetails,id,snippet,status&channelId=UCRFgeSNI_UmvjtNoj2eLobQ&key=AIzaSyAl1kiIpX-nJzwttFqxRt9QVZSSsRKqzss&maxResults=5";
+  final playlistYTUrl = "https://www.googleapis.com/youtube/v3/playlists?part=id,contentDetails,player,contentDetails,id,snippet,status&channelId=UCRFgeSNI_UmvjtNoj2eLobQ&key=AIzaSyAl1kiIpX-nJzwttFqxRt9QVZSSsRKqzss&maxResults=10";
   
   final playlistList = new StreamController<List<PlayList>>.broadcast();
 
@@ -56,19 +58,22 @@ class MusicProvider {
 
     playlistSink(playlist);
   }
-// 0993390490
+
   Future<List<MusicModel>> loadMusicList(String playlistID) async {
     
-    final url = "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=      &maxResults=10";
-    print("**************"+playlistID);
+    final url = "${this.url}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=10";
+    
     final res = await http.get(url);
     final Map<String, dynamic> decoded = json.decode(res.body);
+
+    playElements.clear();
+    playElements.addAll(List<String>.from(decoded["items"].map((music)=>music["snippet"]["resourceId"]["videoId"])));
 
     return List<MusicModel>.from(decoded["items"].map((music){
       return new MusicModel(
         description: music["snippet"]["description"],
         title: music["snippet"]["title"],
-        id: music["id"],
+        id: music["snippet"]["resourceId"]["videoId"],
         image: music["snippet"]["thumbnails"]["default"]["url"]
       );
     })).toList();

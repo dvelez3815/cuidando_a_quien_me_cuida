@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
@@ -16,6 +17,12 @@ void main() async {
   
   final AppSettings appSettings = new AppSettings();
   final UserPreferences pref = new UserPreferences();
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.blueAccent,
+    ),
+  );
   
   await DotEnv().load('.env');
 

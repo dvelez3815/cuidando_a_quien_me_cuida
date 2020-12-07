@@ -23,7 +23,7 @@ class PlaylistScreen extends StatelessWidget {
           component.getHeader(context, size, "MÚSICA"),
           _getPlaylist(context)
         ],
-      )
+      ),
     );
   }
 

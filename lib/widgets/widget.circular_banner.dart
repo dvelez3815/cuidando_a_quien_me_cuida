@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class CircularBannerWidget extends CustomPainter {
+
+  final Color color;
+
+  CircularBannerWidget(this.color);
+
+
   @override
   void paint(Canvas canvas, Size size) {
     final painter = new Paint();
 
-    painter.color = Colors.indigo[900];
+    painter.color = color;
     painter.style = PaintingStyle.fill;
     painter.strokeWidth = 1.0;
 

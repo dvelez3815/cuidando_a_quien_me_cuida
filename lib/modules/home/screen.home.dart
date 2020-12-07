@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
         children: [
           _getBanner(size),
           SingleChildScrollView(
+            physics: ScrollPhysics(parent: BouncingScrollPhysics()),
             child: Column(
               children: [
                 _getHeader(),
@@ -38,16 +39,22 @@ class _HomeState extends State<Home> {
   }
 
   Widget _getBanner(Size size) {
+
+    final color = Theme.of(context).brightness == Brightness.dark? Colors.white:Colors.indigo[900];
+
     return Container(
       height: size.height*0.35,
       width: size.width,
       child: CustomPaint(
-        painter: BannerWidget()
+        painter: BannerWidget(color)
       ),
     );
   }
 
   Widget _getHeader() {
+
+    final textColor = Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
+
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(10.0),
@@ -57,12 +64,12 @@ class _HomeState extends State<Home> {
           children: [
             Text(
               "Cuidando a quién me cuida",
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: TextStyle(color: textColor, fontSize: 18.0),
             ),
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.calendar_today, color: Colors.white),
+                  icon: Icon(Icons.calendar_today, color: textColor),
                   onPressed: ()=>Navigator.of(context).pushNamed(CALENDAR),
                 ),
                 tresPuntos(context)
@@ -96,27 +103,34 @@ class _HomeState extends State<Home> {
       children: [
         TableRow(
           children: [
-            _getOptCard("Actividades", "Sugerencias para ti", ACTIVIDADES),
-            _getOptCard("Música", "Reproducción a un click", MUSICA),
+            _getOptCard("Actividades", "Sugerencias para ti", ACTIVIDADES, icon: Icons.access_time),
+            _getOptCard("Música", "Reproducción a un click", MUSICA, icon: Icons.music_note),
           ]
         ),
         TableRow(
           children: [
-            _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS),
-            _getOptCard("Bienestar", "Tu bienestar es importante", CUIDADO),
+            _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS, icon: Icons.fastfood),
+            _getOptCard("Bienestar", "Tu bienestar es importante", CUIDADO, icon: Icons.medical_services),
           ]
-        )
+        ),
+        TableRow(
+          children: [
+            _getOptCard("Agua", "descripción aqyí", WATER, icon: Icons.bubble_chart),
+            _getOptCard("Contactos", "descripción aquí", CONTACTS, icon: Icons.contact_phone)
+          ]
+        ),
       ],
     );
   }
 
-  Widget _getOptCard(String title, String body, String route) {
+  Widget _getOptCard(String title, String body, String route, {IconData icon}) {
     return GestureDetector(
       onTap: ()=>Navigator.of(context).pushNamed(route),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         height: 140,
         decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
           border: Border.all(width: 2.0, color: Colors.orange[400]),
           borderRadius: BorderRadius.circular(10.0)
         ),
@@ -130,7 +144,7 @@ class _HomeState extends State<Home> {
               ), 
               subtitle: Text(body, style: TextStyle(fontSize: 10.0)),
             ),
-            Icon(Icons.shield, size: 30.0,)
+            Icon(icon ?? Icons.shield, size: 30.0,)
           ],
         ),
       ),

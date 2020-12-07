@@ -7,6 +7,7 @@ import 'package:utm_vinculacion/modules/music/provider.music.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart' as component;
 
 import 'model.music.dart';
+import 'view.videoRep.dart';
 
 class MusicPage extends StatelessWidget {
 
@@ -16,18 +17,29 @@ class MusicPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final PlayList playlist = ModalRoute.of(context).settings.arguments;
+    final color = Theme.of(context).brightness == Brightness.dark? Colors.white:Colors.indigo[900];
 
     return Scaffold(
       body: Column(
         children: [
           component.getHeader(context, size, playlist.title.toUpperCase() ?? "Música"),
-          Expanded(child: _getMusicList(context, playlist))
+          SizedBox(height: 15.0,),
+          Expanded(child: _getMusicList(context, playlist, color))
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.play_arrow, color: Colors.white),
+        backgroundColor: Colors.red,
+        onPressed: (){
+          return Navigator.of(context).push(MaterialPageRoute(
+            builder: (context)=>YouTubePage(null, playlist: _provider.playElements)
+          ));
+        },
+      ),
     );
   }
 
-  Widget _getMusicList(BuildContext context, PlayList playlist) {
+  Widget _getMusicList(BuildContext context, PlayList playlist, Color color) {
     return FutureBuilder(
       future: this._provider.loadMusicList(playlist.id),
       builder: (context, AsyncSnapshot<List<MusicModel>> snapshot){
@@ -41,31 +53,38 @@ class MusicPage extends StatelessWidget {
           );
         }
 
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: snapshot.data.map((MusicModel music){
-              return Column(
-                children: [
-                  ListTile(
-                    leading: getImage(music.image),
-                    title: Text(
-                      music.title ?? "Sin título",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      music.description ?? "Sin descripción",
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Icon(Icons.play_arrow),
+        return ListView.builder(
+          itemCount: snapshot.data.length,
+           physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+          itemBuilder: (context, index) {
+
+            final music = snapshot.data[index];
+
+            return Column(
+              children: [
+                ListTile(
+                  leading: getImage(music.image),
+                  title: Text(
+                    music.title ?? "Sin título",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Divider()
-                ],
-              );
-            }).toList(),
-          ),
+                  subtitle: Text(
+                    music.description ?? "Sin descripción",
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Icon(Icons.play_arrow),
+                  onTap: (){
+                    return Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context)=>YouTubePage(music)
+                    ));
+                  },
+                ),
+                Divider()
+              ],
+            );
+          }
         );
       },
     );

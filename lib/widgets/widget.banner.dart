@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BannerWidget extends CustomPainter {
+
+  final Color color;
+
+  BannerWidget(this.color);
+
   @override
   void paint(Canvas canvas, Size size) {
     final painter = new Paint();
 
-    painter.color = Colors.indigo[900];
+    painter.color = color;
     painter.style = PaintingStyle.fill;
     painter.strokeWidth = 1.0;
 
