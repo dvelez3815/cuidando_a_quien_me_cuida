@@ -61,7 +61,7 @@ class MusicProvider {
 
   Future<List<MusicModel>> loadMusicList(String playlistID) async {
     
-    final url = "${this.url}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=10";
+    final url = "${this.url}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=30";
     
     final res = await http.get(url);
     final Map<String, dynamic> decoded = json.decode(res.body);
