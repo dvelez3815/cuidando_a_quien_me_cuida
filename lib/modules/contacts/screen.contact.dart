@@ -24,66 +24,45 @@ class _ContactScreenState extends State<ContactScreen> {
       body: Column(
         children: [
           getHeader(context, size, "CONTACTOS"),
-          // listaContenido(),
+          ListTile(leading: Icon(Icons.people), title: Text("Contactos de emergencia")),
+          Expanded(child: _getBody())
         ],
       )
     );
   }
 
-  // Widget listaContenido(){
-  //   return Container(
-  //     child: SingleChildScrollView(
-  //       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10.0),
-  //       child: Column(
-  //         children: <Widget>[
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: <Widget>[
-  //               Text(
-  //                 "Mis recetas",
-  //                 style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-  //               ),
-  //               Spacer(),
-  //               IconButton(
-  //                 icon: Icon(Icons.add), 
-  //                 onPressed: (){
-  //                   Navigator.pushNamed(context, ADDPLATOS);
-  //                 }
-  //               )
-  //             ],
-  //           ),
-  //           StreamBuilder(
-  //             stream: dbProvider.comidaStream,
-  //             builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
-                
-  //               if(!snapshot.hasData) return sinDatos();
+  Widget _getBody() {
+    return ListView(
+      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+      children: [
+        ListTile(title: Text("A"),),
+        _getContact("Admin", "09xxxxxxxx"),
+        ListTile(title: Text("F"),),
+        _getContact("Fulana", "09xxxxxxxx"),
+        _getContact("Fulano", "09xxxxxxxx"),
+        ListTile(title: Text("M"),),
+        _getContact("Mamá", "09xxxxxxxx"),        
+        ListTile(title: Text("P"),),
+        _getContact("Papá", "09xxxxxxxx"),
+        _getContact("Person 1", "09xxxxxxxx"),
+        ListTile(title: Text("U"),),
+        _getContact("Usuario 1", "09xxxxxxxx"),
+      ],
+    );
+  }
 
-  //               final List<Widget> widgets = new List<Widget>();
+  Widget _getContact(String user, String phone) {
+    return ListTile(
+      leading: CircleAvatar(
+        child: Text(user.toUpperCase()[0]),
+      ),
+      title: Text(user ?? "Sin nombre"),
+      subtitle: Text(phone),
+      trailing: IconButton(
+        icon: Icon(Icons.phone),
+        onPressed: (){},
+      ),
+    );
+  }
 
-  //               widgets.addAll(snapshot.data.map((item)=>ListTile(
-  //                 onTap: (){
-  //                   //Aca mando los datos de la comida que desea ver y los muestros en info comida
-  //                   Comida comida = item;
-  //                   Navigator.pushNamed(context, INFO_COMIDA, arguments: comida);
-  //                   },            
-  //                 leading: Container(
-  //                   width: MediaQuery.of(context).size.width*0.2,
-  //                   child: item.urlImagen != null?Image.asset(item.urlImagen):Container()
-  //                 ),
-  //                 subtitle: Text(item.descripcion),
-  //                 title: Text(item.nombre),
-  //               )).toList());
-
-  //               return Column(
-  //                 children: widgets,
-  //               );
-
-  //             },
-  //           ),
-  //         ],
-  //       )
-  //     ),
-      
-  //   );
-  // }
 }
