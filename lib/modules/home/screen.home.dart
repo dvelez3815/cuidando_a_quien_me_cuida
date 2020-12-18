@@ -110,13 +110,7 @@ class _HomeState extends State<Home> {
         TableRow(
           children: [
             _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS, icon: Icons.fastfood),
-            _getOptCard("Bienestar", "Tu bienestar es importante", CUIDADO, icon: Icons.medical_services),
-          ]
-        ),
-        TableRow(
-          children: [
             _getOptCard("Agua", "descripción aqyí", WATER, icon: Icons.bubble_chart),
-            _getOptCard("Contactos", "descripción aquí", CONTACTS, icon: Icons.contact_phone)
           ]
         ),
       ],

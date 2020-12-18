@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/modules/events/view.event_list.dart';
+import 'package:utm_vinculacion/modules/activity/view.event_list.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 class Actividades extends StatefulWidget {
   
@@ -26,12 +26,13 @@ class _ActividadesState extends State<Actividades> with ShowEventList{
       key: widget._scaffoldKey,
       body: Column(
         children: [
-          Stack(
-            children: [
-              getHeader(context, size, "MIS ACTIVIDADES"),
-            ],
+          getHeader(context, size, "MIS ACTIVIDADES"),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+              child: listaContenido(context, setState, widget._scaffoldKey, false)
+            )
           ),
-          listaContenido(context, setState, widget._scaffoldKey, false),
         ],
       )
     );

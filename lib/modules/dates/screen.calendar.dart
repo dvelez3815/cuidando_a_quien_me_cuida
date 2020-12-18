@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
-import 'package:utm_vinculacion/modules/care/model.care.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/modules/events/model.events.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -450,22 +447,13 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     DateTime actual = DateTime(anio, mes,dia);
 
                     int dSemana = actual.weekday;
-                    List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
-                    List<Actividad> actividadesDB = (await _db.getActivities()) ?? [];
-                    List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
+                    // List<Actividad> actividadesDB = (await _db.getActivities()) ?? [];
                     
+                    List<AlarmModel> activities = await _db.eventsByWeekday(dSemana) ?? [];
 
-                    if(actividadesDB.length > 0)
-                      actividadesGenerales.addAll(actividadesDB);
-                    if(cuidadosDB.length > 0)
-                      actividadesGenerales.addAll(cuidadosDB);
-
-                      List<AlarmModel> actividades  = new List<AlarmModel>();
-                      actividades.addAll(await _db.eventsByWeekday(dSemana));
-
-                      actividades.forEach((element) {
-                        print(element.title);
-                      });
+                    activities.forEach((element) {
+                      print(element.title);
+                    });
                     
                   },
                   child: Text( //Rojo si tiene actividades

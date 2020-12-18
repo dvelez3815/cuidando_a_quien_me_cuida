@@ -3,25 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/dates/helper.date.dart';
-import 'package:utm_vinculacion/modules/events/model.events.dart';
+import 'package:utm_vinculacion/modules/global/helpers.dart';
 
-class Actividad extends GlobalActivity{
+enum ActivityType {
+  mental,
+  recreation,
+  physical,
+  care
+}
+
+class Actividad{
   
-  final db = DBProvider.db;
+  int id;
+  String nombre;
+  String descripcion;
+  List<String> daysToNotify;
+  TimeOfDay time; // time to be notified
+  bool _estado = true;
+  ActivityType type;  
 
-  Actividad(TimeOfDay time, List<String> daysToNotify, {String nombre, String descripcion}):super(
-    time, daysToNotify, nombre:nombre, descripcion:descripcion
-  );
+  DBProvider db = DBProvider.db;
+
+  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion}){
+    this.type = this.type ?? ActivityType.recreation;
+    this.id = generateID(); // Esto es tremendamente necesario
+  }
   
   /////////////////////////////////// CRUD ///////////////////////////////////
-  @override
   Future<bool> save() async {
     final res = await this.createAlarms();
     return res && (await db.newActivity(this));
   }
 
   /// params need to be in the database format
-  @override
   Future<bool> update(Map<String, dynamic> params) async {
 
     final activityUpdated = await db.updateActivity(params, this.id);
@@ -62,9 +76,6 @@ class Actividad extends GlobalActivity{
     return true;
   }
 
-  Actividad.fromJson(Map<String, dynamic> json):super.fromJson(json);
-
-  @override
   Future<bool> delete() async {
 
     List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
@@ -80,7 +91,6 @@ class Actividad extends GlobalActivity{
   }
 
   ////////////////////////////// Functionality //////////////////////////////
-  @override
   Future<bool> createAlarms() async {
       this.daysToNotify.forEach((String element)async{
       AlarmModel alarm = new AlarmModel(
@@ -97,7 +107,6 @@ class Actividad extends GlobalActivity{
     return Future.value(true);
   }
 
-  @override
   Future<void> chainStateUpdate()async{
     List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
 
@@ -113,6 +122,23 @@ class Actividad extends GlobalActivity{
     await db.updateActivity({"active": this.estado?1:0}, this.id);
   }
 
+  Actividad.fromJson(Map<String, dynamic> json){
+
+    List<int> time = json["time"].toString().split(":").map((i)=>int.parse(i)).toList();
+    String days = json['days'] ?? "[]";
+    days = days.replaceAll("[", "");
+    days = days.replaceAll("]", "");
+    days = days.replaceAll(" ", "");
+
+    this.id = json['id'];
+    this._estado = json['active']==1;
+    this.nombre = json['nombre'];
+    this.descripcion = json['descripcion'];
+    this.time = new TimeOfDay(hour: time[0], minute: time[1]);
+    this.daysToNotify = days.split(",");
+    
+  }
+
   Map<String, dynamic> toJson(){
     return <String, dynamic>{
       "id"         : id,
@@ -122,6 +148,15 @@ class Actividad extends GlobalActivity{
       "time"       : "${this.time.hour}:${this.time.minute}",
       "days"       : this.daysToNotify.toString()
     };
+  }
+
+  /////////////////////////////// Getters ///////////////////////////////
+  get estado =>_estado;
+
+  /////////////////////////////// Setters ///////////////////////////////
+  set estado(bool status) {
+    this._estado = status;
+    chainStateUpdate();
   }
 
 

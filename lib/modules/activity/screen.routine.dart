@@ -4,9 +4,6 @@ import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 
-import 'model.events.dart';
-
-
 class Rutina extends StatelessWidget {
 
   final DBProvider _db = DBProvider.db;
@@ -14,8 +11,8 @@ class Rutina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    _db.initAllEvents().then((i)=>print("Todas las actividades inicializadas"));
     final size = MediaQuery.of(context).size;
+    _db.getActivities();
     
     return Scaffold(
       body: Column(
@@ -23,8 +20,8 @@ class Rutina extends StatelessWidget {
           getHeader(context, size, "MIS EVENTOS"),
           Expanded(
             child: StreamBuilder(
-              stream: _db.todoContenidoStream,
-              builder: (BuildContext context, AsyncSnapshot<List<GlobalActivity>> snapshot){
+              stream: _db.actividadStream,
+              builder: (BuildContext context, AsyncSnapshot<List<Actividad>> snapshot){
                 if(!snapshot.hasData){
                   return Center(child: CircularProgressIndicator());
                 }
@@ -44,13 +41,13 @@ class Rutina extends StatelessWidget {
     );
   }
 
-  List<Widget> _listaContenido(BuildContext context, List<GlobalActivity> actividadesGenerales){
+  List<Widget> _listaContenido(BuildContext context, List<Actividad> actividadesGenerales){
 
     // Ordenando por hora
-    List<GlobalActivity> maniana = new List<GlobalActivity>();
-    List<GlobalActivity> tarde = new List<GlobalActivity>();
-    List<GlobalActivity> noche = new List<GlobalActivity>();
-    List<GlobalActivity> noDefinida = new List<GlobalActivity>();
+    List<Actividad> maniana = new List<Actividad>();
+    List<Actividad> tarde = new List<Actividad>();
+    List<Actividad> noche = new List<Actividad>();
+    List<Actividad> noDefinida = new List<Actividad>();
 
     // Filtrando todo 
     for(int i=0; i<actividadesGenerales.length; ++i){
@@ -116,7 +113,7 @@ class Rutina extends StatelessWidget {
 
   }
 
-  ListTile _createActivityTile(BuildContext context, GlobalActivity item){
+  ListTile _createActivityTile(BuildContext context, Actividad item){
     return new ListTile(
       title: Text(item.nombre ?? "Sin nombre"),
       subtitle: Text(item.descripcion ?? "No disponible"),
@@ -184,6 +181,4 @@ class Rutina extends StatelessWidget {
       )
     );
   }
-
-  
 }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 
-import 'package:utm_vinculacion/modules/care/model.care.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
-
-import 'model.events.dart';
 
 class ShowEventList {
 
@@ -20,8 +18,8 @@ class ShowEventList {
           children: <Widget>[
             _headListTile(context, isCare),
             StreamBuilder(
-                stream: isCare? db.cuidadoStream:db.actividadStream,
-                builder: (BuildContext context, AsyncSnapshot<List<GlobalActivity>> snapshot){
+                stream: db.actividadStream,
+                builder: (BuildContext context, AsyncSnapshot<List<Actividad>> snapshot){
 
                   if(!snapshot.hasData) return Center(child: CircularProgressIndicator());                
                   if(snapshot.data.isEmpty) return sinDatos();
@@ -67,7 +65,7 @@ class ShowEventList {
     );
   }
 
-  Widget alarmTileBody(BuildContext context, GlobalActivity item, GlobalKey<ScaffoldState> scaffoldKey) {
+  Widget alarmTileBody(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     return ListTile(
       title: _daysListView(item, context),
       trailing: IconButton(
@@ -77,7 +75,7 @@ class ShowEventList {
     );
   }
 
-  Widget _daysListView(GlobalActivity item, BuildContext context) {
+  Widget _daysListView(Actividad item, BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -100,7 +98,7 @@ class ShowEventList {
     );
   }
 
-  Widget alarmTileHead(GlobalActivity item, Function setState) {
+  Widget alarmTileHead(Actividad item, Function setState) {
   
     return SwitchListTile(
       value: item.estado,
@@ -114,7 +112,7 @@ class ShowEventList {
     );
   }
 
-  Widget _showTimeCareInfo(GlobalActivity item) {
+  Widget _showTimeCareInfo(Actividad item) {
     return Column(
       children: [            
         Icon(Icons.alarm),
@@ -123,7 +121,7 @@ class ShowEventList {
     );
   }
 
-  void showEditDeleteOptions(BuildContext context, GlobalActivity item, GlobalKey<ScaffoldState> scaffoldKey) {
+  void showEditDeleteOptions(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     showModalBottomSheet(
       context: context, 
       isDismissible: true,
@@ -136,7 +134,7 @@ class ShowEventList {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ListTile(
-                    title: Text((item is Cuidado)?"Cuidado":"Actividad"),
+                    title: Text("Actividad"),
                     subtitle: Text(item.nombre,),
                   ),
                   ListTile(
@@ -161,7 +159,7 @@ class ShowEventList {
                         label: Text("Editar"),
                         onPressed: (){
                           Navigator.of(context).pushNamed(
-                            (item is Cuidado)? ADDCUIDADOS:ADDACTIVIDADES, 
+                            ADDACTIVIDADES, 
                             arguments: {
                             "title": item.nombre,
                             "description": item.descripcion,
@@ -186,11 +184,11 @@ class ShowEventList {
     );
   }
 
-  Future<bool> deleteEvent(GlobalActivity item) async {
+  Future<bool> deleteEvent(Actividad item) async {
     return await item.delete();
   }
 
-  void _onDeleteCare(BuildContext context, GlobalActivity item, GlobalKey<ScaffoldState> scaffoldKey){
+  void _onDeleteCare(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey){
 
     bool deleting = false;
 
@@ -199,7 +197,7 @@ class ShowEventList {
       builder: (contextInternal){
         return AlertDialog(
           title: Text("¡Atención!"),
-          content: Text("Está a punto de eliminar est${(item is Cuidado)? "e cuidado":"a actividad"}, ¿desea continuar?"),
+          content: Text("Está a punto de eliminar esta actividad, ¿desea continuar?"),
           actions: [
             FlatButton.icon(
               icon: Icon(Icons.cancel),
