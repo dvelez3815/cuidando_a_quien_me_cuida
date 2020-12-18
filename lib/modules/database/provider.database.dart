@@ -222,8 +222,17 @@ class DBProvider {
       cuidados = res.map((f)=>Cuidado.fromJson(f)).toList();
     }
     cuidadoSink(cuidados);
+
     return cuidados;
   }
+
+  //obtener actividades mediante el dia de la semana
+
+  /*
+    Se manda el día de la semana 3 (Miercoles)
+    Devolver un List<Actividades> con daysNotify miercoles
+
+  */
 
   Future<bool> deleteCare(Cuidado cuidado) async {
     final db = await database;
@@ -410,6 +419,7 @@ class DBProvider {
   //////////////////////////////// Events ////////////////////////////////
   /// An event could be a care or an activity, so, you will get a list of
   /// all the alarms created by all cares and all activities
+  /// 
   Future<List<AlarmModel>> eventsByWeekday(int weekday) async {
     final db = await database;
 

@@ -7,6 +7,7 @@ import 'package:utm_vinculacion/modules/care/model.care.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/events/model.events.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 class CalendarScreen extends StatefulWidget {
   final double pWidth = 392.7; 
@@ -442,6 +443,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               child: Center(
                 child:GestureDetector(
                   onTap: ()async {
+                    print("Tap");
                     final DBProvider _db = DBProvider.db;
                     int mes = showDate.month;
                     int anio = showDate.year;
@@ -450,22 +452,18 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     DateTime actual = DateTime(anio, mes,dia);
 
                     int dSemana = actual.weekday;
-                    List<GlobalActivity> actividadesGenerales = new List<GlobalActivity>();
-                    List<Actividad> actividadesDB = (await _db.getActivities()) ?? [];
-                    List<Cuidado> cuidadosDB = (await _db.getCuidados()) ?? [];
                     
-
-                    if(actividadesDB.length > 0)
-                      actividadesGenerales.addAll(actividadesDB);
-                    if(cuidadosDB.length > 0)
-                      actividadesGenerales.addAll(cuidadosDB);
+                    String listadoActividad = "";
 
                       List<AlarmModel> actividades  = new List<AlarmModel>();
+
                       actividades.addAll(await _db.eventsByWeekday(dSemana));
 
                       actividades.forEach((element) {
-                        print(element.title);
+                        listadoActividad = listadoActividad + element.title + "\n";
+                        
                       });
+                      mostrarAlerta(listadoActividad, context, titulo: "Actividades");
                     
                   },
                   child: Text( //Rojo si tiene actividades
