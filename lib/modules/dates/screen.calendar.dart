@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
+import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 class CalendarScreen extends StatefulWidget {
   final double pWidth = 392.7; 
@@ -439,6 +440,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               child: Center(
                 child:GestureDetector(
                   onTap: ()async {
+                    print("Tap");
                     final DBProvider _db = DBProvider.db;
                     int mes = showDate.month;
                     int anio = showDate.year;
@@ -447,13 +449,17 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                     DateTime actual = DateTime(anio, mes,dia);
 
                     int dSemana = actual.weekday;
-                    // List<Actividad> actividadesDB = (await _db.getActivities()) ?? [];
                     
-                    List<AlarmModel> activities = await _db.eventsByWeekday(dSemana) ?? [];
+                    String listadoActividad = "";
 
-                    activities.forEach((element) {
-                      print(element.title);
-                    });
+                      List<AlarmModel> actividades  = new List<AlarmModel>();
+
+                      actividades.addAll(await _db.eventsByWeekday(dSemana));
+
+                      actividades.forEach((element) {
+                        listadoActividad = listadoActividad + element.title + "\n";
+                      });
+                      mostrarAlerta(listadoActividad, context, titulo: "Actividades");
                     
                   },
                   child: Text( //Rojo si tiene actividades

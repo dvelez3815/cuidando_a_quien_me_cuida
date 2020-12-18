@@ -268,6 +268,7 @@ class DBProvider {
   //////////////////////////////// Events ////////////////////////////////
   /// An event could be a care or an activity, so, you will get a list of
   /// all the alarms created by all cares and all activities
+  /// 
   Future<List<AlarmModel>> eventsByWeekday(int weekday) async {
     final db = await database;
 

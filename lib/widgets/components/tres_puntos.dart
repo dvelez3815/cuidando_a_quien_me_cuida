@@ -67,13 +67,13 @@ List<Widget> actividades(List<String> actv){
   return actvi;
 }
 
-void mostrarAlerta(mensaje, context){
+void mostrarAlerta(mensaje, context, {titulo = "Mensaje"}){
 
   showDialog(context: context,barrierDismissible: true,
   builder: (BuildContext context){
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text("Mensaje"),
+      title: Text(titulo),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
