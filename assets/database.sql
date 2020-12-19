@@ -6,7 +6,7 @@ CREATE TABLE Actividad(
     time VARCHAR NULL,
     active INTEGER DEFAULT 1,
     type varchar not null,
-    complements text not null
+    complements text
 );
         
 CREATE TABLE Ingrediente(
