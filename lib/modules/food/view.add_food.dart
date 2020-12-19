@@ -61,7 +61,7 @@ class _AddPlatosState extends State<AddPlatos> {
           getExpansionTile(
             controller: nameController,
             items: widget.ingredientes,
-            onPressed: ()=>_getDialog(widget.titleController),
+            onPressed: ()=>_getDialog(nameController),
             setState: setState,
             title: "Ingredientes"
           ),

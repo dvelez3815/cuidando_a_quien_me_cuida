@@ -26,8 +26,6 @@ class Comida {
     preparacion = item['preparacion'];
     ingredientes = List<String>.from(jsonDecode(item['ingredientes'] ?? "[]"));
     urlImagen = item['urlImagen'];
-
-    ingredientes = new List<String>();
   }
 
   Map<String, dynamic> toJson() => {

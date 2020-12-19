@@ -291,8 +291,7 @@ class DBProvider {
     final db = await database;
     final res = await db.delete('Comida', where: "id=?", whereArgs: [food.id]);
 
-    comidas.removeWhere((Comida element) => element.id == food.id);
-    comidaSink(comidas);
+    await getComidas();
 
     return res;
   }
@@ -302,12 +301,9 @@ class DBProvider {
     final db = await database;
     final res1 = await db.insert("Comida", comida.toJson()); 
     
-    if(res1 != 0 ){
-      comidas.add(comida);
-      comidaSink(comidas);
-    }
-    return res1 > 0;
+    await getComidas();
 
+    return res1 > 0;
   }
 
   Future<void> getComidas() async {
