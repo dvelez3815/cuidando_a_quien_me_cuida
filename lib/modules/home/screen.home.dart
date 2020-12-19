@@ -110,16 +110,16 @@ class _HomeState extends State<Home> {
         TableRow(
           children: [
             _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS, icon: Icons.fastfood),
-            _getOptCard("Agua", "descripción aqyí", WATER, icon: Icons.bubble_chart),
+            _getOptCard("Agua", "descripción aquí", WATER, icon: Icons.bubble_chart, activado: false),
           ]
         ),
       ],
     );
   }
 
-  Widget _getOptCard(String title, String body, String route, {IconData icon}) {
+  Widget _getOptCard(String title, String body, String route, {IconData icon, bool activado = true}) {
     return GestureDetector(
-      onTap: ()=>Navigator.of(context).pushNamed(route),
+      onTap: ()=>activado?Navigator.of(context).pushNamed(route):{},
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         height: 140,
