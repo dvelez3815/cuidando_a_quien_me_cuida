@@ -4,7 +4,9 @@ CREATE TABLE Actividad(
     descripcion VARCHAR NOT NULL,
     days VARCHAR NULL,
     time VARCHAR NULL,
-    active INTEGER DEFAULT 1
+    active INTEGER DEFAULT 1,
+    type varchar not null,
+    complements text not null
 );
         
 CREATE TABLE Ingrediente(
@@ -36,16 +38,6 @@ CREATE TABLE ComidaIngrediente(
         ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
-CREATE TABLE cuidado(
-    id INTEGER NOT NULL,
-    nombre VARCHAR NOT NULL,
-    descripcion VARCHAR NOT NULL,
-    days VARCHAR NULL,
-    time VARCHAR NULL, -- HH:MM
-    active INTEGER DEFAULT 1,
-    CONSTRAINT pkCuidado PRIMARY KEY(id)
-);
-
 CREATE TABLE alarma(
     id INTEGER PRIMARY KEY,
     title VARCHAR NULL DEFAULT "Sin título",
@@ -62,10 +54,3 @@ CREATE TABLE actividadesAlarmas(
     FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
-
-CREATE TABLE cuidadosAlarmas(
-    alarma_id INTEGER NOT NULL,
-    cuidado_id INTEGER NOT NULL,
-    FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY(cuidado_id) REFERENCES cuidado(id) ON UPDATE CASCADE ON DELETE NO ACTION
- );

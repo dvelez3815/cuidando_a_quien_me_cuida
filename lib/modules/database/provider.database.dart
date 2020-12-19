@@ -67,7 +67,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 6,
       onOpen: (db){},
       onCreate: initDatabase
     );

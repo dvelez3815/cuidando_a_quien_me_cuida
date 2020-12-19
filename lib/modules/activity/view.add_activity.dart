@@ -24,7 +24,7 @@ class AddActividades extends StatefulWidget {
     'miércoles': false,
     'jueves': false,
     'viernes': false,
-    'sabado': false,
+    'sábado': false,
     'domingo': false,
   };
 
@@ -36,6 +36,7 @@ class _AddActividadesState extends State<AddActividades>{
   
   Map<String, dynamic> updateData;  // this data will be defined in each specific class
   List<String> litems;
+  List<Map<String, dynamic>> materiales;
   bool loadFirstTime;
   TimeOfDay time; // Time to be notified
   ActivityType actType;
@@ -47,6 +48,7 @@ class _AddActividadesState extends State<AddActividades>{
     loadFirstTime = false;
     selectedType = 0;
     litems = [];
+    materiales = [];
 
     super.initState();
   }
@@ -118,19 +120,19 @@ class _AddActividadesState extends State<AddActividades>{
   Widget getTimeSelector(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         FlatButton.icon(
           onPressed: ()=>showPicker(context),
           color: Colors.green,
-          icon: Icon(Icons.timer),
-          label: Text('Establecer hora')
+          icon: Icon(Icons.timer, color: Colors.white),
+          label: Text('Establecer hora', style: TextStyle(color: Colors.white))
         ),
       ],
     );
   }
 
-  Future showPicker(BuildContext context) async {
+  Future<void> showPicker(BuildContext context) async {
         // Obteniendo hora de la alarma
     if(updateData.isNotEmpty){
       Actividad cuidado = updateData['model_data'];
@@ -143,6 +145,7 @@ class _AddActividadesState extends State<AddActividades>{
 
   Widget getSaveButton(BuildContext context, Actividad type) {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       width: MediaQuery.of(context).size.width * 0.5,
       child: RaisedButton(
         color: Colors.amber,
@@ -198,40 +201,39 @@ class _AddActividadesState extends State<AddActividades>{
     Navigator.of(context).pop();
   }
 
-  Widget _getDescriptionField() {
+  Widget _getInputStyle(String label, String hint, TextEditingController controller, IconData icon, {int maxLines=1}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        maxLines: null,
-        onChanged: (value) => widget.objetivosActividad.text = value,         
-        initialValue: widget.objetivosActividad.text ?? "",        
-        decoration: InputDecoration(
-          labelText: "Descripción",
-          hintText: "¿Cuál es el objetivo de la actividad?",
-          icon: Icon(Icons.description),
-          border: OutlineInputBorder()
-        ),
-      ),
-    );
-  }
-
-  Widget _getTitleField() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        onChanged: (value)=>widget.nombreActividad.text=value, 
-        maxLines: 1,
-        initialValue: widget.nombreActividad.text ?? "",
+        onChanged: (value)=>controller.text = value, 
+        maxLines: maxLines,
+        initialValue: controller.text ?? "",
         decoration: InputDecoration(                    
-          labelText: "Nombre",
-          hintText: "¿Cómo se llamará la actividad?",
-          icon: Icon(Icons.info),
+          labelText: label,
+          hintText: hint,
+          icon: Icon(icon),
           border: OutlineInputBorder(),
         ),
       ),
     );
   }
 
+  Widget _getTitleField() {
+    return _getInputStyle(
+      "Nombre", "¿Cómo se llamará la actividad?",
+      widget.nombreActividad, Icons.info
+    );
+  }
+
+  Widget _getDescriptionField() {
+
+    return _getInputStyle(
+      "Descripción", "¿Cuál es el objetivo de la actividad?",
+      widget.objetivosActividad, Icons.description,
+      maxLines: null
+    );
+  }
+  
   List<Widget> _getElementList() {
     return <Widget>[
       ListTile(
@@ -239,6 +241,7 @@ class _AddActividadesState extends State<AddActividades>{
       ),
       _getTitleField(),
       _getDescriptionField(),
+      _getComplementsOpt(),
       Divider(),
       ListTile(
         title: Text("Seleccione el tipo de actividad"),
@@ -306,13 +309,84 @@ class _AddActividadesState extends State<AddActividades>{
     ];
   }
 
+  Widget _getComplementsOpt() {
+
+    TextEditingController title = new TextEditingController();
+    TextEditingController about = new TextEditingController();
+
+    return ExpansionTile(
+      title: Text("Materiales"),
+      children: _getComplementList(),
+      leading: IconButton(
+        icon: Icon(Icons.add),
+        onPressed: (){
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            child: AlertDialog(
+              title: Text("Agregar material"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _getInputStyle("Nombre", "Nombre del material", title, Icons.sports_baseball),
+                    _getInputStyle("Descripción", "¿Para qué sirve?", about, Icons.sports_baseball),
+                  ],
+                ),
+              ),
+              actions: [
+                FlatButton.icon(
+                  icon: Icon(Icons.cancel),
+                  label: Text("Cancelar"),
+                  onPressed: ()=>Navigator.of(context).pop(),
+                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.check_circle),
+                  label: Text("Guardar"),
+                  onPressed: ()=>setState((){
+                    this.materiales.add({
+                      "title": title.text,
+                      "description": about.text
+                    });
+                    Navigator.of(context).pop();
+                  })
+                ),
+              ],
+            )
+          );
+        },
+      ),
+    );
+  }
+
   IconData _getIconByDay(String key) {
     switch(key.toLowerCase()){
       case "lunes": return Icons.work;
       case "martes": return Icons.wysiwyg;
       case "miércoles": return Icons.airport_shuttle;
+      case "jueves": return Icons.insert_emoticon;
+      case "viernes": return Icons.pending_actions;
+      case "sábado": return Icons.sports_baseball;
+      case "domingo": return Icons.wb_sunny;
       default: return Icons.info;
     }
+  }
+
+  List<Widget> _getComplementList() {
+
+    if(this.materiales.isEmpty){
+      return [ListTile(
+        leading: Icon(Icons.sentiment_dissatisfied),
+        title: Text("Sin materiales")
+      )];
+    }
+
+    return this.materiales.map((complement)=>ListTile(
+      title: Text(complement["title"] ?? "Sin nombre"),
+      subtitle: Text(complement["description"] ?? "Sin descripción"),
+      leading: Icon(Icons.emoji_objects),
+    )).toList();
+
   }
 
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
@@ -20,12 +22,14 @@ class Actividad{
   List<String> daysToNotify;
   TimeOfDay time; // time to be notified
   bool _estado = true;
-  ActivityType type;  
+  ActivityType type;
+  List<Map<String, dynamic>> complements;
 
   DBProvider db = DBProvider.db;
 
-  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion}){
+  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion, this.complements}){
     this.type = this.type ?? ActivityType.recreation;
+    this.complements = [];
     this.id = generateID(); // Esto es tremendamente necesario
   }
   
@@ -136,7 +140,7 @@ class Actividad{
     this.descripcion = json['descripcion'];
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
     this.daysToNotify = days.split(",");
-    
+    this.complements =  jsonDecode(json["complements"] ?? "[]");
   }
 
   Map<String, dynamic> toJson(){
@@ -146,7 +150,8 @@ class Actividad{
       "descripcion": descripcion,
       "active"     : this.estado? 1:0,
       "time"       : "${this.time.hour}:${this.time.minute}",
-      "days"       : this.daysToNotify.toString()
+      "days"       : this.daysToNotify.toString(),
+      "complements": jsonEncode(this.complements ?? [])
     };
   }
 
