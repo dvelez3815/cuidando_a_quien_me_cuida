@@ -337,6 +337,7 @@ class _AddActividadesState extends State<AddActividades>{
                 widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
                   content: Text("Material ya existe"),
                 ));
+                return;
               }
 
               this.materiales.add({

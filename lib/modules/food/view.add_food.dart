@@ -43,6 +43,7 @@ class _AddPlatosState extends State<AddPlatos> {
 
     return Expanded(
       child: ListView(
+        physics: ScrollPhysics(parent: BouncingScrollPhysics()),
         children: [
           getInputStyle("Nombre", "Nombre de la receta", widget.titleController, Icons.restaurant),
           getInputStyle("Preparación", "Paso a paso", widget.descriptionController, Icons.info, maxLines: null),
@@ -89,6 +90,7 @@ class _AddPlatosState extends State<AddPlatos> {
                 widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
                   content: Text("Material ya existe"),
                 ));
+                return;
               }
 
               widget.ingredientes.add({
