@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/alarms/provider.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/widgets/components/expansion_tile.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
+import 'package:utm_vinculacion/widgets/components/input.dart';
 
 import 'model.activity.dart';
 
@@ -185,7 +187,7 @@ class _AddActividadesState extends State<AddActividades>{
 
     // Creating the model
     Actividad activity = new Actividad(
-      ActivityType.recreation, //TODO: complete this
+      this.actType ?? ActivityType.recreation,
       this.time,
       daysActive, // this is not the class attribute
       nombre: widget.nombreActividad.text ?? "Sin título",
@@ -201,25 +203,8 @@ class _AddActividadesState extends State<AddActividades>{
     Navigator.of(context).pop();
   }
 
-  Widget _getInputStyle(String label, String hint, TextEditingController controller, IconData icon, {int maxLines=1}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        onChanged: (value)=>controller.text = value, 
-        maxLines: maxLines,
-        initialValue: controller.text ?? "",
-        decoration: InputDecoration(                    
-          labelText: label,
-          hintText: hint,
-          icon: Icon(icon),
-          border: OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
-
   Widget _getTitleField() {
-    return _getInputStyle(
+    return getInputStyle(
       "Nombre", "¿Cómo se llamará la actividad?",
       widget.nombreActividad, Icons.info
     );
@@ -227,7 +212,7 @@ class _AddActividadesState extends State<AddActividades>{
 
   Widget _getDescriptionField() {
 
-    return _getInputStyle(
+    return getInputStyle(
       "Descripción", "¿Cuál es el objetivo de la actividad?",
       widget.objetivosActividad, Icons.description,
       maxLines: null
@@ -235,13 +220,22 @@ class _AddActividadesState extends State<AddActividades>{
   }
   
   List<Widget> _getElementList() {
+
+    TextEditingController controller = new TextEditingController();
+
     return <Widget>[
       ListTile(
         title: Text("Defina su actividad"),
       ),
       _getTitleField(),
       _getDescriptionField(),
-      _getComplementsOpt(),
+      getExpansionTile(
+        controller: controller,
+        items: this.materiales,
+        setState: setState,
+        title: "Materiales",
+        onPressed: ()=>_getDialog(controller),
+      ),
       Divider(),
       ListTile(
         title: Text("Seleccione el tipo de actividad"),
@@ -301,64 +295,62 @@ class _AddActividadesState extends State<AddActividades>{
       this.getDaysSelector(setState),
       this.getTimeSelector(context),
       getSaveButton(context, new Actividad(
-          ActivityType.recreation, //TODO: complete this
-          TimeOfDay.now(), 
-          []
+          this.actType ?? ActivityType.recreation,
+          this.time ?? TimeOfDay.now(),
+          widget.daysToNotify.entries.where((element){
+            return element.value;
+          }).map((e) => e.key).toList(),
+          nombre: widget.nombreActividad.text,
+          descripcion: widget.objetivosActividad.text,
+          complements: this.materiales ?? []
         )
       )
     ];
   }
 
-  Widget _getComplementsOpt() {
+  Future<void> _getDialog(TextEditingController controller) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      child: AlertDialog(
+        title: Text("Agregar material"),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              getInputStyle("Nombre", "Nombre del material", controller, Icons.sports_baseball),
+            ],
+          ),
+        ),
+        actions: [
+          FlatButton.icon(
+            icon: Icon(Icons.cancel),
+            label: Text("Cancelar"),
+            onPressed: ()=>Navigator.of(context).pop(),
+          ),
+          FlatButton.icon(
+            icon: Icon(Icons.check_circle),
+            label: Text("Guardar"),
+            onPressed: ()=>setState((){
 
-    TextEditingController title = new TextEditingController();
-    TextEditingController about = new TextEditingController();
+              if(this.materiales.indexWhere((element) => (element["title"] == controller.text)) > -1){
+                widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
+                  content: Text("Material ya existe"),
+                ));
+              }
 
-    return ExpansionTile(
-      title: Text("Materiales"),
-      children: _getComplementList(),
-      leading: IconButton(
-        icon: Icon(Icons.add),
-        onPressed: (){
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            child: AlertDialog(
-              title: Text("Agregar material"),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _getInputStyle("Nombre", "Nombre del material", title, Icons.sports_baseball),
-                    _getInputStyle("Descripción", "¿Para qué sirve?", about, Icons.sports_baseball),
-                  ],
-                ),
-              ),
-              actions: [
-                FlatButton.icon(
-                  icon: Icon(Icons.cancel),
-                  label: Text("Cancelar"),
-                  onPressed: ()=>Navigator.of(context).pop(),
-                ),
-                FlatButton.icon(
-                  icon: Icon(Icons.check_circle),
-                  label: Text("Guardar"),
-                  onPressed: ()=>setState((){
-                    this.materiales.add({
-                      "title": title.text,
-                      "description": about.text
-                    });
-                    Navigator.of(context).pop();
-                  })
-                ),
-              ],
-            )
-          );
-        },
-      ),
+              this.materiales.add({
+                "title": controller.text
+              });
+              Navigator.of(context).pop();
+            })
+          ),
+        ],
+      )
     );
   }
 
+  
   IconData _getIconByDay(String key) {
     switch(key.toLowerCase()){
       case "lunes": return Icons.work;
@@ -372,21 +364,5 @@ class _AddActividadesState extends State<AddActividades>{
     }
   }
 
-  List<Widget> _getComplementList() {
-
-    if(this.materiales.isEmpty){
-      return [ListTile(
-        leading: Icon(Icons.sentiment_dissatisfied),
-        title: Text("Sin materiales")
-      )];
-    }
-
-    return this.materiales.map((complement)=>ListTile(
-      title: Text(complement["title"] ?? "Sin nombre"),
-      subtitle: Text(complement["description"] ?? "Sin descripción"),
-      leading: Icon(Icons.emoji_objects),
-    )).toList();
-
-  }
 
 }

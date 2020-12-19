@@ -68,7 +68,7 @@ class DBProvider {
     return await openDatabase(
       path,
       version: 6,
-      onOpen: (db){},
+      onOpen: (db){print("Database started");},
       onCreate: initDatabase
     );
   }
@@ -345,7 +345,7 @@ class DBProvider {
 
   }
 
-  Future getComidas() async {
+  Future<void> getComidas() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("Comida");
     List<Map<String, dynamic>> res2;
@@ -360,8 +360,9 @@ class DBProvider {
         comidas.add(i);
       }
 
-      comidaSink(comidas);
     }
+    
+    comidaSink(comidas);
   }
 
 }

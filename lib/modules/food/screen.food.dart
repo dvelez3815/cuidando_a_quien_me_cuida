@@ -76,7 +76,6 @@ class _RecetasState extends State<Recetas> {
                     width: MediaQuery.of(context).size.width*0.2,
                     child: item.urlImagen != null?Image.asset(item.urlImagen):Container()
                   ),
-                  subtitle: Text(item.descripcion),
                   title: Text(item.nombre),
                 )).toList());
 

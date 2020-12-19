@@ -8,35 +8,15 @@ CREATE TABLE Actividad(
     type varchar not null,
     complements text
 );
-        
-CREATE TABLE Ingrediente(
-    id INTEGER PRIMARY KEY,
-    nombre VARCHAR NOT NULL
-);
 
 CREATE TABLE Comida(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR NOT NULL,
-    descripcion VARCHAR NOT NULL,
-    preparacion VARCHAR NOT NULL,
-    total VARCHAR NOT NULL,
-    calorias VARCHAR NOT NULL,
-    coccion VARCHAR NOT NULL,
-    comensales VARCHAR NOT NULL,
-    tipo VARCHAR NOT NULL,
-    urlImagen VARCHAR,
-    rutaVista VARCHAR
+    urlImagen varchar not null,
+    preparacion text,
+    ingredientes text
 );
 
-CREATE TABLE ComidaIngrediente(
-    idComida INTEGER NOT NULL,
-    idIngrediente VARCHAR NOT NULL,
-    CONSTRAINT pkComidaIngrediente PRIMARY KEY(idComida, idIngrediente),
-    CONSTRAINT fkComida FOREIGN KEY(idComida) REFERENCES Comida(id) 
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    CONSTRAINT fkIngrediente FOREIGN KEY(idIngrediente) REFERENCES Ingrediente(nombre) 
-        ON UPDATE CASCADE ON DELETE NO ACTION
-);
 
 CREATE TABLE alarma(
     id INTEGER PRIMARY KEY,

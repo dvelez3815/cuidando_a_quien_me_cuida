@@ -141,6 +141,7 @@ class Actividad{
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
     this.daysToNotify = days.split(",");
     this.complements =  jsonDecode(json["complements"] ?? "[]");
+    this.type = json["type"] ?? "recreation";
   }
 
   Map<String, dynamic> toJson(){
@@ -151,7 +152,8 @@ class Actividad{
       "active"     : this.estado? 1:0,
       "time"       : "${this.time.hour}:${this.time.minute}",
       "days"       : this.daysToNotify.toString(),
-      "complements": jsonEncode(this.complements ?? [])
+      "complements": jsonEncode(this.complements ?? []),
+      "type"       : this.type ?? "recreation"
     };
   }
 
