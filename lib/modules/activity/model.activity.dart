@@ -27,9 +27,9 @@ class Actividad{
 
   DBProvider db = DBProvider.db;
 
-  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion, this.complements}){
+  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion, List<Map<String, dynamic>> complements}){
+    this.complements = complements;
     this.type = this.type ?? ActivityType.recreation;
-    this.complements = [];
     this.id = generateID(); // Esto es tremendamente necesario
   }
   
@@ -140,11 +140,12 @@ class Actividad{
     this.descripcion = json['descripcion'];
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
     this.daysToNotify = days.split(",");
-    this.complements =  jsonDecode(json["complements"] ?? "[]");
-    this.type = json["type"] ?? "recreation";
+    this.complements =  List<Map<String, dynamic>>.from(jsonDecode(json["complements"] ?? "[]"));
+    this.type = loadFromString(json["type"] ?? "recreation");
   }
 
   Map<String, dynamic> toJson(){
+
     return <String, dynamic>{
       "id"         : id,
       "nombre"     : nombre,
@@ -153,8 +154,29 @@ class Actividad{
       "time"       : "${this.time.hour}:${this.time.minute}",
       "days"       : this.daysToNotify.toString(),
       "complements": jsonEncode(this.complements ?? []),
-      "type"       : this.type ?? "recreation"
+      "type"       : typeString
     };
+  }
+
+  ActivityType loadFromString(String data){
+    switch(data){
+      case "mental": return ActivityType.mental;
+      case "physical": return ActivityType.physical;
+      case "recreation": return ActivityType.recreation;
+      case "care": return ActivityType.care;
+      default: return ActivityType.recreation;
+    }
+  }
+
+  String get typeString {
+    switch(this.type){
+      
+      case ActivityType.mental: return "mental";
+      case ActivityType.recreation: return "recreation";
+      case ActivityType.physical: return "physical";
+      case ActivityType.care: return "care";
+      default: return "recreation";
+    }
   }
 
   /////////////////////////////// Getters ///////////////////////////////

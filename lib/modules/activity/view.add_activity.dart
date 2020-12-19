@@ -85,6 +85,8 @@ class _AddActividadesState extends State<AddActividades>{
     
     if(!loadFirstTime) loadFirstTime = true;
     else return;
+
+    print("Loading updated data");
     
     Actividad activity = updateData["model_data"];
     
@@ -92,6 +94,25 @@ class _AddActividadesState extends State<AddActividades>{
     widget.objetivosActividad.text = activity.descripcion;
     
     time = activity.time;
+
+    // load actiity type
+    switch(activity.type){
+      
+      case ActivityType.mental:
+        this.selectedType = 1;
+        break;
+      case ActivityType.recreation:
+        this.selectedType = 2;
+        break;
+      case ActivityType.physical:
+        this.selectedType = 0;
+        break;
+      case ActivityType.care:
+        this.selectedType = 3;
+        break;
+    }
+
+    this.materiales = activity.complements;
     
     // if there are no days to notify, then put one by default
     activity.daysToNotify.forEach((element) {
@@ -145,7 +166,7 @@ class _AddActividadesState extends State<AddActividades>{
     }
   }
 
-  Widget getSaveButton(BuildContext context, Actividad type) {
+  Widget getSaveButton(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       width: MediaQuery.of(context).size.width * 0.5,
@@ -153,13 +174,13 @@ class _AddActividadesState extends State<AddActividades>{
         color: Colors.amber,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
-        onPressed: ()=>saveAlarm(context, type),
+        onPressed: ()=>saveAlarm(context),
         child: Text(updateData.isEmpty? "Guardar":"Actualizar"),
       )
     );
   }
 
-  Future<void> saveAlarm(BuildContext context, Actividad type) async {  
+  Future<void> saveAlarm(BuildContext context) async {  
     // What I actually do, is to delete the current event and its alarms
     // and then I create a new one with the new data
     if(updateData.isNotEmpty){
@@ -167,10 +188,10 @@ class _AddActividadesState extends State<AddActividades>{
       await activity.delete();
     }
 
-    return await _newAlarm(context, type);
+    return await _newAlarm(context);
   }
 
-  Future<void> _newAlarm(BuildContext context, Actividad type) async {
+  Future<void> _newAlarm(BuildContext context) async {
 
     // This will contains only the days to notify
     final List<String> daysActive = new List<String>();
@@ -191,7 +212,8 @@ class _AddActividadesState extends State<AddActividades>{
       this.time,
       daysActive, // this is not the class attribute
       nombre: widget.nombreActividad.text ?? "Sin título",
-      descripcion: widget.objetivosActividad.text ?? "Sin objetivos"
+      descripcion: widget.objetivosActividad.text ?? "Sin objetivos",
+      complements: this.materiales
     );
 
     await activity.save(); // this save this activity/activity in local database
@@ -294,17 +316,7 @@ class _AddActividadesState extends State<AddActividades>{
       ),
       this.getDaysSelector(setState),
       this.getTimeSelector(context),
-      getSaveButton(context, new Actividad(
-          this.actType ?? ActivityType.recreation,
-          this.time ?? TimeOfDay.now(),
-          widget.daysToNotify.entries.where((element){
-            return element.value;
-          }).map((e) => e.key).toList(),
-          nombre: widget.nombreActividad.text,
-          descripcion: widget.objetivosActividad.text,
-          complements: this.materiales ?? []
-        )
-      )
+      getSaveButton(context)
     ];
   }
 

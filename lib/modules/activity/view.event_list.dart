@@ -141,6 +141,15 @@ class ShowEventList {
                     title: Text("Descripción"),
                     subtitle: Text(item.descripcion,),
                   ),
+                  ExpansionTile(
+                    title: Text("Materiales"),
+                    children: item.complements.map((item){
+                      return ListTile(
+                        leading: Icon(Icons.sports_baseball),
+                        title: Text(item["title"])
+                      );
+                    }).toList(),
+                  ),
                   ListTile(
                     title: Text("Días para notificar"),
                     subtitle: _daysListView(item, context)

@@ -201,7 +201,7 @@ class DBProvider {
 
     if(res.isNotEmpty){
       actividades.clear();
-      actividades = res.map((f)=>Actividad.fromJson(f)).toList();
+      actividades = List<Actividad>.from(res.map((f)=>Actividad.fromJson(f)).toList());
     }
     actividadSink(actividades);
     return actividades;
@@ -213,7 +213,7 @@ class DBProvider {
     final res = await db.rawDelete("DELETE FROM actividad WHERE id=?", [activity.id]);
 
     if(res > 0){
-      actividades.remove(activity);
+      actividades.removeWhere((Actividad a)=>a.id == activity.id);
       actividadSink(actividades);
     }
 
@@ -287,82 +287,34 @@ class DBProvider {
 
   ///////////////////////////////// Food /////////////////////////////////
   ///
-  Future<int> eliminarComidas() async {
+  Future<int> eliminarComida(Comida food) async {
     final db = await database;
-    final res = await db.delete('Comida');
-    final res1 = await db.delete('ComidaIngrediente');
+    final res = await db.delete('Comida', where: "id=?", whereArgs: [food.id]);
 
-    comidas.clear();
-
+    comidas.removeWhere((Comida element) => element.id == food.id);
     comidaSink(comidas);
 
-    return res*res1;
+    return res;
   }
 
-  Future<int> nuevaComida(Comida comida) async {
+  Future<bool> nuevaComida(Comida comida) async {
 
     final db = await database;
     final res1 = await db.insert("Comida", comida.toJson()); 
-
-    // le pone un id a la comida si no lo tiene
-    if(comida.id == null){
-      final idComida = await db.rawQuery("select id from comida");
-      comida.id = idComida[idComida.length - 1]["id"];
-    }
-
-    // esta variable sirve para detectar errores
-    int res2 = 5;
-    List<Map<String, dynamic>> tmp;
-
-    for(String i in comida.ingredientes){
-      tmp = await db.query("ComidaIngrediente", where: "idIngrediente = ?", whereArgs: [i]);
-
-      // si ya está el ingrediente registrado
-      if(tmp.length == 0){
-        res2 = await db.insert('Ingrediente', {
-          "nombre": i
-        });
-      }
-
-      // si hay error, rompe el buble
-      if(res2 == 0) break;
-
-      res2 = await db.insert('ComidaIngrediente', {
-        "idComida": comida.id,
-        "idIngrediente":i
-      });
-
-      // si hay error, rompe el buble
-      if(res2 == 0) break;
-
-    }
     
-    if(res1 != 0 && res2 != 0){
+    if(res1 != 0 ){
       comidas.add(comida);
       comidaSink(comidas);
     }
-    return res1 == 0 || res2 == 0? 0:1;
+    return res1 > 0;
 
   }
 
   Future<void> getComidas() async {
     final db = await database;
     List<Map<String, dynamic>> res = await db.query("Comida");
-    List<Map<String, dynamic>> res2;
-
-    if(res.isNotEmpty){
-
-      comidas.clear();
-
-      for(Comida i in res.map((f)=>Comida.fromJson(f)).toList()){
-        res2 = await db.query("ComidaIngrediente", where: "idComida = ?", whereArgs: [i.id]);
-        i.ingredientes.addAll(res2.map((e) => e["idIngrediente"]));
-        comidas.add(i);
-      }
-
-    }
     
-    comidaSink(comidas);
+    comidaSink(List<Comida>.from(res.map((f)=>Comida.fromJson(f)).toList()));
   }
 
 }

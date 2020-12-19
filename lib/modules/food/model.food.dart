@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:utm_vinculacion/modules/global/helpers.dart';
+
 class Comida {
   int id;
   String nombre;
@@ -14,13 +16,15 @@ class Comida {
     this.preparacion,
     this.ingredientes,
     this.urlImagen,
-  });
+  }){
+    this.id = generateID(); // Esto es tremendamente necesario
+  }
 
   Comida.fromJson(Map<String, dynamic> item){
     id = item['id'];
     nombre = item['nombre'];
     preparacion = item['preparacion'];
-    ingredientes = jsonDecode(item['ingredientes'] ?? "[]");
+    ingredientes = List<String>.from(jsonDecode(item['ingredientes'] ?? "[]"));
     urlImagen = item['urlImagen'];
 
     ingredientes = new List<String>();

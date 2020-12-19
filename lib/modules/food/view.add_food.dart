@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/food/model.food.dart';
 import 'package:utm_vinculacion/widgets/components/expansion_tile.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/input.dart';
 
 class AddPlatos extends StatefulWidget {
 
-  // final DBProvider dbProvider = DBProvider.db;
+  final DBProvider dbProvider = DBProvider.db;
   final TextEditingController titleController = new TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final List<Map<String, dynamic>> ingredientes = new List<Map<String, dynamic>>();
@@ -17,15 +19,24 @@ class AddPlatos extends StatefulWidget {
 
 class _AddPlatosState extends State<AddPlatos> {
 
+  Map<String, dynamic> updateData;  // this data will be defined in each specific class
+  bool loadFirstTime;
 
   @override
   void initState() {
-    // widget.dbProvider.getComidas();
-    super.initState();    
+    loadFirstTime = false;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext ctxt) {
+
+    updateData = ModalRoute.of(context).settings.arguments ?? {};
+
+    if(updateData.isNotEmpty){
+      loadUpdateData(setState);
+    }
+
     return Scaffold(
       key: widget.scaffoldKey,
       body: Column(
@@ -47,7 +58,6 @@ class _AddPlatosState extends State<AddPlatos> {
         children: [
           getInputStyle("Nombre", "Nombre de la receta", widget.titleController, Icons.restaurant),
           getInputStyle("Preparación", "Paso a paso", widget.descriptionController, Icons.info, maxLines: null),
-          
           getExpansionTile(
             controller: nameController,
             items: widget.ingredientes,
@@ -56,8 +66,29 @@ class _AddPlatosState extends State<AddPlatos> {
             title: "Ingredientes"
           ),
           Divider(),
+          _getSaveButton(context)
         ],
       ),
+    );
+  }
+
+  Widget _getSaveButton(BuildContext context) {
+
+    bool canPress = true;
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      width: MediaQuery.of(context).size.width * 0.5,
+      child: RaisedButton(
+        color: Colors.amber,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+        onPressed: !canPress? null:()async{
+          canPress = false;
+          await _saveAction();
+        },
+        child: Text(updateData.isEmpty? "Guardar":"Actualizar"),
+      )
     );
   }
 
@@ -102,6 +133,49 @@ class _AddPlatosState extends State<AddPlatos> {
         ],
       )
     );
+  }
+
+  void loadUpdateData(Function setState) {
+    
+    if(!loadFirstTime) loadFirstTime = true;
+    else return;
+
+    print("Loading updated data");
+    
+    Comida food = updateData["model_data"];
+    
+    widget.descriptionController.text = food.preparacion;
+    widget.titleController.text = food.nombre;
+    
+    widget.ingredientes.addAll(food.ingredientes.map((String i)=><String, dynamic>{"title": i}).toList());
+
+    setState((){});
+  }
+
+  Future<void> _saveAction()async{
+
+    if(updateData.isNotEmpty){
+      Comida food = updateData['model_data'];
+      await widget.dbProvider.eliminarComida(food);
+    }
+
+    // The food we're gonna save
+    Comida food = new Comida(
+      ingredientes: List<String>.from(widget.ingredientes.map((e) => e["title"]).toList()),
+      nombre: widget.titleController.text ?? "Sin nombre",
+      preparacion: widget.descriptionController.text ?? "Sin descripción",
+      urlImagen: "assets/imagenes/recetas.jpg"
+    );
+
+    // saving the new information
+    await widget.dbProvider.nuevaComida(food);
+
+    widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: Text("Receta ${updateData.isNotEmpty?"actualizada":"agregada"}"),
+    ));
+
+    // Delayed to show the snackbar
+    Future.delayed(Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
   }
 
 }
