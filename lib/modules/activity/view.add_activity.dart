@@ -23,10 +23,10 @@ class AddActividades extends StatefulWidget {
   final Map<String, bool> daysToNotify = {
     'lunes': false,
     'martes': false,
-    'miércoles': false,
+    'miercoles': false,
     'jueves': false,
     'viernes': false,
-    'sábado': false,
+    'sabado': false,
     'domingo': false,
   };
 
@@ -368,10 +368,10 @@ class _AddActividadesState extends State<AddActividades>{
     switch(key.toLowerCase()){
       case "lunes": return Icons.work;
       case "martes": return Icons.wysiwyg;
-      case "miércoles": return Icons.airport_shuttle;
+      case "miercoles": return Icons.airport_shuttle;
       case "jueves": return Icons.insert_emoticon;
       case "viernes": return Icons.pending_actions;
-      case "sábado": return Icons.sports_baseball;
+      case "sabado": return Icons.sports_baseball;
       case "domingo": return Icons.wb_sunny;
       default: return Icons.info;
     }

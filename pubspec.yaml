@@ -42,7 +42,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
-  flutter_native_splash: ^0.1.9
+  
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: 
@@ -54,10 +54,6 @@ flutter_icons:
   image_path: "assets/imagenes/logo-app.png"
   adaptive_icon_background: "assets/imagenes/logo-app.png"
 
-flutter_native_splash:
-  image: assets/imagenes/splash-app.png
-  color: "42a5f5"
-  ios: false
 
 
 # For information on the generic Dart part of this file, see the
