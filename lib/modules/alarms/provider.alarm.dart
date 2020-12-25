@@ -3,6 +3,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:utm_vinculacion/routes/route.names.dart';
 
 class AlarmProvider {
     
@@ -19,7 +20,8 @@ class AlarmProvider {
   static final initializationSettingsAndroid = AndroidInitializationSettings("app_icon");
   static final initializationSettingsIOS = IOSInitializationSettings();
   static final initializationSettings = InitializationSettings(
-    initializationSettingsAndroid, initializationSettingsIOS
+    android: initializationSettingsAndroid, 
+    iOS: initializationSettingsIOS
   );
 
   static AlarmProvider _instance;
@@ -35,14 +37,17 @@ class AlarmProvider {
   AlarmProvider._();
 
   
-  // static Future<void> playSong()async{
-  //   final audio = new AudioCache().fixedPlayer;
-  //   await audio.play('sonido.mp3', isLocal: true, respectSilence: true,);
-  // }
+  static Future<void> playSong()async{
+    final audio = new AudioCache();
+    await audio.play(
+      'sonido.mp3',
+      stayAwake: true,   
+    );
+  }
 
-  // static Future<void> stopSong() async {
-  //   await player.stop();
-  // }
+  static Future<void> stopSong() async {
+    await player.stop();
+  }
 
   void init(BuildContext context){
     
@@ -51,8 +56,8 @@ class AlarmProvider {
       if (payload != null) {
         debugPrint('notification payload: ' + payload);
       }
-      // await playSong();
-      await Navigator.of(context).pushNamed('/');
+      await AlarmProvider.stopSong();
+      await Navigator.of(context).pushNamed(HOME);
     }
 
     flutterLocalNotificationsPlugin.initialize(

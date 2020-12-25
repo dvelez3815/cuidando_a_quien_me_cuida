@@ -1,6 +1,6 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:device_preview/device_preview.dart' as dp;
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,8 +8,6 @@ import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/modules/music/provider.music.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 import 'modules/alarms/provider.alarm.dart';
-
-
 
 import 'routes/routes.dart' as rutas;
 
@@ -40,6 +38,13 @@ class MyApp extends StatelessWidget {
 
   final AlarmProvider alarmProvider = new AlarmProvider();
 
+
+  MyApp(){
+    SystemChrome.setPreferredOrientations([
+       DeviceOrientation.portraitUp,
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
         return MaterialApp(
           // locale: DevicePreview.of(context).locale,
-          builder: DevicePreview.appBuilder,
+          builder: dp.DevicePreview.appBuilder,
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate

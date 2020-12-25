@@ -35,7 +35,7 @@ class Rutina extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add_to_photos),
+        child: Icon(Icons.add),
         onPressed: ()=>onPressedEvent(context),
       ),
     );
@@ -120,20 +120,11 @@ class Rutina extends StatelessWidget {
       trailing: RaisedButton.icon(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
         onPressed: (){
-          if(item is Actividad){
-            Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
+          Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
               "title": item.nombre,
               "description": item.descripcion,
               "model_data": item
             });
-          }
-          else{
-            Navigator.of(context).pushNamed(ADDCUIDADOS, arguments: {
-              "title": item.nombre,
-              "description": item.descripcion,
-              "model_data": item
-            });
-          }
         }, 
         icon: Icon(Icons.edit),
         label: Text("Editar")
@@ -154,31 +145,5 @@ class Rutina extends StatelessWidget {
     );
   }
 
-  void onPressedEvent(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      child: AlertDialog(
-        title: Text("¿Qué tipo de evento desea añadir?", textAlign: TextAlign.center,  ),
-        content: Text(
-          "Para cancelar o salir toque cualquier lugar fuera de este menú",
-          textAlign: TextAlign.center,  
-        ),
-        actions: [
-          FlatButton.icon(
-            onPressed: ()=>Navigator.of(context).pushNamed(ADDCUIDADOS),
-            icon: Icon(Icons.emoji_emotions),
-            label: Text("Cuidado")
-          ),
-          FlatButton.icon(
-            onPressed: (){
-              Navigator.of(context).pushNamed(ADDACTIVIDADES);
-            },
-            icon: Icon(Icons.directions_run),
-            label: Text("Actividad")
-          ),
-        ],
-      )
-    );
-  }
+  void onPressedEvent(BuildContext context) => Navigator.of(context).pushNamed(ADDACTIVIDADES);
 }

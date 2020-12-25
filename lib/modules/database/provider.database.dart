@@ -197,7 +197,7 @@ class DBProvider {
 
   Future<List<Actividad>> getActivities() async {
     final db = await database;
-    List<Map<String, dynamic>> res = await db.query("actividad");
+    List<Map<String, dynamic>> res = await db.query("actividad", orderBy: "nombre");
 
     if(res.isNotEmpty){
       actividades.clear();

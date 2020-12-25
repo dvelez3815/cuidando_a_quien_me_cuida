@@ -1,3 +1,39 @@
 {
-    "app_name": "Cuidando a quien me cuida"
+    "app_name": "Cuidando a quien me cuida",
+    "activities_type": {
+        "mental": "mental",
+        "physical": "física",
+        "recreation": "recreación",
+        "care": "bienestar"
+    },
+    "menu_items": [
+        {
+            "title": "Actividades",
+            "description": "Sugerencias para ti",
+            "icon_url": "assets/icons/OP ACTIVIDADES.png",
+            "route": "activity"
+        },
+        {
+            "title": "Música",
+            "description": "Reproducción a un click",
+            "icon_url": "assets/icons/OP MUSICA.png",
+            "route": "music"
+        },
+        {
+            "title": "Recetas",
+            "description": "Disfruta de grandes comidas",
+            "icon_url": "assets/icons/OP RECETA.png",
+            "route": "food"
+        },
+        {
+            "title": "Agua",
+            "description": "La hidratación es fundamental",
+            "route": "water"
+        },
+        {
+            "title": "Emergencia",
+            "description": "Contactos de emergencia",
+            "route": "water"
+        }
+    ]
 }

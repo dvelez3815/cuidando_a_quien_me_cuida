@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="utm_vinculacion"
+        android:label="Cuidando a quien me cuida"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

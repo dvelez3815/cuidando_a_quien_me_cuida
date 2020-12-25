@@ -67,7 +67,7 @@ class AlarmModel {
   /// notifyed at an specific time.
   Future<void> activate() async {    
     // this will be the next time this alarm will be triggered
-    final date = nextDateAlarm(DateTime.now(), this._dayToNotify);
+    final date = nextDateAlarm(DateTime.now(), this._dayToNotify, time: this._time);
 
     await AndroidAlarmManager.periodic(
       Duration(days: this._interval),

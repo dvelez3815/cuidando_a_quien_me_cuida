@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/modules/home/view.carousel.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
+import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 import 'package:utm_vinculacion/widgets/widget.banner.dart';
 
@@ -63,7 +65,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Cuidando a quién me cuida",
+              setting.settings["app_name"],
               style: TextStyle(color: textColor, fontSize: 18.0),
             ),
             Row(
@@ -99,30 +101,38 @@ class _HomeState extends State<Home> {
   }
 
   Widget _getOptions() {
+
+    final List<Map<String, dynamic>> fullData = List<Map<String, dynamic>>.from(AppSettings().settings["menu_items"]);
+
+    int rows = fullData.length ~/ 2;
+    if(fullData.length.isOdd) ++rows;
+
+    final elements = new List<TableRow>();
+
+    // Mapping all elements
+    for(int i=0; i<rows; ++i){
+
+      elements.add(TableRow(
+        children: [
+          _getOptCard(fullData[i*2]["title"], fullData[i*2]["description"], fullData[i*2]["route"], icon: fullData[i*2]["icon_url"]),
+          (i == rows - 1 && fullData.length.isOdd)? 
+            Container():
+            _getOptCard(fullData[i*2+1]["title"], fullData[i*2+1]["description"], fullData[i*2+1]["route"], icon: fullData[i*2+1]["icon_url"]),
+        ]
+      ));
+    }
+
     return Table(            
-      children: [
-        TableRow(
-          children: [
-            _getOptCard("Actividades", "Sugerencias para ti", ACTIVIDADES, icon: Icons.access_time),
-            _getOptCard("Música", "Reproducción a un click", MUSICA, icon: Icons.music_note),
-          ]
-        ),
-        TableRow(
-          children: [
-            _getOptCard("Recetas", "Disfruta de grandes comidas", RECETAS, icon: Icons.fastfood),
-            _getOptCard("Agua", "descripción aquí", WATER, icon: Icons.bubble_chart),
-          ]
-        ),
-      ],
+      children: elements
     );
   }
 
-  Widget _getOptCard(String title, String body, String route, {IconData icon, bool activado = true}) {
+  Widget _getOptCard(String title, String body, String route, {String icon, bool activado = true}) {
     return GestureDetector(
       onTap: ()=>activado?Navigator.of(context).pushNamed(route):{},
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        height: 140,
+        height: 200,
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
           border: Border.all(width: 2.0, color: Colors.orange[400]),
@@ -138,7 +148,12 @@ class _HomeState extends State<Home> {
               ), 
               subtitle: Text(body, style: TextStyle(fontSize: 10.0)),
             ),
-            Icon(icon ?? Icons.shield, size: 30.0,)
+            (icon == null)? Icon(Icons.shield, size: 80.0,):
+                            Image.asset(
+                              icon,
+                              height: 120.0,
+                              fit: BoxFit.cover,
+                            )
           ],
         ),
       ),

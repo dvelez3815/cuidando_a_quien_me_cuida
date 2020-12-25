@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 import 'model.activity.dart';
+
+// extensions
+import 'package:utm_vinculacion/modules/global/extensions.dart' show StringExt;
+
 class Actividades extends StatefulWidget {
   
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -30,19 +35,22 @@ class _ActividadesState extends State<Actividades>{
       body: Column(
         children: [
           getHeader(context, size, "MIS ACTIVIDADES"),
-          _headListTile(),
-          listaContenido(setState, widget._scaffoldKey),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+              child: listaContenido(setState, widget._scaffoldKey)
+            )
+          ),
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES),
+      ),
     );
   }
 
   Widget listaContenido(Function setState, GlobalKey<ScaffoldState> scaffoldKey){
-
-    final List<Widget> physicalData = new List<Widget>();
-    final List<Widget> mentalData = new List<Widget>();
-    final List<Widget> recreationData = new List<Widget>();
-    final List<Widget> careData = new List<Widget>();
 
     return StreamBuilder(
       stream: dbProvider.actividadStream,
@@ -51,95 +59,21 @@ class _ActividadesState extends State<Actividades>{
         if(!snapshot.hasData) return Center(child: CircularProgressIndicator());                
         if(snapshot.data.isEmpty) return sinDatos();
 
-        // Adding header for each physical activity type
-        physicalData.clear();
-        physicalData.add(Center(child: Text("Físicas", style: TextStyle(fontSize: 18.0))));
-        physicalData.add(Divider());
+        final Map<String, dynamic> activityTypes = AppSettings().settings["activities_type"];
+        
+        return Column(
+          children: List<ExpansionTile>.from(activityTypes.keys.map((String key){
 
-        mentalData.clear();
-        mentalData.add(Center(child: Text("Mental", style: TextStyle(fontSize: 18.0))));
-        mentalData.add(Divider());
+            final String title = activityTypes[key];
 
-        recreationData.clear();
-        recreationData.add(Center(child: Text("Recreación", style: TextStyle(fontSize: 18.0))));
-        recreationData.add(Divider());
-
-        careData.clear();
-        careData.add(Center(child: Text("Cuidado", style: TextStyle(fontSize: 18.0))));
-        careData.add(Divider());
-
-        // Mapping all entries
-        snapshot.data.forEach((Actividad element) { 
-
-          final widget = new Column(
-            children: [
-              alarmTileHead(element, setState),
-              alarmTileBody(context, element, scaffoldKey),
-              Divider()
-            ],
-          );
-
-          switch(element.type){                      
-            case ActivityType.recreation: recreationData.add(widget); break;
-            case ActivityType.physical: physicalData.add(widget); break;
-            case ActivityType.mental: mentalData.add(widget); break;
-            case ActivityType.care: careData.add(widget); break;
-          }
-
-        });
-
-        final List<Widget> completeData = new List<Widget>();
-
-        if(physicalData.length > 2) completeData.add(_getElementList(physicalData));
-        if(careData.length > 2) completeData.add(_getElementList(careData));
-        if(recreationData.length > 2) completeData.add(_getElementList(recreationData));
-        if(mentalData.length > 2) completeData.add(_getElementList(mentalData));
-
-        return Expanded(
-          child: PageView(
-            controller: PageController(
-              viewportFraction: 0.85,              
-            ),
-            pageSnapping: true,
-            scrollDirection: Axis.horizontal,
-            children: completeData
-          ),
-        );
+            return ExpansionTile(
+              title: Text(title.capitalize()),
+              initiallyExpanded: true,              
+              children: _getActivityData(key, snapshot.data)
+            );
+          })
+        ));
       },
-    );
-  }
-
-  Widget _getElementList(List<Widget> physicalData) {
-    return Card(      
-      child: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            children: physicalData
-          )
-        )
-      )
-    );
-  }
-
-  Widget _headListTile() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Actividades",
-            style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-          ),
-          Spacer(),
-          IconButton(
-            icon: Icon(Icons.add), 
-            onPressed: (){
-              Navigator.pushNamed(context, ADDACTIVIDADES);
-            },
-          )
-        ],
-      ),
     );
   }
 
@@ -312,6 +246,23 @@ class _ActividadesState extends State<Actividades>{
         );
       }, 
     );    
+  }
+
+  List<Widget> _getActivityData(String key, List<Actividad> fullData) {
+
+    final filteredData = fullData.where((Actividad actividad){
+      return actividad.typeString == key;
+    });
+
+    return List<Widget>.from(filteredData.map((Actividad activity){
+      return new Column(
+        children: [
+          alarmTileHead(activity, setState),
+          alarmTileBody(context, activity, widget._scaffoldKey),
+          Divider()
+        ],
+      );
+    }));
   }
 
 }
