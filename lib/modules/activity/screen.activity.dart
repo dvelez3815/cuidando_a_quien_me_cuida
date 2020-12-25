@@ -68,6 +68,7 @@ class _ActividadesState extends State<Actividades>{
 
             return ExpansionTile(
               title: Text(title.capitalize()),
+              maintainState: true,
               initiallyExpanded: true,              
               children: _getActivityData(key, snapshot.data)
             );
@@ -95,6 +96,7 @@ class _ActividadesState extends State<Actividades>{
           return Container(
             margin: EdgeInsets.only(right: 5.0),
             child: CircleAvatar(
+              backgroundColor: Theme.of(context).accentColor,
               radius: 12.0,            
               child: Text(
                 day != "miercoles"? day[0].toUpperCase(): "X", 
@@ -118,7 +120,7 @@ class _ActividadesState extends State<Actividades>{
         item.estado = status;
         setState(() {});
       },
-      subtitle: Text(item.descripcion),
+      subtitle: Text(item.descripcion, maxLines: 4, overflow: TextOverflow.ellipsis,),
       title: Text("${item.nombre ?? "Sin nombre"}"),
       secondary: _showTimeCareInfo(item),
     );

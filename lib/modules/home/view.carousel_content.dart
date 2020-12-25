@@ -4,7 +4,7 @@ import 'package:utm_vinculacion/modules/home/text.carousel.dart';
 List<Widget> carouselContent (BuildContext context) {
   return carouselText().map((text){
     return Card(
-      color: Colors.orange[400],
+      color: Theme.of(context).backgroundColor, //Colors.orange[400],
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(

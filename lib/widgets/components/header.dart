@@ -7,7 +7,7 @@ final setting = new AppSettings();
 
 Widget getHeader(BuildContext context, Size size, String title){
 
-  final color = Theme.of(context).brightness == Brightness.dark? Colors.white:Colors.indigo[900];
+  final color = Theme.of(context).accentColor; // brightness == Brightness.dark? Colors.white:Colors.indigo[900];
   final textColor = Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
 
   return Container(

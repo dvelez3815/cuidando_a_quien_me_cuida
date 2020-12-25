@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
 
   Widget _getBanner(Size size) {
 
-    final color = Theme.of(context).brightness == Brightness.dark? Colors.white:Colors.indigo[900];
+    final color = Theme.of(context).accentColor; //brightness == Brightness.dark? Colors.white:Colors.indigo[900];
 
     return Container(
       height: size.height*0.35,
@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
       width: MediaQuery.of(context).size.width*0.95,
       child: MaterialButton(
         padding: EdgeInsets.all(15.0),
-        color: Colors.orange[400],
+        color: Theme.of(context).bottomAppBarColor, // Colors.orange[400],
         child: Text(
           "MIS EVENTOS",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
         height: 200,
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          border: Border.all(width: 2.0, color: Colors.orange[400]),
+          border: Border.all(width: 2.0, color: Theme.of(context).bottomAppBarColor),
           borderRadius: BorderRadius.circular(10.0)
         ),
         child: Column(
@@ -148,7 +148,7 @@ class _HomeState extends State<Home> {
               ), 
               subtitle: Text(body, style: TextStyle(fontSize: 10.0)),
             ),
-            (icon == null)? Icon(Icons.shield, size: 80.0,):
+            (icon == null)? Icon(Icons.shield, size: 80.0, color: Colors.grey):
                             Image.asset(
                               icon,
                               height: 120.0,

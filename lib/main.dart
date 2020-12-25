@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
+import 'package:utm_vinculacion/modules/global/theme.dart';
 import 'package:utm_vinculacion/modules/music/provider.music.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 import 'modules/alarms/provider.alarm.dart';
@@ -62,7 +63,8 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: [const Locale('en', 'US'), const Locale('es', 'ES')],
           debugShowCheckedModeBanner: false,
-          darkTheme: ThemeData.dark(),
+          theme: getMainTheme(),
+          darkTheme: getDarkTheme(),
           themeMode: (UserPreferences().darkMode ?? false)? ThemeMode.dark:ThemeMode.light,
           initialRoute: '/',
           routes: rutas.getRoutes(),
