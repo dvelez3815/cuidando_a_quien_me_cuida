@@ -33,7 +33,11 @@ class _RecetasState extends State<Recetas> {
           getHeader(context, size, "RECETAS"),
           listaContenido(),
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: ()=>Navigator.of(context).pushNamed(ADDPLATOS),
+      ),
     );
   }
 
@@ -42,27 +46,11 @@ class _RecetasState extends State<Recetas> {
       child: ListView(
         physics: ScrollPhysics(parent: BouncingScrollPhysics()),
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Mis recetas",
-                    style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-                  ),
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: (){
-                      Navigator.pushNamed(context, ADDPLATOS);
-                    }
-                  )
-                ],
-              ),
               StreamBuilder(
                 stream: widget.dbProvider.comidaStream,
                 builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
                   
-                  if(!snapshot.hasData) return CircularProgressIndicator();
+                  if(!snapshot.hasData) return Center(child: CircularProgressIndicator());
                   if(snapshot.data.isEmpty) return sinDatos();
 
                   final List<Widget> widgets = new List<Widget>();

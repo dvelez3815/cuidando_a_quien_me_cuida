@@ -29,24 +29,34 @@ class InfoReceta extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ListTile(
-            //   leading: Icon(Icons.info),
-            //   title: Text("Mostrando información de la receta"),
-            //   trailing: IconButton(
-            //     icon: Icon(Icons.edit),
-            //     onPressed: (){},
-            //   ),
-            // ),
             ListTile(
               leading: Icon(Icons.food_bank),
               title: Text("Nombre"),
               subtitle: Text(food.nombre ?? "Sin nombre"),
             ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text("Imágen de la receta"),
+            ),
+            food.urlImagen != null?
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  food.urlImagen,
+                  fit: BoxFit.cover,
+                  height: 200.0,
+                ),
+              ],
+            ):ListTile(title: Text("No hay imágen")),
+            Divider(),
             ListTile(
               leading: Icon(Icons.restaurant),
               title: Text("Preparación"),
               subtitle: Text(food.preparacion ?? "Sin descripción"),
             ),
+            Divider(),
             ExpansionTile(
               title: Text("Ingredientes"),
               children: food.ingredientes.isEmpty?
@@ -58,12 +68,6 @@ class InfoReceta extends StatelessWidget {
                   );
                 }).toList(),
             ),
-            ListTile(
-              leading: Icon(Icons.image),
-              title: Text("Imágen de la receta"),
-            ),
-            food.urlImagen != null?Image.asset(food.urlImagen):Container(),
-
           ],
         )
       ],

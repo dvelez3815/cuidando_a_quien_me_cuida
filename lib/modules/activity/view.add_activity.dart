@@ -147,9 +147,9 @@ class _AddActividadesState extends State<AddActividades>{
       children: [
         FlatButton.icon(
           onPressed: ()=>showPicker(context),
-          color: Colors.green,
-          icon: Icon(Icons.timer, color: Colors.white),
-          label: Text('Establecer hora', style: TextStyle(color: Colors.white))
+          color: Theme.of(context).bottomAppBarColor,
+          icon: Icon(Icons.timer),
+          label: Text('Establecer hora')
         ),
       ],
     );
@@ -171,7 +171,7 @@ class _AddActividadesState extends State<AddActividades>{
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       width: MediaQuery.of(context).size.width * 0.5,
       child: RaisedButton(
-        color: Colors.amber,
+        color: Theme.of(context).bottomAppBarColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
         onPressed: ()=>saveAlarm(context),
@@ -363,7 +363,6 @@ class _AddActividadesState extends State<AddActividades>{
     );
   }
 
-  
   IconData _getIconByDay(String key) {
     switch(key.toLowerCase()){
       case "lunes": return Icons.work;

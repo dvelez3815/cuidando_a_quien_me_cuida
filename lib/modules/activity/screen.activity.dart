@@ -69,7 +69,7 @@ class _ActividadesState extends State<Actividades>{
             return ExpansionTile(
               title: Text(title.capitalize()),
               maintainState: true,
-              initiallyExpanded: true,              
+              initiallyExpanded: false,              
               children: _getActivityData(key, snapshot.data)
             );
           })

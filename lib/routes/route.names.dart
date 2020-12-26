@@ -1,5 +1,6 @@
 const String ACTIVIDADES = 'activity';
 const String ADDACTIVIDADES = "add_actividades";
+const String ADDCONTACT = "add_contact";
 const String ADDCUIDADOS = "add_cuidados";
 const String ADDPLATOS = "add_platos";
 const String ALARMS = "settings/alarms";

@@ -1,4 +1,4 @@
-CREATE TABLE Actividad(
+CREATE TABLE IF NOT EXISTS Actividad(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR NOT NULL,
     descripcion VARCHAR NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE Actividad(
     complements text
 );
 
-CREATE TABLE Comida(
+CREATE TABLE IF NOT EXISTS Comida(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR NOT NULL,
     urlImagen varchar not null,
@@ -17,8 +17,14 @@ CREATE TABLE Comida(
     ingredientes text
 );
 
+CREATE TABLE IF NOT EXISTS Contacto(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    description TEXT,
+    phone CHAR(10)
+);
 
-CREATE TABLE alarma(
+CREATE TABLE IF NOT EXISTS alarma(
     id INTEGER PRIMARY KEY,
     title VARCHAR NULL DEFAULT "Sin título",
     body VARCHAR NULL DEFAULT "Sin descripción",
@@ -28,7 +34,7 @@ CREATE TABLE alarma(
     interval INTEGER DEFAULT 7
 );
 
-CREATE TABLE actividadesAlarmas(
+CREATE TABLE IF NOT EXISTS actividadesAlarmas(
     alarma_id INTEGER NOT NULL,
     actividad_id INTEGER NOT NULL,
     FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,

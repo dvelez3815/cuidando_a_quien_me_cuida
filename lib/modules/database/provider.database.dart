@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
+import 'package:utm_vinculacion/modules/contacts/model.contacts.dart';
 import 'package:utm_vinculacion/modules/food/model.food.dart';
 
 import 'helper.database.dart';
@@ -19,11 +20,13 @@ class DBProvider {
   List<Actividad>actividades = new List<Actividad>();
   List<Comida>comidas        = new List<Comida>();
   List<AlarmModel> alarmas   = new List<AlarmModel>();
+  List<Contact> contacts     = new List<Contact>();
 
   // Streams to update components in real time
   final _streamControllerActividades = new StreamController<List<Actividad>>.broadcast();
   final _streamControllerComidas     = new StreamController<List<Comida>>.broadcast();
   final _streamControllerAlarmas     = new StreamController<List<AlarmModel>>.broadcast();
+  final _streamControllerContacts    = new StreamController<List<Contact>>.broadcast();
 
   // Streams getters and setters
   Function(List<AlarmModel>) get alarmSink => _streamControllerAlarmas.sink.add;
@@ -35,12 +38,16 @@ class DBProvider {
   Function(List<Comida>) get comidaSink => _streamControllerComidas.sink.add;
   Stream<List<Comida>> get comidaStream => _streamControllerComidas.stream;
 
+  Function(List<Contact>) get contactSink => _streamControllerContacts.sink.add;
+  Stream<List<Contact>> get contactStream => _streamControllerContacts.stream;
+
 
   // Every stream needs to be closed to avoid memory leaks
   void dispose(){
     _streamControllerActividades?.close();
     _streamControllerComidas?.close();
     _streamControllerAlarmas?.close();
+    _streamControllerContacts?.close();
   }
 
   DBProvider._();
@@ -67,8 +74,15 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 6,
-      onOpen: (db){print("Database started");},
+      version: 8,
+      onUpgrade: (db, oldVersion, newVersion)async{
+        print("Database upgraded");
+        
+        final batch = db.batch();
+        await initDatabase(db, newVersion);
+        await batch.commit();
+      },
+      onOpen: (db)=>print("Database started"),
       onCreate: initDatabase
     );
   }
@@ -157,9 +171,6 @@ class DBProvider {
   }
   
 
-  
-
-  
   ///////////////////////////// Activities /////////////////////////////
   Future<bool> newActivity(Actividad activity) async {
     final db = await database;
@@ -264,6 +275,32 @@ class DBProvider {
     return res > 0;
   }
  
+  /////////////////////////////// Contacts ///////////////////////////////
+  Future<void> getContacts() async {
+    
+    contacts.clear();
+
+    final db = await database;
+    final affectedRows = List<Map<String, dynamic>>.from(await db.query("contacto"));
+
+    contacts.addAll(affectedRows.map((Map<String, dynamic> e) => Contact.fromJson(e)));
+
+    contactSink(contacts);
+  }
+
+  Future<void> createContact(Contact contact) async {
+
+    final db = DBProvider._database;
+
+    final affectedRows = await db.insert("contacto", contact.toJson());
+
+    // It means that some rows were affected
+    if(affectedRows > 0) {
+      contacts.add(contact);
+      contactSink(contacts);
+    }
+
+  }
 
   //////////////////////////////// Events ////////////////////////////////
   /// An event could be a care or an activity, so, you will get a list of

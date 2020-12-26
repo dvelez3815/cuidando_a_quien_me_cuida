@@ -33,7 +33,8 @@
         {
             "title": "Emergencia",
             "description": "Contactos de emergencia",
-            "route": "water"
+            "icon_url": "assets/icons/Persona.png",
+            "route": "contacts"
         }
     ]
 }

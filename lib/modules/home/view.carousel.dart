@@ -59,8 +59,9 @@ class _CarouselWidgetState extends State<CarouselWidget> {
                   EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                border: Border.all(color: Theme.of(context).bottomAppBarColor),
                 color: _currentIndex == index
-                    ? Colors.blueAccent
+                    ? Theme.of(context).accentColor// Colors.blueAccent
                     : Colors.grey,
               ),
             );
