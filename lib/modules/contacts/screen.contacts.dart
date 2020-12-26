@@ -10,6 +10,7 @@ import 'package:utm_vinculacion/modules/global/extensions.dart' show StringExt;
 class ContactsScreen extends StatelessWidget {
 
   final _dbProvider = DBProvider.db;
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class ContactsScreen extends StatelessWidget {
     _dbProvider.getContacts();
 
     return Scaffold(
+      key: this._scaffoldKey,
       body: Column(
         children: [
           getHeader(context, MediaQuery.of(context).size, "Contactos"),
@@ -53,10 +55,10 @@ class ContactsScreen extends StatelessWidget {
                 child: Text(snapshot.data[index].title[0].toUpperCase() ?? '?'),
               ),
               title: Text(snapshot.data[index].title.capitalize() ?? "Sin título"),
-              subtitle: Text(snapshot.data[index].description.capitalize() ?? "Sin descripción"),
+              subtitle: Text(snapshot.data[index].description ?? "Sin descripción"),
               trailing: IconButton(
-                icon: Icon(Icons.call),
-                onPressed: null,
+                icon: Icon(Icons.settings),
+                onPressed: ()=> _getOptionAction(context, snapshot.data[index]),
               ),
             );
           },
@@ -65,6 +67,81 @@ class ContactsScreen extends StatelessWidget {
       },
     );
 
+  }
+
+  void _getOptionAction(BuildContext context, Contact contact) {
+    
+    bool deleting = false;
+
+    showBottomSheet(                  
+      elevation: 2.0,
+      shape: Border.all(color: Colors.grey[100]),
+      context: context,
+      clipBehavior: Clip.hardEdge,
+      builder: (context) { 
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 25,),
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text("Información del contacto"),
+                trailing: IconButton(icon: Icon(Icons.close), onPressed: ()=>Navigator.of(context).pop()),
+              ),
+              Divider(),
+              ListTile(
+                title: Text("Nombre"),
+                subtitle: Text(contact.title.capitalize() ?? "Sin título"),
+              ),
+              ListTile(
+                title: Text("Descripción"),
+                subtitle: Text(contact.description ?? "Sin descripción"),
+              ),
+              ListTile(
+                title: Text("Teléfono"),
+                subtitle: Text(contact.phone ?? "Sin teléfono"),
+                trailing: Icon(Icons.call),
+                onTap: (){},
+              ),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlatButton.icon(
+                    icon: Icon(Icons.delete),
+                    label: Text("Eliminar"),
+                    onPressed: ()async{
+                      // You can't delete anything if you're already deleting something
+                      if(deleting) return;
+
+                      deleting = true; // changing deleting state
+                      await _dbProvider.deleteContact(contact); // removing contact from database
+
+                      // closing this widget context
+                      Navigator.of(context).pop();
+
+                      this._scaffoldKey.currentState.showSnackBar(new SnackBar(
+                        content: Text("Contacto eliminado"),
+                      ));
+
+                      // waiting for 500 milliseconds to show a snackbar to user
+                      // await Future.delayed(Duration(milliseconds: 500));
+                      deleting = false; // restoring deleting state
+
+                    },
+                  ),
+                  FlatButton.icon(
+                    icon: Icon(Icons.edit),
+                    label: Text("Editar"),
+                    onPressed: ()=>Navigator.of(context).pushNamed(ADDCONTACT, arguments: contact)
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      }
+    );
   }
 
 }

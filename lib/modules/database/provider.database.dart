@@ -302,6 +302,30 @@ class DBProvider {
 
   }
 
+  Future<void> updateContact(Contact contact) async {    
+    final db = DBProvider._database;
+
+    final response = await db.update("contacto", contact.toJson(), where: "id=?", whereArgs: [contact.id]);
+
+    if(response > 0){
+
+      contacts.removeWhere((element) => element.id == contact.id);
+      contacts.add(contact);
+
+      contactSink(contacts);
+
+    }
+  }
+
+  Future<void> deleteContact(Contact contact) async {
+    final db = DBProvider._database;
+    final response = await db.delete("contacto", where: "id=?", whereArgs: [contact.id]);
+
+    if(response > 0){
+      contacts.removeWhere((element) => element.id == contact.id);
+      contactSink(contacts);
+    }
+  }
   //////////////////////////////// Events ////////////////////////////////
   /// An event could be a care or an activity, so, you will get a list of
   /// all the alarms created by all cares and all activities
