@@ -70,11 +70,11 @@ class DBProvider {
     Directory directory = await getApplicationDocumentsDirectory();
 
     // The logical address of the database
-    final String path = directory.path+"vinculacionI.db";
+    final String path = directory.path+"CAQMC.db";
 
     return await openDatabase(
       path,
-      version: 8,
+      version: 1,
       onUpgrade: (db, oldVersion, newVersion)async{
         print("Database upgraded");
         
@@ -83,7 +83,11 @@ class DBProvider {
         await batch.commit();
       },
       onOpen: (db)=>print("Database started"),
-      onCreate: initDatabase
+      onCreate: (db, version)async{
+        await initDatabase(db, version);
+        await defaultData(db);
+        print("Database created");
+      }
     );
   }
 
