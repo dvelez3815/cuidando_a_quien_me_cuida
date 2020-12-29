@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 
-Widget tresPuntos(context) { //este es para el icono de hamburguesa de 3 puntos
+Widget tresPuntos(context, {Color customColor}) {
 
-  final color = Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
+  final color = customColor ?? ((Theme.of(context).brightness == Brightness.dark)? Colors.black:Colors.white);
 
   return PopupMenuButton<String>(
     icon: Icon(Icons.settings, color: color),

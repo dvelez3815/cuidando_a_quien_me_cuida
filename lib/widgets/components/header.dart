@@ -5,10 +5,10 @@ import '../widget.circular_banner.dart';
 
 final setting = new AppSettings();
 
-Widget getHeader(BuildContext context, Size size, String title){
+Widget getHeader(BuildContext context, Size size, String title, {bool transparent}){
 
-  final color = Theme.of(context).accentColor; // brightness == Brightness.dark? Colors.white:Colors.indigo[900];
-  final textColor = Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
+  final color = (transparent ?? false)? Theme.of(context).canvasColor:Theme.of(context).accentColor; // brightness == Brightness.dark? Colors.white:Colors.indigo[900];
+  final textColor = (transparent ?? false)?Theme.of(context).accentColor:Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
 
   return Container(
       width: size.width,
@@ -24,7 +24,7 @@ Widget getHeader(BuildContext context, Size size, String title){
                   icon: Icon(Icons.arrow_back, color: textColor), 
                   onPressed: ()=>Navigator.of(context).pop()
                 ),
-                trailing: tresPuntos(context),
+                trailing: tresPuntos(context, customColor: textColor),
               ),
             ),
             SizedBox(height: size.height*0.05),
