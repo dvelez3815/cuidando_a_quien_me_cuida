@@ -4,8 +4,9 @@ import 'dart:math' as math;
 class WaterCircular extends StatelessWidget {
 
   final double progress;
+  final bool completed;
 
-  const WaterCircular({Key key, this.progress}) : super(key: key);
+  const WaterCircular({Key key, this.progress, this.completed = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,11 @@ class WaterCircular extends StatelessWidget {
       margin: EdgeInsets.all(20.0),
       child: CustomPaint(
         painter: _CircularCounter(progress),
-        child: Icon(Icons.bubble_chart, size: size.width*0.5, color: Colors.blue),
+        child: Icon(
+          completed? Icons.check:Icons.bubble_chart, 
+          size: size.width*0.5, 
+          color: Colors.blue
+        ),
       )
     );
   }
