@@ -68,7 +68,7 @@ class _AddActividadesState extends State<AddActividades>{
       key: widget.scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Agregar actividad"),
+          getHeader(context, "Agregar actividad"),
           Expanded(
             child: ListView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),

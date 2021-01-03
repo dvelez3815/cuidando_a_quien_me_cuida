@@ -15,14 +15,13 @@ class MusicPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final PlayList playlist = ModalRoute.of(context).settings.arguments;
     final color = Theme.of(context).brightness == Brightness.dark? Colors.white:Colors.indigo[900];
 
     return Scaffold(
       body: Column(
         children: [
-          component.getHeader(context, size, playlist.title.toUpperCase() ?? "Música"),
+          component.getHeader(context, playlist.title.toUpperCase() ?? "Música"),
           SizedBox(height: 15.0,),
           Expanded(child: _getMusicList(context, playlist, color))
         ],

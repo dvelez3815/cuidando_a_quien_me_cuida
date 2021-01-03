@@ -25,12 +25,10 @@ class _RecetasState extends State<Recetas> {
   @override
   Widget build(BuildContext context) {
 
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(      
       body: Column(
         children: [
-          getHeader(context, size, "RECETAS"),
+          getHeader(context, "RECETAS"),
           listaContenido(),
         ],
       ),

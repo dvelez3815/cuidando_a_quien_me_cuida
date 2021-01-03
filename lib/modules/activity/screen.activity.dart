@@ -27,14 +27,13 @@ class _ActividadesState extends State<Actividades>{
   @override
   Widget build(BuildContext context) {
 
-    final size = MediaQuery.of(context).size;
-
     dbProvider.getActivities();
+    
     return Scaffold(
       key: widget._scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, size, "MIS ACTIVIDADES"),
+          getHeader(context, "MIS ACTIVIDADES"),
           Expanded(
             child: SingleChildScrollView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),

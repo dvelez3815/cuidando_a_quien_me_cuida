@@ -14,13 +14,12 @@ class PlaylistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final size = MediaQuery.of(context).size;
     _musicProvider.queryPlaylist();
 
     return Scaffold(
       body: Column(
         children: [
-          component.getHeader(context, size, "MÚSICA"),
+          component.getHeader(context, "MÚSICA"),
           _getPlaylist(context)
         ],
       ),

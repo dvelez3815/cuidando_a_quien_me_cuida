@@ -21,7 +21,7 @@ class ContactsScreen extends StatelessWidget {
       key: this._scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Contactos"),
+          getHeader(context, "Contactos"),
           Expanded(child: _getContent(context))
         ],
       ),

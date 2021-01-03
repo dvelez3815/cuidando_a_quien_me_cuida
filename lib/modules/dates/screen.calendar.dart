@@ -91,12 +91,10 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     double scaleFactor = MediaQuery.of(context).size.width / widget.pWidth;
     double calendarWidth = MediaQuery.of(context).size.width * 0.85;
 
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Column(
         children: [
-          getHeader(context, size, "CALENDARIO"),
+          getHeader(context, "CALENDARIO"),
           SizedBox(height: 15.0),
           Container(
             decoration: BoxDecoration(

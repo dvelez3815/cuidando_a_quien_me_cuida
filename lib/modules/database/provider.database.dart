@@ -8,6 +8,8 @@ import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/contacts/model.contacts.dart';
 import 'package:utm_vinculacion/modules/food/model.food.dart';
+import 'package:utm_vinculacion/modules/water/model.water.dart';
+import 'package:utm_vinculacion/user_preferences.dart';
 
 import 'helper.database.dart';
 
@@ -74,7 +76,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onUpgrade: (db, oldVersion, newVersion)async{
         print("Database upgraded");
         
@@ -376,6 +378,42 @@ class DBProvider {
     List<Map<String, dynamic>> res = await db.query("Comida");
     
     comidaSink(List<Comida>.from(res.map((f)=>Comida.fromJson(f)).toList()));
+  }
+
+  Future<bool> storeWater(WaterModel water) async {
+    final db = await database;
+
+    return (await db.insert('water', water.toJson())) > 0;
+  }
+
+  Future<WaterModel> lastWater() async {    
+    final db = await database;
+
+    const query = "select * from water order by id desc limit 1";
+
+    List<Map<String, dynamic>> response = await db.rawQuery(query);
+
+    if(response.isEmpty) return null;
+
+    return new WaterModel(response[0]['goal'], UserPreferences().waterProgress ?? 0.0, response[0]['size']);
+  }
+
+  Future<bool> updateWater(Map<String, dynamic> params, int id) async {  
+    final db = await database;
+
+    params.remove("id");
+
+    final res = await db.update('water', params, where: "id=?", whereArgs: [id]);
+
+    return res  > 0;
+  }
+
+  Future<void> newWaterAlarm(int waterID, int alarmID)async{
+    final db = await database;
+    await db.insert('waterAlarms', {
+      "water_id": waterID,
+      "alarm_id": alarmID
+    });
   }
 
 }

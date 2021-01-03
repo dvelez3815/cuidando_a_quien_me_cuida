@@ -20,9 +20,12 @@ class AlarmModel {
   static DBProvider db = DBProvider.db;
 
   //////////////////////////////// Constructor ////////////////////////////////
-  AlarmModel(this._dayToNotify, this._time, this._title, this._description) {
+  AlarmModel(this._dayToNotify, this._time, this._title, this._description, {int interval}) {
+
+    assert(interval==null || interval > 0);
+
     this._id = generateID();
-    this._interval = 7; // repeat it every 7 days (every week)
+    this._interval = interval ?? 7; // repeat it every 7 days (every week)
     this._active=true;  // at the beginning all alarms will be active
   }
 

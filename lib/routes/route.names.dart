@@ -14,4 +14,5 @@ const String MUSICA = "music";
 const String MUSIC_DETAIL = "music/detail";
 const String CALENDAR = "calendar";
 const String WATER = "water";
+const String WATER_PREFERENCES = "water/preferences";
 const String CONTACTS = "contacts";

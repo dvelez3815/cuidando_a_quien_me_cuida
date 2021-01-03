@@ -14,7 +14,7 @@ class InfoReceta extends StatelessWidget {
     return Scaffold(  
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Receta"),
+          getHeader(context, "Receta"),
           Expanded(child: _getContent(food)),
         ],
       )

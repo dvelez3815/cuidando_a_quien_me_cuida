@@ -40,3 +40,17 @@ CREATE TABLE IF NOT EXISTS actividadesAlarmas(
     FOREIGN KEY(actividad_id) REFERENCES actividad(id) ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY(alarma_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS water(
+    id INTEGER PRIMARY KEY,
+    size INTEGER NOT NULL, -- glass size in ml
+    goal DECIMAL NOT NULL -- how many Lts are you going to drink?
+    -- water progress is storaged in cache
+);
+
+CREATE TABLE IF NOT EXISTS waterAlarms(
+    alarm_id INTEGER NOT NULL,
+    water_id INTEGER NOT NULL,
+    FOREIGN KEY(water_id) REFERENCES water(id) ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY(alarm_id) REFERENCES alarma(id) ON UPDATE CASCADE ON DELETE NO ACTION
+);

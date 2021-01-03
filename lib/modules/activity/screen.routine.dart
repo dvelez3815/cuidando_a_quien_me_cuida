@@ -11,13 +11,12 @@ class Rutina extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final size = MediaQuery.of(context).size;
     _db.getActivities();
     
     return Scaffold(
       body: Column(
         children: [
-          getHeader(context, size, "MIS EVENTOS"),
+          getHeader(context, "MIS EVENTOS"),
           Expanded(
             child: StreamBuilder(
               stream: _db.actividadStream,

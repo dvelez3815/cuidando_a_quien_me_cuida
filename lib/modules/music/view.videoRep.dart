@@ -58,7 +58,7 @@ class _YouTubePageState extends State<YouTubePage> {
       // appBar: AppBar(title: Text("Video"),),
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Reproductor"),
+          getHeader(context, "Reproductor"),
           Expanded(child: _getElements(_controller)),
         ],
       )

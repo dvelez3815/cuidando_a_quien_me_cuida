@@ -41,7 +41,7 @@ class _AddPlatosState extends State<AddPlatos> {
       key: widget.scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Agregar Comida"),
+          getHeader(context, "Agregar Comida"),
           _getContent()
         ],
       )

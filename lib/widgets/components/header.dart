@@ -5,14 +5,15 @@ import '../widget.circular_banner.dart';
 
 final setting = new AppSettings();
 
-Widget getHeader(BuildContext context, Size size, String title, {bool transparent}){
+Widget getHeader(BuildContext context, String title, {bool transparent}){
 
+  final Size size = MediaQuery.of(context).size;
   final color = (transparent ?? false)? Theme.of(context).canvasColor:Theme.of(context).accentColor; // brightness == Brightness.dark? Colors.white:Colors.indigo[900];
   final textColor = (transparent ?? false)?Theme.of(context).accentColor:Theme.of(context).brightness == Brightness.dark? Colors.black:Colors.white;
 
   return Container(
       width: size.width,
-      height: size.height*0.3,
+      height: size.height*0.25,
       child: CustomPaint(
         painter: CircularBannerWidget(color),
         child: Column(

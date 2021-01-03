@@ -17,7 +17,6 @@ Future<void> _performQueries(Database db, String route) async {
 
   script.split(';').forEach((element) {
     if(element.length < 5) return;
-    print("Performing "+element);
     batch.execute(element);
   });
   

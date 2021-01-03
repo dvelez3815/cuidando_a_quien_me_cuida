@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
       key: widget.scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Configuración"),
+          getHeader(context, "Configuración"),
           Expanded(
             child: ListView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),

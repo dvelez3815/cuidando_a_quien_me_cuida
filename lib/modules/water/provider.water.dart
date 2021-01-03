@@ -1,7 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
+import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 
 class WaterProvider {
+
+  final _dbProvider = DBProvider.db;
 
   static WaterProvider _instance;
 
@@ -15,55 +21,81 @@ class WaterProvider {
 
   WaterProvider._();
 
-  double _glassContent = 0.5;
+  final BehaviorSubject<WaterModel> _modelStreamController = new BehaviorSubject<WaterModel>();
 
-  final BehaviorSubject<double> _goalStreamController = new BehaviorSubject<double>();
-  final BehaviorSubject<double> _progressStreamController = new BehaviorSubject<double>();
+  Function(WaterModel) get _modelSink => _modelStreamController.sink.add;
 
-  Function(double) get _goalSink => _goalStreamController.sink.add;
-  Function(double) get _progressSink => _progressStreamController.add;
+  Stream<WaterModel> get modelStream => _modelStreamController.stream;
 
-  Stream<double> get goalStream => _goalStreamController.stream;
-  Stream<double> get progressStream => _progressStreamController.stream;
-
-  double get goalValue => _goalStreamController.value;
-  double get glassContent => _glassContent;
+  WaterModel get model => _modelStreamController.value;
 
   dispose(){
-    _goalStreamController?.close();
-    _progressStreamController?.close();
+    _modelStreamController?.close();
   }
 
-  void init(){
-    _goalSink(UserPreferences().waterGoal ?? 2.0);
-    _progressSink(UserPreferences().waterProgress ?? 0.0);
-    this._glassContent = UserPreferences().glassContent ?? 0.5;
+  Future<void> init()async{
+
+    this._modelSink(await _dbProvider.lastWater() ?? new WaterModel(2.0, UserPreferences().waterProgress ?? 0.0, 225));
+
+    // TODO: make logic
+    // await this.storageInDB();
+
   }
 
   void addWaterLts({double lts}) {
     assert(lts == null || (lts != null && lts > 0));
 
-    lts = lts ?? this._glassContent;
+    // how many lts of water user is gonna drink
+    lts = lts ?? this.model.glassSize / 1000;
 
-    _progressSink(lts + _progressStreamController.value);
-    UserPreferences().waterProgress = _progressStreamController.value;
+    this.model.progress = lts + model.progress;
+    this._modelSink(this.model);
+    UserPreferences().waterProgress = this.model.progress;
   }
 
-  void updateGoal(double newGoal) {
+  Future<void> updateGoal(double newGoal) async{
 
     assert(newGoal > 0);
-    _goalSink(newGoal);
-    _progressSink(_progressStreamController.value);
-    UserPreferences().waterGoal = _goalStreamController.value;
+
+    final res = await this._dbProvider.updateWater({"goal": newGoal}, model.id);
+    
+    if(res) {
+      this.model.goal = newGoal;
+      _modelSink(this.model);
+    }
   }
 
-  void updateGlassContent(double lts) {
-    this._glassContent = lts;
-    UserPreferences().glassContent = lts;
+  Future<void> updateGlassContent(int mlts) async {
+
+    assert(mlts > 0);
+
+    final res = await this._dbProvider.updateWater({"size": mlts}, model.id);
+    
+    if(res) {
+      this.model.glassSize = mlts;
+      this._modelSink(this.model);
+    }
   }
 
   void restoreProgress() {    
-    _progressSink(0);
+    this.model.progress = 0.0;
+    this._modelSink(this.model);
     UserPreferences().waterProgress = 0;
   }
+
+  Future<void> storageInDB() async {
+    final alarm = new AlarmModel(
+      DateTime.now().weekday, TimeOfDay.now(), 
+      "Tomar agua", "Bebe un poco de agua", interval: 1
+    );
+
+    await this._dbProvider.storeWater(this.model);
+    await alarm.save();
+  }
+
+  int timesToDrinkWater({double maxValueInLts}) {
+    return (maxValueInLts ?? this.model.goal) ~/ (this.model.glassSize / 1000);
+  }
+
+
 }

@@ -13,6 +13,7 @@ import 'package:utm_vinculacion/modules/music/screen.playlist.dart';
 import 'package:utm_vinculacion/modules/music/view.music.dart';
 import 'package:utm_vinculacion/modules/settings/screen.settings.dart';
 import 'package:utm_vinculacion/modules/water/screen.water.dart';
+import 'package:utm_vinculacion/modules/water/screen.water_preferences.dart';
 import 'route.names.dart' as constantesRutas;
 
 Map<String, Widget Function(BuildContext)> getRoutes() {
@@ -31,5 +32,6 @@ Map<String, Widget Function(BuildContext)> getRoutes() {
     constantesRutas.RECETAS: (_)=>Recetas(),
     constantesRutas.SETTINGS: (_)=>SettingsPage(),
     constantesRutas.WATER: (_)=>WaterScreen(),
+    constantesRutas.WATER_PREFERENCES: (_)=>WaterPreferences()
   };
 }

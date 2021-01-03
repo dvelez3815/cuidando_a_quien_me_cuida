@@ -28,7 +28,7 @@ class CreateContactView extends StatelessWidget {
       key: _scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, MediaQuery.of(context).size, "Agregar Contacto"),
+          getHeader(context, "Agregar Contacto"),
           _getContent(context, edit)
         ],
       ),
