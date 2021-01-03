@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
@@ -35,11 +33,14 @@ class WaterProvider {
 
   Future<void> init()async{
 
-    this._modelSink(await _dbProvider.lastWater() ?? new WaterModel(2.0, UserPreferences().waterProgress ?? 0.0, 225));
+    WaterModel water = await _dbProvider.lastWater();
 
-    // TODO: make logic
-    // await this.storageInDB();
-
+    if(water == null) {
+      water = new WaterModel(2.0, UserPreferences().waterProgress ?? 0.0, 225);
+      // TODO: make sure this is correct
+      await this.storageInDB(water: water);
+    }
+    this._modelSink(water);
   }
 
   void addWaterLts({double lts}) {
@@ -83,14 +84,15 @@ class WaterProvider {
     UserPreferences().waterProgress = 0;
   }
 
-  Future<void> storageInDB() async {
-    final alarm = new AlarmModel(
-      DateTime.now().weekday, TimeOfDay.now(), 
-      "Tomar agua", "Bebe un poco de agua", interval: 1
-    );
+  Future<void> storageInDB({WaterModel water}) async {
+    // TODO: define alarms
+    // final alarm = new AlarmModel(
+    //   DateTime.now().weekday, TimeOfDay.now(), 
+    //   "Tomar agua", "Bebe un poco de agua", interval: 1
+    // );
 
-    await this._dbProvider.storeWater(this.model);
-    await alarm.save();
+    await this._dbProvider.storeWater(water ?? this.model);
+    // await alarm.save();
   }
 
   int timesToDrinkWater({double maxValueInLts}) {

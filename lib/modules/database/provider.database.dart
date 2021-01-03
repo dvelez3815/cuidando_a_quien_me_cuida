@@ -383,7 +383,10 @@ class DBProvider {
   Future<bool> storeWater(WaterModel water) async {
     final db = await database;
 
-    return (await db.insert('water', water.toJson())) > 0;
+    final Map<String, dynamic> save = water.toJson();
+    save.remove("progress");
+
+    return (await db.insert('water', save)) > 0;
   }
 
   Future<WaterModel> lastWater() async {    
@@ -395,7 +398,10 @@ class DBProvider {
 
     if(response.isEmpty) return null;
 
-    return new WaterModel(response[0]['goal'], UserPreferences().waterProgress ?? 0.0, response[0]['size']);
+    final Map<String, dynamic> lastElement = response[0];
+    lastElement.addAll({"progress":UserPreferences().waterProgress ?? 0.0});
+
+    return WaterModel.fromJson(lastElement);
   }
 
   Future<bool> updateWater(Map<String, dynamic> params, int id) async {  
@@ -404,7 +410,7 @@ class DBProvider {
     params.remove("id");
 
     final res = await db.update('water', params, where: "id=?", whereArgs: [id]);
-
+    print("Response is $res");
     return res  > 0;
   }
 

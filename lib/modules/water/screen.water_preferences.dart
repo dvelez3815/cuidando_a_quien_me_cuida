@@ -26,7 +26,10 @@ class _WaterPreferencesState extends State<WaterPreferences> {
     super.initState();
 
     alarmsActive = false;
-    widget._waterLtsController.text = (widget._provider.model.glassSize).toStringAsFixed(2);
+    widget._waterLtsController.text = widget._provider.model.glassSize.toString();
+    print("Size: "+widget._provider.model.glassSize.toString());
+    print("Goal: "+widget._provider.model.goal.toString());
+    print("Progress: "+widget._provider.model.progress.toString());
   }
 
   @override
@@ -170,7 +173,7 @@ class _WaterPreferencesState extends State<WaterPreferences> {
     );
   }
 
-  Form _getGlassContentForm() {
+  Widget _getGlassContentForm() {
     return Form(
       key: widget._formKey,
       child: getInputStyle(
@@ -178,13 +181,13 @@ class _WaterPreferencesState extends State<WaterPreferences> {
         "¿Cuántos mililitros de agua contiene el vaso?",
         widget._waterLtsController, null, 
         inputType: TextInputType.numberWithOptions(
-          decimal: true,
+          decimal: false,
           signed: false
         ),
         validatorCallback: (number){
-          double n = double.parse(number ?? "", (e)=>-1.0);
+          int n = int.parse(number ?? "", onError: (err)=>-1);
           
-          if(n <= 0) return "El valor ingresado no es válido";
+          if(n <= 0) return "Valor no válido. Ingrese un entero";
 
           return null;
         }
