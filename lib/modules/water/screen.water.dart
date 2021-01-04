@@ -57,6 +57,10 @@ class _WaterScreenState extends State<WaterScreen> {
       children: [
         _getWaterGlassComponent(),
         _getProgressComponent(size),
+        IconButton(
+          icon: Icon(Icons.restore),
+          onPressed: ()=>widget._provider.restoreProgress()
+        ),
         FlatButton.icon(
           icon: Icon(Icons.settings),
           label: Text("Editar preferencias"),

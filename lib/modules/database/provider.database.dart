@@ -398,8 +398,12 @@ class DBProvider {
 
     if(response.isEmpty) return null;
 
-    final Map<String, dynamic> lastElement = response[0];
-    lastElement.addAll({"progress":UserPreferences().waterProgress ?? 0.0});
+    double progress = UserPreferences().waterProgress ?? 0.0;
+    Map<String, dynamic> lastElement = new Map<String, dynamic>();
+    
+    lastElement.addAll(response[0]);
+    lastElement.addAll({"progress": progress});
+
 
     return WaterModel.fromJson(lastElement);
   }

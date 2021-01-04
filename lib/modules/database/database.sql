@@ -44,7 +44,11 @@ CREATE TABLE IF NOT EXISTS actividadesAlarmas(
 CREATE TABLE IF NOT EXISTS water(
     id INTEGER PRIMARY KEY,
     size INTEGER NOT NULL, -- glass size in ml
-    goal DECIMAL NOT NULL -- how many Lts are you going to drink?
+    goal DECIMAL NOT NULL, -- how many Lts are you going to drink?
+    start_hour INTEGER NOT NULL, -- time to start alarms
+    start_minute INTEGER NOT NULL,
+    end_hour INTEGER NOT NULL, -- time to stop alarms
+    end_minute INTEGER NOT NULL
     -- water progress is storaged in cache
 );
 

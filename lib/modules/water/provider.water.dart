@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/water/model.water.dart';
@@ -36,7 +37,13 @@ class WaterProvider {
     WaterModel water = await _dbProvider.lastWater();
 
     if(water == null) {
-      water = new WaterModel(2.0, UserPreferences().waterProgress ?? 0.0, 225);
+      water = new WaterModel(
+        2.0, 
+        UserPreferences().waterProgress ?? 0.0, 
+        225,
+        start: TimeOfDay(hour: 6, minute: 0),
+        end: TimeOfDay(hour: 21, minute: 0)
+      );
       // TODO: make sure this is correct
       await this.storageInDB(water: water);
     }

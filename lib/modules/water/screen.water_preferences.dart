@@ -98,7 +98,7 @@ class _WaterPreferencesState extends State<WaterPreferences> {
 
   Widget _getAlarmRemainder() {
     return SwitchListTile(
-      value: this.alarmsActive ?? false, //TODO: complete this 
+      value: this.alarmsActive ?? false,
       onChanged: (value)=>setState((){this.alarmsActive = value;}),
       title: Text("Alarmas"),
       subtitle: Text("¿Desea que se le recuerde cada vez que deba tomar agua?"),
