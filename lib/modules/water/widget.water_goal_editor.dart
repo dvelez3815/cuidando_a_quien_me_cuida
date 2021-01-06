@@ -7,7 +7,7 @@ class WaterGoalEditor extends StatefulWidget {
   final _provider = new WaterProvider();
   final GlobalKey<ScaffoldState> _scaffoldKey;
 
-  final _maxValue = 15.0;
+  final _maxValue = 7.0;
   final _minValue = 2.0;
 
   WaterGoalEditor(this._scaffoldKey);

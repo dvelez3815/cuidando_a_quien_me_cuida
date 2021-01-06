@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:utm_vinculacion/modules/alarms/helper.alarm.dart';
+import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/water/widget.water_goal_editor.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/input.dart';
 
 import 'model.water.dart';
 import 'provider.water.dart';
+
+// TODO: Remember that you need to provide the 'waterReminder' key in json from DB
 
 class WaterPreferences extends StatefulWidget {
   
@@ -27,9 +31,6 @@ class _WaterPreferencesState extends State<WaterPreferences> {
 
     alarmsActive = false;
     widget._waterLtsController.text = widget._provider.model.glassSize.toString();
-    print("Size: "+widget._provider.model.glassSize.toString());
-    print("Goal: "+widget._provider.model.goal.toString());
-    print("Progress: "+widget._provider.model.progress.toString());
   }
 
   @override
@@ -86,13 +87,23 @@ class _WaterPreferencesState extends State<WaterPreferences> {
   }
 
   Widget _getGlassEditor() {
-    return ListTile(
-      title: Text("Editar vaso de agua"),
-      subtitle: Text("¿Cuántos mililitros de agua contiene el vaso?"),
-      trailing: IconButton(
-        icon: Icon(Icons.edit),
-        onPressed: _editGlassEvent,
-      ),
+    return StreamBuilder<WaterModel>(
+      stream: widget._provider.modelStream,
+      builder: (BuildContext context, AsyncSnapshot<WaterModel> snapshot) {
+
+        if(!snapshot.hasData){
+          return Center(child: CircularProgressIndicator());
+        }
+
+        return ListTile(
+          title: Text("Editar vaso de agua"),
+          subtitle: Text("Actualmente el vaso es de ${snapshot.data.glassSize} ml"),
+          trailing: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: _editGlassEvent,
+          ),
+        );
+      }
     );
   }
 
@@ -107,27 +118,43 @@ class _WaterPreferencesState extends State<WaterPreferences> {
   }
 
   Widget _getAlarmsSettings() {
-    return (!this.alarmsActive)? Container(): Column(
-      children: [
-        ListTile(
-          leading: Text("08:20"),
-          title: Text("Hora de inicio"),
-          subtitle: Text("¿A qué hora desea tomar el primer vaso de agua?"),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: (){} //TODO: do this,
-          ),
-        ),
-        ListTile(
-          leading: Text("21:20"),
-          title: Text("Hora de finalización"),
-          subtitle: Text("¿A qué hora desea tomar el último vaso de agua?"),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: (){} //TODO: do this,
-          ),
-        ),
-      ],
+    return (!this.alarmsActive)? Container(): StreamBuilder<WaterModel>(
+      stream: widget._provider.modelStream,
+      builder: (context, AsyncSnapshot<WaterModel> snapshot) {
+
+        if(!snapshot.hasData){
+          return Center(child: CircularProgressIndicator());
+        }
+
+        return Column(
+          children: [
+            ListTile(
+              leading: Text("${snapshot.data.startTime.format(context)}"),
+              title: Text("Hora de inicio"),
+              subtitle: Text("¿A qué hora desea tomar el primer vaso de agua?"),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: ()=>_showDefineHourAlert(isStart: true)
+              ),
+            ),
+            ListTile(
+              leading: Text("${snapshot.data.endTime.format(context)}"),
+              title: Text("Hora de finalización"),
+              subtitle: Text("¿A qué hora desea tomar el último vaso de agua?"),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: (){} //TODO: do this,
+              ),
+            ),
+            Divider(),
+            FlatButton.icon(
+              icon: Icon(Icons.save),
+              label: Text("Guardar recordatorio"),
+              onPressed: _createAlarmsEvent
+            )
+          ],
+        );
+      }
     );
   }
 
@@ -161,7 +188,6 @@ class _WaterPreferencesState extends State<WaterPreferences> {
       onPressed: (){
 
         if(widget._formKey.currentState.validate()){
-          // TODO: storage it in database
           widget._provider.updateGlassContent(int.parse(widget._waterLtsController.text));
           Navigator.of(context).pop();
           widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
@@ -188,6 +214,7 @@ class _WaterPreferencesState extends State<WaterPreferences> {
           int n = int.parse(number ?? "", onError: (err)=>-1);
           
           if(n <= 0) return "Valor no válido. Ingrese un entero";
+          if(n < 200) return "El tamaño mínimo es 200 ml";
 
           return null;
         }
@@ -204,6 +231,73 @@ class _WaterPreferencesState extends State<WaterPreferences> {
         return AlertDialog(
           title: Text("Ajustar objetivo diario"),
           content: WaterGoalEditor(widget._scaffoldKey)
+        );
+      }
+    );
+  }
+
+  Future<void> _createAlarmsEvent() async {
+
+    // Validate that glass Size is not bigger than goal size
+    final WaterModel waterModel = widget._provider.model;
+    final int howManyReminders = waterModel.goal ~/ (waterModel.glassSize / 1000);
+    
+    // How many minutes are between start and end date
+    final int timeDiff = waterModel.timeDiff;
+
+    final startAlarm = new AlarmModel(
+      DateTime.monday, 
+      waterModel.startTime, 
+      "Beber agua", "Recuerda mantenerte hidratado",
+      interval: timeDiff ~/ howManyReminders
+    );
+
+    // startAlarm.activate();
+
+
+
+  }
+
+  Future<void> _showDefineHourAlert({bool isStart = true}) async {
+    
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: widget._provider.model.startTime,
+      helpText: "¿A qué hora desea que inicien los recordatorios?",
+      initialEntryMode: TimePickerEntryMode.dial,
+      confirmText: "Guardar",
+      cancelText: "Cancelar",
+    );
+
+    if(selectedTime==null) return;
+
+    try{
+      if(isStart) widget._provider.model.startTime = selectedTime;
+      else widget._provider.model.endTime = selectedTime;
+    }catch(error){
+      showAlertDialog(error);
+      return;
+    }
+
+  }
+
+  void showAlertDialog(Object obj) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(
+            "El periodo de tiempo entre las alarmas de inicio y fin es muy corto"
+            ".\nAumenta el tamaño del vaso o reduce tu objetivo diario."
+          ),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.check_circle),
+              label: Text("Aceptar"),
+              onPressed: ()=>Navigator.of(context).pop(),
+            )
+          ],
         );
       }
     );

@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 SwitchListTile(
                   title: Text("Modo oscuro"),
                   value: UserPreferences().darkMode ?? false,
-                  onChanged: (bool value){UserPreferences().darkMode = value; setState((){});},
+                  onChanged: null //(bool value){UserPreferences().darkMode = value; setState((){});},
                 ),
                 Divider(),
                 ListTile(

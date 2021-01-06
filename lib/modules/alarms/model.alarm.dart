@@ -12,20 +12,22 @@ class AlarmModel {
   String _description; // part of payload
   int _dayToNotify; // time where this alarm has to notify
   bool _active; // if this alarm is active or not
-  int _interval; // this is the repetition rate for alarms
+  int _interval; // this is the repetition rate for alarms measured in days
   TimeOfDay _time; // time to be notified
+  Duration _period;
 
   // this is the seed for id generation
   static final DateTime referenceDateId = new DateTime(2020, 1, 1, 1, 1, 1);
   static DBProvider db = DBProvider.db;
 
   //////////////////////////////// Constructor ////////////////////////////////
-  AlarmModel(this._dayToNotify, this._time, this._title, this._description, {int interval}) {
+  AlarmModel(this._dayToNotify, this._time, this._title, this._description, {int interval, bool isMinute=false}) {
 
     assert(interval==null || interval > 0);
 
     this._id = generateID();
     this._interval = interval ?? 7; // repeat it every 7 days (every week)
+    this._period = isMinute? Duration(minutes: this._interval):Duration(days: this._interval);
     this._active=true;  // at the beginning all alarms will be active
   }
 
@@ -35,8 +37,9 @@ class AlarmModel {
   /// this with a care or an activity you need to go to that model and search for
   /// that method.
   /// @interval variable will storage the frequency of repetition measured in days.
-  Future<bool> save({int interval}) async {    
+  Future<bool> save({int interval, bool isMinute=false}) async {    
     this._interval = interval ?? this._interval;
+    this._period = isMinute? Duration(minutes: this._interval):Duration(days: this._interval);
     await this.activate();
     return await db.nuevaAlarma(this);
   }
@@ -52,6 +55,7 @@ class AlarmModel {
     this._time = new TimeOfDay(hour: timeDB[0], minute: timeDB[1]);
     this._dayToNotify = json["day"] ?? 1;
     this._interval = json["interval"] ?? 7;
+    this._period = json["waterReminder"]? Duration(minutes: this._interval):Duration(days: this._interval);
   }
 
   /// In params you need to specify which fields you want to change. ID
@@ -68,18 +72,18 @@ class AlarmModel {
   /////////////////////////////// Funtionality ///////////////////////////////
   /// This method will create and schedule a service in android OS to be
   /// notifyed at an specific time.
-  Future<void> activate() async {    
+  Future<void> activate({Function callback}) async {    
     // this will be the next time this alarm will be triggered
     final date = nextDateAlarm(DateTime.now(), this._dayToNotify, time: this._time);
 
     await AndroidAlarmManager.periodic(
-      Duration(days: this._interval),
+      this._period,
       this._id,
-      showAlarmNotification,
+      (id)=>showAlarmNotification(id, callback: callback),
       startAt: date,
       exact: true,
       wakeup: true,
-      rescheduleOnReboot: false // no poner true hasta estar seguros de que funciona
+      rescheduleOnReboot: true // no poner true hasta estar seguros de que funciona
     );
   }
 

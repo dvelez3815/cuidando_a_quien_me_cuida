@@ -40,6 +40,18 @@ class WaterModel {
   double get goal => this._goal;
   int get glassSize => this._size;
   int get id => this._id;
+  TimeOfDay get startTime => this._start;
+  TimeOfDay get endTime => this._end;
+
+  int get timeDiff {
+    final now = DateTime.now();
+    final startTime = new DateTime(now.year, now.month, now.day, this._start.hour, this._start.minute);
+    final endTime = new DateTime(now.year, now.month, now.day, this._end.hour, this._end.minute);
+
+    final diff = endTime.difference(startTime);
+
+    return diff.inMinutes;
+  }
 
   set goal(double value) {
     assert(value != null && value >= 0);
@@ -54,6 +66,28 @@ class WaterModel {
   set progress(double value) {
     assert(value != null && value >= 0);
     this._progress = value;
+  }
+
+  set startTime(TimeOfDay time) {
+    final alarmsToCreate = this.goal ~/ (this.glassSize/1000);
+
+    if(this._end.hour - time.hour < alarmsToCreate/2){
+      throw ErrorDescription("Period of time between start and end alarms are too close");
+    }
+    else{
+      this._start = time;
+    }
+  }
+
+  set endTime(TimeOfDay time) {
+    final alarmsToCreate = this.goal ~/ (this.glassSize/1000);
+
+    if(time.hour - this._start.hour < alarmsToCreate/2){
+      throw ErrorDescription("Period of time between start and end alarms are too close");
+    }
+    else{
+      this._end = time;
+    }
   }
 
 }

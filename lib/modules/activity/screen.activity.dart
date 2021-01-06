@@ -129,7 +129,7 @@ class _ActividadesState extends State<Actividades>{
     return Column(
       children: [            
         Icon(Icons.alarm),
-        Text("${item.time.hour}:${item.time.minute}"), 
+        Text("${item.time.format(context)}"), 
       ],
     );
   }
@@ -169,7 +169,7 @@ class _ActividadesState extends State<Actividades>{
                   ),
                   ListTile(
                     title: Text("Hora para notificar"),
-                    subtitle: Text("${item.time.hour}:${item.time.minute}")
+                    subtitle: Text("${item.time.format(context)}")
                   ),
                   Divider(),
                   Row(

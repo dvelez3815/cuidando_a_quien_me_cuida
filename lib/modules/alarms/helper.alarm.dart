@@ -31,11 +31,12 @@ DateTime nextDateAlarm(DateTime current, int targetWeekDay, {TimeOfDay time}){
 }
 
 /// This will show the alarm at the notification bar of your cellphone
-Future<void> showAlarmNotification(int id) async {
+Future<void> showAlarmNotification(int id, {Function callback}) async {
 
   final alarm = await DBProvider.db.getAlarma(id);
 
   if(alarm == null) return;
+  if(callback != null) await callback();
 
   final localNotification = FlutterLocalNotificationsPlugin();
   await localNotification.show(

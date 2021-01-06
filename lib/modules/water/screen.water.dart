@@ -55,12 +55,12 @@ class _WaterScreenState extends State<WaterScreen> {
   Widget _getBody(BuildContext context, Size size) {
     return Column(
       children: [
-        _getWaterGlassComponent(),
-        _getProgressComponent(size),
         IconButton(
           icon: Icon(Icons.restore),
           onPressed: ()=>widget._provider.restoreProgress()
         ),
+        _getProgressComponent(size),
+        _getWaterGlassComponent(),
         FlatButton.icon(
           icon: Icon(Icons.settings),
           label: Text("Editar preferencias"),
@@ -74,10 +74,11 @@ class _WaterScreenState extends State<WaterScreen> {
     return Center(
         child: FlatButton.icon(
           padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          icon: Icon(Icons.bubble_chart_rounded, size: 20.0),
+          icon: Icon(Icons.bubble_chart_rounded, size: 20.0, color: Theme.of(context).canvasColor),
+          color: Theme.of(context).accentColor,
           label: Text(
-            "Agregar vaso de agua",
-            style: TextStyle(fontSize: 20.0),
+            "Beber agua",
+            style: TextStyle(fontSize: 20.0, color: Theme.of(context).canvasColor),
           ),
           onPressed: ()=>widget._provider.addWaterLts(),
         ),
