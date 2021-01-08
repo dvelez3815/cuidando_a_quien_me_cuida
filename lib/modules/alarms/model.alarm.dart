@@ -55,7 +55,7 @@ class AlarmModel {
     this._time = new TimeOfDay(hour: timeDB[0], minute: timeDB[1]);
     this._dayToNotify = json["day"] ?? 1;
     this._interval = json["interval"] ?? 7;
-    this._period = json["waterReminder"]? Duration(minutes: this._interval):Duration(days: this._interval);
+    this._period = (json["waterReminder"] ?? false)? Duration(minutes: this._interval):Duration(days: this._interval);
   }
 
   /// In params you need to specify which fields you want to change. ID

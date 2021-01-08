@@ -1,5 +1,9 @@
+// Contador de las veces que maldijo cosas
+// inexistentes por culpa de este archivo.
+// 
+// Contador: 1 
+
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/modules/alarms/helper.alarm.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/water/widget.water_goal_editor.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
@@ -132,19 +136,19 @@ class _WaterPreferencesState extends State<WaterPreferences> {
               leading: Text("${snapshot.data.startTime.format(context)}"),
               title: Text("Hora de inicio"),
               subtitle: Text("¿A qué hora desea tomar el primer vaso de agua?"),
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: ()=>_showDefineHourAlert(isStart: true)
-              ),
+              // trailing: IconButton(
+              //   icon: Icon(Icons.edit),
+              //   onPressed: ()=>_showDefineHourAlert(isStart: true)
+              // ),
             ),
             ListTile(
               leading: Text("${snapshot.data.endTime.format(context)}"),
               title: Text("Hora de finalización"),
               subtitle: Text("¿A qué hora desea tomar el último vaso de agua?"),
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: (){} //TODO: do this,
-              ),
+              // trailing: IconButton(
+              //   icon: Icon(Icons.edit),
+              //   // onPressed: (){}
+              // ),
             ),
             Divider(),
             FlatButton.icon(
@@ -258,28 +262,28 @@ class _WaterPreferencesState extends State<WaterPreferences> {
 
   }
 
-  Future<void> _showDefineHourAlert({bool isStart = true}) async {
+  // Future<void> _showDefineHourAlert({bool isStart = true}) async {
     
-    final selectedTime = await showTimePicker(
-      context: context,
-      initialTime: widget._provider.model.startTime,
-      helpText: "¿A qué hora desea que inicien los recordatorios?",
-      initialEntryMode: TimePickerEntryMode.dial,
-      confirmText: "Guardar",
-      cancelText: "Cancelar",
-    );
+  //   final selectedTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: widget._provider.model.startTime,
+  //     helpText: "¿A qué hora desea que inicien los recordatorios?",
+  //     initialEntryMode: TimePickerEntryMode.dial,
+  //     confirmText: "Guardar",
+  //     cancelText: "Cancelar",
+  //   );
 
-    if(selectedTime==null) return;
+  //   if(selectedTime==null) return;
 
-    try{
-      if(isStart) widget._provider.model.startTime = selectedTime;
-      else widget._provider.model.endTime = selectedTime;
-    }catch(error){
-      showAlertDialog(error);
-      return;
-    }
+  //   try{
+  //     if(isStart) widget._provider.model.startTime = selectedTime;
+  //     else widget._provider.model.endTime = selectedTime;
+  //   }catch(error){
+  //     showAlertDialog(error);
+  //     return;
+  //   }
 
-  }
+  // }
 
   void showAlertDialog(Object obj) {
     showDialog(
