@@ -6,7 +6,7 @@ insert into contacto values
     (1, 'Emergencia', 'Contacto de emergencia de Ecuador', '911');
 
 -- El ID debes ponerlo manualmente, es un entero. Los días vienen dados como un
--- vector con los nombres en español; la hora está en formato 24h. El parámetro
+-- vector con los nombres en español, la hora está en formato 24h. El parámetro
 -- 'active' es un booleano, pero como sqlite no lo soporta se pone 1 para true y 0
 -- para false, pero ponle siempre 1. El 'type' es el tipo de actividad, en este caso
 -- solo acepta 4 posibles valores: mental, recreation, physical, care.

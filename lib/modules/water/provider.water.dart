@@ -44,7 +44,6 @@ class WaterProvider {
         start: TimeOfDay(hour: 6, minute: 0),
         end: TimeOfDay(hour: 21, minute: 0)
       );
-      // TODO: make sure this is correct
       await this.storageInDB(water: water);
     }
     this._modelSink(water);
