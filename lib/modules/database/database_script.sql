@@ -337,7 +337,7 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
     {"title":"Pimienta negra molida"}]
     '
 ),
-(20, 'Ensaladilla de patata con mayonesa de limón y mostaza', 'assets/imagenes/.jpg', 
+(20, 'Ensaladilla de patata con mayonesa de limón y mostaza', 'assets/imagenes/ensaladilla.jpg', 
     '1.	Cocemos las patatas enteras y con piel en una cacerola con abundante agua. El tiempo dependerá del tipo de patata. Las nuestras tardaron 30 minutos, pero lo mejor es comprobar el punto pinchando con una brocheta en la parte más gruesa. Si entra con facilidad, están listas y las podemos retirar del agua. Si no es el caso las dejamos cocer unos minutos más.
 2.	Al tiempo que se hacen las patatas ponemos a hervir agua con un puñado de sal en un cacito. Introducimos cuatro huevos y contamos 11 minutos justos. Retiramos los huevos y los refrescamos en un recipiente con agua helada para cortar la cocción. Pelamos y reservamos.
 3.	También preparamos la salsa mezclando la mayonesa con la yema de huevo, la ralladura de un limón, la mostaza y la leche. Salpimentamos al gusto y removemos bien hasta homogeneizar. Reservamos en la nevera hasta el momento de usar.
@@ -355,4 +355,14 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
     '
 );
 
+
+insert into imagenesactividades(0, 0, "assets/imagenes/taichi.jpg"), (1, 0, "assets/imagenes/taichi.jpg");
+
+insert into procedimiento values ('1.Siéntese o acuéstese en una posición cómoda. 
+2.	Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.
+3.	Respire hondo por la nariz y deje que el abdomen le empuje la mano. El pecho no debería moverse.
+4.	Exhale a través de los labios fruncidos como si estuviese silbando. Sienta cómo se hunde la mano sobre su abdomen y utilícela para expulsar todo el aire hacia afuera.
+5.	Realice este ejercicio de respiración entre 3 y 10 veces. Tómese su tiempo con cada respiración.
+6.	Note cómo se siente al final del ejercicio.
+',0, 0);
 
