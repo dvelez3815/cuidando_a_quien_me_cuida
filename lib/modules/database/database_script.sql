@@ -38,50 +38,6 @@ values
     '[martes, jueves, sabado]', '17:00', 1, 'mental', '[]');
 
 
-insert into alarma (id, title, body, day, time, active, interval)
-values
-(0, 'Juegos al aire libre', 'Las actividades físicas en exteriores fomentan un envejecimiento sano.', 1, "07:00", 1, 7),
-(1, 'Respiración matinal', 'Intente realizar este ejercicio cuando se levanta por la mañana para aliviar la rigidez de los músculos y liberar las vías respiratorias obstruidas. Luego, utilícelo a lo largo del día para aliviar la tensión en la espalda.', 1, "08:30", 1, 7),
-(2, 'Crucigramas', 'Divierte un poco y fortalece tu memoria jugando con crucigramas', 1, "13:00", 1, 7),
-(3, 'Respiración 4-7-8', 'Respiración abdominal para ayudar a relajarse', 1, "17:30", 1, 7),
-(4, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración.', 1, "20:00", 1, 7),
-(5, 'Risoterapia', 'ideal para liberar tensiones de forma natural usando herramientas como: juegos de mesa, de azar, bailes o chistes.', 2, "7:00", 1, 7),
-(6, 'Natación', 'Puede aportar no solo ejercicio físico sino, favorecer la energía y vitalidad del adulto.', 2, "8:00", 1, 7),
-(7, 'TAICHI', 'La especificidad del taichí de bienestar consiste en una ejecución de secuencias hecha con la sensación de llevar unas bolas de ki.', 2, "10:00", 1, 7),
-(8, 'Caminar', 'Ideal para para los que que deseen preservar su masa muscular, mejorar su salud cardiovascular y perder peso como método de prevención a posibles fracturas o lesiones a nivel de vertebras.', 2, "13:00", 1, 7),
-(9, 'Bailoterapia', 'Nada mejor como realiza bailoterapia!', 2, "14:00", 1, 7),
-(10, 'Sudokus', 'Mejora la habilitad mental jugando sodoku', 2, "17:00", 1, 7),
-(11, 'Meditación', 'Procure buscar un lugar tranquilo, pero no se preocupe si hay algunos ruidos, como el del tráfico.', 2, "21:00", 1, 7),
-(12, 'Juegos al aire libre', 'Las actividades físicas en exteriores fomentan un envejecimiento sano.', 3, "07:00", 1, 7),
-(13, 'Respiración matinal', 'Intente realizar este ejercicio cuando se levanta por la mañana para aliviar la rigidez de los músculos y liberar las vías respiratorias obstruidas. Luego, utilícelo a lo largo del día para aliviar la tensión en la espalda.', 3, "08:30", 1, 7),
-(14, 'Crucigramas', 'Divierte un poco y fortalece tu memoria jugando con crucigramas', 3, "13:00", 1, 7),
-(15, 'Respiración 4-7-8', 'Respiración abdominal para ayudar a relajarse', 3, "17:30", 1, 7),
-(16, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración.', 3, "20:00", 1, 7),
-(17, 'Risoterapia', 'ideal para liberar tensiones de forma natural usando herramientas como: juegos de mesa, de azar, bailes o chistes.', 4, "7:00", 1, 7),
-(18, 'Natación', 'Puede aportar no solo ejercicio físico sino, favorecer la energía y vitalidad del adulto.', 4, "8:00", 1, 7),
-(19, 'TAICHI', 'La especificidad del taichí de bienestar consiste en una ejecución de secuencias hecha con la sensación de llevar unas bolas de ki.', 4, "10:00", 1, 7),
-(20, 'Caminar', 'Ideal para para los que que deseen preservar su masa muscular, mejorar su salud cardiovascular y perder peso como método de prevención a posibles fracturas o lesiones a nivel de vertebras.', 4, "13:00", 1, 7),
-(21, 'Bailoterapia', 'Nada mejor como realiza bailoterapia!', 4, "14:00", 1, 7),
-(22, 'Sudokus', 'Mejora la habilitad mental jugando sodoku', 4, "17:00", 1, 7),
-(23, 'Meditación', 'Procure buscar un lugar tranquilo, pero no se preocupe si hay algunos ruidos, como el del tráfico.', 4, "21:00", 1, 7),
-(24, 'Juegos al aire libre', 'Las actividades físicas en exteriores fomentan un envejecimiento sano.', 5, "07:00", 1, 7),
-(25, 'Respiración matinal', 'Intente realizar este ejercicio cuando se levanta por la mañana para aliviar la rigidez de los músculos y liberar las vías respiratorias obstruidas. Luego, utilícelo a lo largo del día para aliviar la tensión en la espalda.', 5, "08:30", 1, 7),
-(26, 'Crucigramas', 'Divierte un poco y fortalece tu memoria jugando con crucigramas', 5, "13:00", 1, 7),
-(27, 'Respiración 4-7-8', 'Respiración abdominal para ayudar a relajarse', 5, "17:30", 1, 7),
-(28, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración.', 5, "20:00", 1, 7),
-(29, 'Risoterapia', 'ideal para liberar tensiones de forma natural usando herramientas como: juegos de mesa, de azar, bailes o chistes.', 6, "7:00", 1, 7),
-(30, 'Natación', 'Puede aportar no solo ejercicio físico sino, favorecer la energía y vitalidad del adulto.', 6, "8:00", 1, 7),
-(31, 'TAICHI', 'La especificidad del taichí de bienestar consiste en una ejecución de secuencias hecha con la sensación de llevar unas bolas de ki.', 6, "10:00", 1, 7),
-(32, 'Caminar', 'Ideal para para los que que deseen preservar su masa muscular, mejorar su salud cardiovascular y perder peso como método de prevención a posibles fracturas o lesiones a nivel de vertebras.',6, "13:00", 1, 7),
-(33, 'Bailoterapia', 'Nada mejor como realiza bailoterapia!', 6, "14:00", 1, 7),
-(34, 'Sudokus', 'Mejora la habilitad mental jugando sodoku', 6, "17:00", 1, 7),
-(35, 'Meditación', 'Procure buscar un lugar tranquilo, pero no se preocupe si hay algunos ruidos, como el del tráfico.', 6, "21:00", 1, 7);
-
-
-insert into actividadesAlarmas(alarma_id, actividad_id)
-values (0, 8), (1, 3), (2, 11), (3, 1),(4, 2),(5, 7),(6, 9),(7, 5),(8, 10),(9, 6),(10, 12),(11, 4),(12, 8),(13,3),(14, 11),(15,1),(16, 2),(17, 7),
-(18, 9),(19, 5),(20, 10),(21, 6),(22, 12),(23, 4),(24, 8),(25, 3),(26, 11),(27,1),(28, 2),(29, 7),(30, 9),(31, 5),(32, 10),(33, 6),(34, 12),(35, 4);
-
 
 insert into comida(id, nombre, urlImagen, preparacion, ingredientes)
 values
@@ -145,4 +101,258 @@ values
 4.	Enrolla.
 ',
     '[{"title":"4 rebanadas de pan blanco"}, {"title":"4 cucharadas de frijol refrito"},{"title":"4 rebanadas de queso amarillo"}, {"title":"2 rebanadas de jamón"}]'
+),
+(6, 'Omelet con Espinacas y Jamón', 'assets/imagenes/omelet.jpg', 
+    '1.	Separa las hojas de las espinacas y desecha sus tallos. Lava las hojas en abundante agua y desinféctalas. Escúrrelas, dejando unas gotas de agua en las hojas, que servirán para su cocción. Puedes conocer el tiempo de cocción de las espinacas y más alimentos en tiempodecoccion.net
+2.	Pica finamente las lonchas de queso gouda y divide en dos porciones.
+3.	Calienta una sartén a fuego medio alto, sin aceite ni mantequilla, agrega las espinacas con un poco de sal, remueve constantemente hasta que estén completamente cocidas. Este paso no durará más de 1 minuto.
+4.	Una vez cocidas, colócalas en un colador y escúrrelas. Presiona suavemente con una cuchara para extraer la mayor cantidad de agua.
+5.	Pica finamente las espinacas, colócalas en un tazón y agrega los huevos, sal y pimienta. Bate con ayuda de un tenedor.
+6.	Calienta nuevamente la sartén, y agrega una cucharada de mantequilla, espera a que se derrita e inmediatamente agrega la mitad de la mezcla de huevo y espinaca.
+7.	Cocina el huevo, sin voltear, ayudándote de una espátula de plástico, para distribuir uniformemente las espinacas, hasta que el huevo comience a espesar.
+8.	Inclina un poco la sartén para distribuir el huevo de la parte central del omelete. Una vez que la tortilla de huevo esté firme, espolvorea, en una mitad de la tortilla una porción de queso y distribuye encima del queso 2 rebanadas de jamón.
+9.	Con la ayuda de la espátula, dobla la tortilla por la mitad, deja 30 segundos más en el fuego y transfiere el omelet de espinacas a un plato.
+10.	Repite los pasos del 6 al 9 con el resto de la mezcla de huevo con espinacas, la porción restante de queso y las otras 2 rebanadas de jamón.
+',
+    '[{"title":"1 manojo de espinacas"},{"title":"4 huevos"},{"title":"4 rebanadas de jamón de pavo"},{"title":"4 rebanadas finas de queso gouda"},{"title":"2 cucharadas de mantequilla"},{"title":"Sal y Pimienta"}]'
+),
+(7, 'ENCAPSULADO DE JAMÓN, HUEVO Y QUESO CHEDDAR', 'assets/imagenes/capsula.jpg', 
+    '1.	Cortar una tapa al pan o bollo, ahuecarlos y reservar.
+2.	Corta el jamon en rebanadas y cubre el interior del bollo. Agregar un huevo al interior del bollo, sazona con sal y pimienta, agrega queso cheddar y luego perejil.
+3.	Hornear a 180° C los panes para permitir que gratine el queso. Retirar del horno y agrega mas queso y perejil, Cubrir con la tapa y cocinar en el horno por 5 minutos más.
+',
+    '[{"title":"5 panes, con costra redondo o bollo"},{"title":"5 rebanadas de jamón tipo york"},{"title":"5 huevos"},{"title":"250 gramos de queso cheddar"},{"title":"perejil, al gusto"},{"title":"sal, cantidad necesaria"},{"title":"pimientas, al gusto"},{"title":"1 taza de vinagre blanco"},{"title":"1 taza de agua"}]'
+),
+
+(8, 'Pescado a la Plancha con Verduras', 'assets/imagenes/pescado.jpg', 
+    '1.	Cortar el pescado o bien adquirirlo hecho filetes, esparcir con una mezcla de aceite, sal y pimienta.
+Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado etc.) y recortar unos espárragos. Ponerlo todo en una plancha o bien una sartén a fuego fuerte salpimentando las verduras. Ir pincelando el pescado de cuando en cuando con la mezcla del aceite.
+2.	Servir el pescado y las verduras que más le agraden a cada uno de ellos y comer calentito.
+
+',
+    '[{"title":"Pescado"},{"title":"Verdura"},{"title":"Sal"}]'
+),
+
+(9, 'Aguado de pollo', 'assets/imagenes/aguado.jpg', 
+    '1.	Remoje el arroz en agua durante unos 30 minutos
+2.	En una olla grande, caliente el aceite o la mantequilla para hacer un refrito o sofrito con la cebolla, el ajo, el pimiento, los tomates, el perejil, el orégano, el comino, el achiote, la sal y pimienta. Cocine por 10 minutos, revolviendo frecuentemente.
+3.	Agregue el caldo de pollo y haga hervir.
+4.	Agregue las presas de pollo y cocine a fuego medio durante 30 minutos.
+5.	Agregue el arroz remojado y las papas picadas, cocine por unos 45 minutos a fuego bajo, revolviendo de vez de en cuando.
+6.	Agregue las zanahorias y cocine durante 5 minutos
+7.	Agregue las arvejas y cocine por 5-7 minutos o hasta que las arvejas y las zanahorias estén tiernas.
+8.	Retire del fuego, y agregue el cilantro picado
+9.	Sirva el aguado acompañado de tajas de aguacate y ají.
+',
+    '[{"title":"900g de pollo o gallina"},
+    {"title":"1 taza de arroz"},
+    {"title":"2 cucharadas de aceite de oliva"},
+    {"title":"1 taza de cebolla roja picada en cubitos"},
+    {"title":"1 taza de pimiento picado en cubitos"},
+    {"title":"2 tomates tipo roma pelados, sin semillas y picados en cubitos"},
+    {"title":"4 dientes de ajo machacados"},
+    {"title":"2 cucharadas de perejil finamente picado"},
+    {"title":"1 cucharadita de orégano seco o 1 cucharada de orégano fresco picado"},
+    {"title":"1 cucharadita de comino molido"},
+    {"title":"1 cucharadita de achiote molido"},
+    {"title":"4 tazas de caldo de pollo o agua"},
+    {"title":"2 papas peladas y picadas, alrededor de 3 ½ tazas"},
+    {"title":"1 taza de zanahorias picadas en cubitos"},
+    {"title":"1 taza de arvejas o guisantes frescas o congeladas"},
+    {"title":"2 cucharadas de cilantro finamente picado"},
+    {"title":"Sal y pimienta al gusto"}]
+    '
+),
+(10, 'Locro de papa con queso', 'assets/imagenes/locro.jpg', 
+    '1.	Prepare un refrito para el locro de papa, caliente el aceite o la mantequilla a fuego medio en una olla, añada la cebolla picada, los ajos picados, el comino y el achiote molido. Cocine hasta que las cebollas estén suaves, aproximadamente 5 minutos.
+2.	Añada las papas a la olla y mezclar bien con el refrito, continúe cocinando las papas por unos 5 minutos.
+3.	Añada el agua y haga hervir, cocine las papas hasta que se ablanden. Utilice un machacador de papas para aplastar las papas, pero no las aplaste a todas, la consistencia del locro de papa debe ser cremosa pero con trocitos de papa.
+4.	Reduzca la temperatura, añada la leche, mezcle bien y deje cocinar por unos 5 minutos adicionales. Puede añadir más leche o agua si la sopa está muy espesa.
+5.	Añada sal al gusto, el queso rallado o desmenuzado y el cilantro.
+6.	Sirva el locro de papa caliente con los aguacates, las cebollitas verdes, el queso feta desmenuzado y el aji.
+
+',
+    '[{"title":"5 papas de tamaño mediano peladas y cortadas en cuadros grandes y pequeños"},
+    {"title":"2 cucharadas de aceite de oliva"},
+    {"title":"1 cebolla blanca tipo perla picada en cuadritos"},
+    {"title":"2 dientes de ajo picados finamente"},
+    {"title":"2 cucharaditas de comino"},
+    {"title":"1-2 cucharaditas de achiote molido"},
+    {"title":"5 tazas de agua"},
+    {"title":"1 taza de leche puede ponerle más si gusta"},
+    {"title":"1 taza de quesillo o queso fresco desmenuzado también se puede usar mozzarella rallada"},
+    {"title":"4 cucharadas de cilantro picado finamente"},
+    {"title":"Sal al gusto"}]
+    '
+),
+
+(11, 'Macarrones con atún', 'assets/imagenes/macarron.jpg', 
+    '1.	Echar un poco de aceite de las latas del pescado para dorar el ajo.
+2.	Poner el atún y el resto de aceite en un colador o separar con un tenedor.
+3.	Freír el ajo con aceite hasta que esté dorado y descartarlo, añadir la mezcla de pescado, el tomate y, si se desea, la menta o la albahaca y cocinar a fuego lento durante unos 15 minutos. Esta salsa se puede poner en la nevera y recalentar justo antes de servir. O empezar a hacer la salsa unos minutos antes de poner los macarrones a hervir, como siempre, en abundante agua con sal.
+4.	Cuando los macarrones estén al dente, escurrir, echar la salsa caliente por encima y decorar con el perejil en el momento de servir.
+
+',
+    '[{"title":"75 gr de atún en aceite de oliva"},
+    {"title":"1 diente de ajo"},
+    {"title":"1 lata de pasta de tomate"},
+    {"title":"1 ramita de albaca o menta (opcional)"},
+    {"title":"400g de macarrones"},
+    {"title":"2 cucharadas de perejil picado"}]
+    '
+),
+
+(12, 'Filete de pollo a la plancha', 'assets/imagenes/fplancha.jpg', 
+    '1.	Prepara el marinado para el pollo, utiliza: limón o vinagre de manzana, el ajo (finamente picado) y las especies.
+2.	Mezcla muy bien todos los ingredientes, hasta lograr homogeneidad, y reserva. El marinado proporciona sabor a la carne, jugosidad y suavidad.
+3.	Acto seguido, impregna las pechugas fileteadas dentro de la mezcla, deja reposar entre 10 y 15 minutos.
+4.	Pasado el tiempo, solo necesitas cocinarlo a la plancha (no agregues aceite).
+',
+    '[{"title":"2 filetes de pechuga de pollo"},
+    {"title":"1 Limón"},
+    {"title":"1 pizca de pimienta"},
+    {"title":"1 diente de ajo"},
+    {"title":"1 pizca de orégano"},
+    {"title":"1 pizca de hierbas provenzales"}]
+    '
+),
+(13, 'Sopa de zapallo', 'assets/imagenes/szapallo.jpg', 
+    '1.	Caliente el aceite en una cacerola de buen tamaño.
+2.	Añada la cebolla, el ajo, el comino y los tomates, cocine hasta que las cebollas estén suaves, por unos 5 minutos.
+3.	Añada el caldo de pollo o verduras y haga hervir.
+4.	Añada los trozos de zapallo o calabaza y haga hervir nuevamente, reduzca la temperatura y cocine a fuego lento hasta que los pedazos de zapallo estén suaves, aproximadamente unos 30 minutos.
+5.	Dejar que la sopa se enfríe lo suficiente para poder licuarlo, licuar hasta obtener un puré.
+6.	Añada sal y pimienta al gusto, re-calentar si la sopa lo requiere
+7.	Sirva la sopa caliente con queso feta o queso de cabra y cebolletas picadas
+',
+    '[{"title":"1 zapallo o calabaza de buen tamaño pelado, sin semillas y cortado en trozos pequeños"},
+    {"title":"3 cucharadas de aceite de oliva"},
+    {"title":"1 cebolla blanca picada finamente"},
+    {"title":"3 dientes de ajo machacados"},
+    {"title":"1 cucharadita de comino molido"},
+    {"title":"4 tomates pelados y picados"},
+    {"title":"6 tazas de caldo de pollo o verduras"},
+    {"title":"Sal y pimienta al gusto"}]
+    '
+),
+(14, 'Sopa de fideo con queso', 'assets/imagenes/sopaqueso.jpg', 
+    '1.	Preparar un refrito o sofrito con el aceite de color, la cebolla picada, y los aliños.
+2.	Pelar y picar las papas en cuadritos pequeños.
+3.	Agregar el agua y las papas. Llevar a la ebullición.
+4.	Agregar el fideo y cocinar durante unos diez minutos o hasta que las papas y los fi-deos estén cocidos.
+5.	Añadir la crema y el queso desmenuzado. Mezclar bien.
+6.	Rectificar la sal y servir con culantro o perejil picadito.
+',
+    '[{"title":"2 cucharadas de aceite de color achiote"},
+    {"title":"½ cebollita blanca picadita"},
+    {"title":"Aliños al gusto: comino, ajo, orégano, etc"},
+    {"title":"2 ½ litros de agua"},
+    {"title":"1 libra de papas"},
+    {"title":"7 onzas de fideos"},
+    {"title":"½ taza de crema de leche"},
+    {"title":"6 onzas de queso picadito en cubos o desmenuzado"},
+    {"title":"Culantro o perejil picadito"}]
+    '
+),
+(15, 'Wok de tallarines, camarón y verduras con salsa teriyaki', 'assets/imagenes/wok.jpg', 
+    '1.	Empezamos lavando las verduras y cortándolas en juliana.
+2.	Luego, en un wok con aceite caliente salteamos las verduras moviéndolas constantemente con un movimiento de muñeca. La idea es no hacerlas demasiado para que queden ligeramente crujientes
+3.	Por otro lado, calentamos agua con sal en una olla y hacemos los tallarines, luego los escurrimos con agua fría y los añadimos al wok junto con la salsa teriyaki (unas dos o tres cucharadas).
+4.	Rehogamos un par de minutos y servimos en cuencos.
+',
+    '[{"title":"160 g de tallarines (pueden ser noodles al huevo como los usado, fideos udon o incluso de arroz)"},
+    {"title":"10 Camarones pelados"},
+    {"title":"Verduras variadas (berenjena, pimiento, zanahoria, cebolla, champiñones...)"},
+    {"title":"Aceite de oliva virgen extra"},
+    {"title":"Sal"},
+    {"title":"Salsa teriyaki"}]
+    '
+),
+(16, 'Ensalada de jamón y brócoli', 'assets/imagenes/jb.jpg', 
+    '1.	Lavar las verduras con abundante agua, cocínalos con poca agua e introdúcelos cuando empiece a hervir. 
+2.	Déjalos por poco tiempo en el agua caliente y finalmente pásalo por agua fría.
+3.	Trocea la lechuga y colócala en una fuente.
+4.	Agrega jamón y vegetales restantes en forma decorativa.
+5.	En un tazón combina el aceite, la salsa inglesa, la mostaza, el ajo, el orégano y la azúcar por 3 minutos y sirve sobre la ensalada.
+',
+    '[{"title":"1 Unidad Lechuga Bien lavada"},
+    {"title":"1/2 Taza Brócoli Cocido"},
+    {"title":"2 Tajadas Jamón Picado en tiras"},
+    {"title":"1/2 Taza Champiñones Picados"},
+    {"title":"1/4 Taza Aceite Vegetal"},
+    {"title":"1/2 Taza Tomate Cherry"},
+    {"title":"1 Cucharada Salsa Inglesa"},
+    {"title":"1 Cucharadita Mostaza"},
+    {"title":"1 Unidad Ajo Diente triturado"},
+    {"title":"2 Cucharaditas Azúcar"},
+    {"title":"1/2 Cucharadita Orégano Fresco"}]
+    '
+),
+
+(17, 'Tostada de aguacate', 'assets/imagenes/ta.jpg', 
+    '1.	Prepara la mayonesa mezclándola con sal de ajo, paprika, y Puré de Tomate, reserva.
+2.	Para los panes y huevos Tuesta ligeramente los panes en un sartén, coloca un poco de mantequilla sobre el sartén y cocina los huevos como huevos fritos. Otra opción es en una olla a fuego medio, coloca agua y deja hervir. Agrega 2 cucharadas de vinagre blanco y con cuidado agregas los huevos. Revuelves el agua con mucho cuidado formando un remolino en el agua y deja cocinar los huevos 4 minutos en el remolino de agua hirviendo.
+3.	Mientras tanto coloca un poco de la mayonesa preparada sobre las rodajas de pan tostado, sobre esta las rodajas de aguacate y sobre el aguacate los huevos.
+',
+    '[{"title":"3 Cucharadas de Mayonesa"},
+    {"title":"1 Unidad Aguacate maduro, pelado y picado en rodajas"},
+    {"title":"2 Unidades Pan artesanal de masa madre"},
+    {"title":"2 Unidades Huevo"},
+    {"title":"1 Cucharadita Sal de Ajo"},
+    {"title":"1 Cucharadita Paprika"},
+    {"title":"1 Cucharadita de Puré de Tomate"}]
+    '
+),
+
+(18, 'Guisantes con jamón', 'assets/imagenes/guisante.jpg', 
+    '1.	Comenzamos cortando la cebolla y picándola en brunoise . Ponemos la cebolla a fuego lento en una sartén con dos cucharadas de aceite de oliva
+2.	Mientras la cebolla refríen, vamos cociendo los guisantes.
+3.	Cocerlos durante unos 8 minutos para que estén perfectos
+4.	Cuando la cebolla está transparente y comience a sudar, agregamos el jamón serrano muy picado -se agradecen los trocitos de tocino que aportan mucha jugosidad- y se rehogan con la cebolla.
+5.	Se añade también una puntita de harina y un cucharón del agua de la cocción de los guisantes.
+6.	Se liga un poco esa salsa de cebolla, jamón y harina y se agregan los guisantes bien escurridos. Se mezcla el conjunto hasta que forma un cuerpo uniforme y se decora con una hojita de salvia o con otro brote aromático y se lleva a la mesa inmediatamente.
+',
+    '[{"title":"Guisantes 300 g"},
+    {"title":"Cebolla cortada en brunoise fino 100 g"},
+    {"title":"Jamón serrano en tacos 150 g"},
+    {"title":"Harina de trigo 10 g"}]
+    '
+),
+(19, 'Tacos de atún', 'assets/imagenes/tacos.jpg', 
+    '1.	Vamos a calentar unas gotas de aceite de oliva en un sartén en el que colocaremos los filetes de atún fresco que sazonamos con tomillo, sal y pimienta negra. 
+2.	Los sellaremos a fuego fuerte por un par de minutos de ambos lados. Bajamos la lumbre a intensidad medio baja y dejamos unos 10 minutos más. Hora picamos la cebolla y el tomate.
+3.	Pelamos los aguacates, retiramos los huesos. Uno de ellos lo cortamos en dados y el otro en gajos. Mezclamos los dados de aguacate con el tomate, la cebolla, el jugo de la lima, sal y pimienta.
+4.	Cuando el atún esté listo, lo retiramos de la lumbre y cortamos en trozos que agregamos a los demás ingredientes. 
+5.	Revolvemos añadiendo un poco de aceite de oliva y ajustando el sazón. Colocamos los gajos de aguacate y unas cucharadas de la mezcla de atún y verduras sobre las tortillas calientes. Acompañamos de una salsa picante mexicana como una salsa verde o roja.
+',
+    '[{"title":"Atún fresco (fileteado) 400 g"},
+    {"title":"Aguacate 2"},
+    {"title":"Tomate maduro 1"},
+    {"title":"Cebolla 100 g"},
+    {"title":"Lima 1"},
+    {"title":"Tortillas de harina o maíz  4"},
+    {"title":"Aceite de oliva virgen extra 15 ml"},
+    {"title":"Tomillo seco"},
+    {"title":"Sal"},
+    {"title":"Pimienta negra molida"}]
+    '
+),
+(20, 'Ensaladilla de patata con mayonesa de limón y mostaza', 'assets/imagenes/.jpg', 
+    '1.	Cocemos las patatas enteras y con piel en una cacerola con abundante agua. El tiempo dependerá del tipo de patata. Las nuestras tardaron 30 minutos, pero lo mejor es comprobar el punto pinchando con una brocheta en la parte más gruesa. Si entra con facilidad, están listas y las podemos retirar del agua. Si no es el caso las dejamos cocer unos minutos más.
+2.	Al tiempo que se hacen las patatas ponemos a hervir agua con un puñado de sal en un cacito. Introducimos cuatro huevos y contamos 11 minutos justos. Retiramos los huevos y los refrescamos en un recipiente con agua helada para cortar la cocción. Pelamos y reservamos.
+3.	También preparamos la salsa mezclando la mayonesa con la yema de huevo, la ralladura de un limón, la mostaza y la leche. Salpimentamos al gusto y removemos bien hasta homogeneizar. Reservamos en la nevera hasta el momento de usar.
+4.	Pelamos las patatas (en frío) y semi machacamos con un tenedor, dejando trozos irregulares para dar textura. Salpimentamos ligeramente, añadimos los huevos duros troceados (nos reservamos una yema para decorar) junto con la salsa. En el momento de servir la ensalada rallamos la yema de huevo duro que tenemos reservada y decoramos con cebollino fresco picado.
+',
+    '[{"title":"Patata nueva 4"},
+    {"title":"Mayonesa 200 g"},
+    {"title":"Ralladura de limón 1"},
+    {"title":"Leche 30 ml"},
+    {"title":"Yema de huevo 1"},
+    {"title":"Huevo 4"},
+    {"title":"Sal"},
+    {"title":"Pimienta negra molida"},
+    {"title":"Cebollino para decorar"}]
+    '
 );
+
+

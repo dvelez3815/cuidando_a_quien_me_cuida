@@ -34,7 +34,7 @@
         {
             "title": "Emergencia",
             "description": "Contactos de emergencia",
-            "icon_url": "assets/icons/Persona.png",
+            "icon_url": "assets/icons/doctor.png",
             "route": "contacts"
         }
     ]

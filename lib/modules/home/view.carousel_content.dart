@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/home/text.carousel.dart';
 
 List<Widget> carouselContent (BuildContext context) {
+  var media = MediaQuery.of(context).size;
   return carouselText().map((text){
     return Card(
       color: Theme.of(context).backgroundColor, //Colors.orange[400],
@@ -22,12 +23,8 @@ List<Widget> carouselContent (BuildContext context) {
               )
             ),
             Container(
-              child: Icon(
-                Icons.wb_sunny,
-                size: 50,
-                color: Colors.black,
+              child: Image.asset("assets/icons/Persona.png",width: media.width*0.3,height: media.width*0.3,)
               )
-            )
           ],
         ),
       ),
