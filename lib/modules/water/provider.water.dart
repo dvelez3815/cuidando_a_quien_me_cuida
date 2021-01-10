@@ -1,40 +1,20 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
-import 'package:utm_vinculacion/modules/alarms/provider.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/modules/global/helpers.dart';
 import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 
-// This is the callback that will be executed when the start alarm
-// is notifying. It needs to be a high order function in order to
-// be exceuted correctly
-Future<void> _startRoutineCallback(int id) async {
+import 'helper.water.dart';
 
-  final alarm = await DBProvider.db.getAlarma(id);
+// TODO: hacer la creación de las alarmas algo dinámico. De momento
+// cuando se edita el tamaño del vaso o el objetivo diario, estas 
+// permanecen intactas, es más, habrán bugs.
 
-  if(alarm == null) return;
-
-  final localNotification = FlutterLocalNotificationsPlugin();
-  await localNotification.show(
-    alarm.id, alarm.title, alarm.description, 
-    NotificationDetails(
-      android: AlarmProvider.androidChannel, 
-      iOS: AlarmProvider.iOSChannel
-    ),
-    payload: alarm.id.toString()
-  );
-  await AlarmProvider.playSong();
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 class WaterProvider {
 
   static const START_ALARM_ID = -1;
-  static const END_ALARM_ID = -2;
 
   final _dbProvider = DBProvider.db;
 
@@ -145,15 +125,23 @@ class WaterProvider {
       interval: 1, id: START_ALARM_ID
     );
 
-    startAlarm.save(activate: ()async{
+    await startAlarm.save(activate: ()async{
       await AndroidAlarmManager.periodic(
         Duration(days: 1), // It will notify us every day
-        startAlarm.id, 
-        _startRoutineCallback, // It is our tuned callback
+        startAlarm.id, // It's the same ID always
+        startRoutineCallback, // It is our tuned callback
         exact: true,
         rescheduleOnReboot: true
       );
     });    
+  }
+
+  Future<void> destroyAlarms()async{
+    final alarmStart = await DBProvider.db.getAlarma(START_ALARM_ID);
+    final alarmReminders = await DBProvider.db.getAlarma(REMINDER_ALARM_ID);
+
+    await alarmStart.delete();
+    await alarmReminders.delete();
   }
 
   int timesToDrinkWater({double maxValueInLts}) {

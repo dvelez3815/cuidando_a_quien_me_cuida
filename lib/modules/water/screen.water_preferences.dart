@@ -33,7 +33,7 @@ class _WaterPreferencesState extends State<WaterPreferences> {
   void initState() {
     super.initState();
 
-    alarmsActive = false;
+    alarmsActive = widget._provider.model.isActive ?? false;
     widget._waterLtsController.text = widget._provider.model.glassSize.toString();
   }
 

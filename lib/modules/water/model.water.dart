@@ -82,6 +82,10 @@ class WaterModel {
     return (1000 * (this.goal - this.progress) / this.glassSize).ceil();
   }
 
+  bool get isActive => this._active;
+
+  set isactive(bool value) => this._active = value;
+
   set goal(double value) {
     assert(value != null && value >= 0);
     this._goal = value;
@@ -118,5 +122,6 @@ class WaterModel {
       this._end = time;
     }
   }
+
 
 }
