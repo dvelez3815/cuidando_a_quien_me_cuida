@@ -136,26 +136,12 @@ class _WaterPreferencesState extends State<WaterPreferences> {
               leading: Text("${snapshot.data.startTime.format(context)}"),
               title: Text("Hora de inicio"),
               subtitle: Text("¿A qué hora desea tomar el primer vaso de agua?"),
-              // trailing: IconButton(
-              //   icon: Icon(Icons.edit),
-              //   onPressed: ()=>_showDefineHourAlert(isStart: true)
-              // ),
             ),
             ListTile(
               leading: Text("${snapshot.data.endTime.format(context)}"),
               title: Text("Hora de finalización"),
               subtitle: Text("¿A qué hora desea tomar el último vaso de agua?"),
-              // trailing: IconButton(
-              //   icon: Icon(Icons.edit),
-              //   // onPressed: (){}
-              // ),
             ),
-            Divider(),
-            FlatButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Guardar recordatorio"),
-              onPressed: _createAlarmsEvent
-            )
           ],
         );
       }

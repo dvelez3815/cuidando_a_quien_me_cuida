@@ -84,6 +84,18 @@ class WaterProvider {
     }
   }
 
+  void removeWaterGlasses({int howManyGlasses = 1}) {
+    
+    final progress = this.model.progress;
+    final glassSize = this.model.glassSize / 1000;
+
+    assert(howManyGlasses >= 1 && progress >= glassSize*howManyGlasses);
+
+    this.model.progress -= glassSize*howManyGlasses;
+    this._modelSink(this.model);
+    UserPreferences().waterProgress = this.model.progress;
+  }
+
   void restoreProgress() {    
     this.model.progress = 0.0;
     this._modelSink(this.model);

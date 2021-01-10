@@ -72,14 +72,14 @@ class AlarmModel {
   /////////////////////////////// Funtionality ///////////////////////////////
   /// This method will create and schedule a service in android OS to be
   /// notifyed at an specific time.
-  Future<void> activate({Function callback}) async {    
+  Future<void> activate({Function showNotification}) async {    
     // this will be the next time this alarm will be triggered
     final date = nextDateAlarm(DateTime.now(), this._dayToNotify, time: this._time);
 
     await AndroidAlarmManager.periodic(
       this._period,
       this._id,
-      (id)=>showAlarmNotification(id, callback: callback),
+      showNotification ?? showAlarmNotification,
       startAt: date,
       exact: true,
       wakeup: true,

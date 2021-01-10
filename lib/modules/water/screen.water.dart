@@ -41,6 +41,7 @@ class _WaterScreenState extends State<WaterScreen> {
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+        physics: ScrollPhysics(parent: BouncingScrollPhysics()),
         child: Column(
           children: [
             // getHeader(context, "AGUA", transparent: true),
@@ -54,35 +55,57 @@ class _WaterScreenState extends State<WaterScreen> {
 
   Widget _getBody(BuildContext context, Size size) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        IconButton(
-          icon: Icon(Icons.restore),
-          onPressed: ()=>widget._provider.restoreProgress()
-        ),
         _getProgressComponent(size),
         _getWaterGlassComponent(),
-        FlatButton.icon(
-          icon: Icon(Icons.settings),
-          label: Text("Editar preferencias"),
-          onPressed: ()=>Navigator.of(context).pushNamed(WATER_PREFERENCES),
-        )
       ],
     );
   }
 
-  Center _getWaterGlassComponent() {
-    return Center(
-        child: FlatButton.icon(
-          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          icon: Icon(Icons.bubble_chart_rounded, size: 20.0, color: Theme.of(context).canvasColor),
-          color: Theme.of(context).accentColor,
-          label: Text(
-            "Beber agua",
-            style: TextStyle(fontSize: 20.0, color: Theme.of(context).canvasColor),
-          ),
-          onPressed: ()=>widget._provider.addWaterLts(),
+  Widget _getWaterGlassComponent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _getTunedButton(
+          "Beber un vaso de agua", 
+          Icons.bubble_chart_rounded,
+          widget._provider.addWaterLts
         ),
-      );
+        _getTunedButton(
+          "Quitar un vaso de agua", 
+          Icons.delete_sweep,
+          _getRemoveGlassEvent,
+          minimalist: true
+        ),
+      ],
+    );
+  }
+
+  Widget _getTunedButton(String text, IconData icon, Function onPress, {bool minimalist=false}) {
+    return new RaisedButton.icon(
+      padding: EdgeInsets.symmetric(
+        vertical: minimalist?10.0:30.0, 
+        horizontal: 20.0
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0)
+      ),
+      icon: Icon(
+        icon, size: minimalist? 15.0:20.0,
+        color: minimalist?Theme.of(context).accentColor:Theme.of(context).canvasColor
+      ),
+      color: minimalist? Theme.of(context).canvasColor:Theme.of(context).accentColor,
+      label: Text(
+        text,
+        style: TextStyle(
+          fontSize: minimalist? 15.0:20.0,
+          color: minimalist?Theme.of(context).accentColor:Theme.of(context).canvasColor
+        ),
+      ),
+      onPressed: onPress
+    );
   }
 
   StreamBuilder<WaterModel> _getProgressComponent(Size size) {
@@ -149,29 +172,48 @@ class _WaterScreenState extends State<WaterScreen> {
             return Center(child: CircularProgressIndicator(),);
           }
           
-          return Column(
+          return Stack(
+            alignment: AlignmentDirectional.topCenter,
             children: [
-              Text(
-                "Agua bebida hoy",
-                style: TextStyle(
-                  color: Theme.of(context).canvasColor, 
-                  fontSize: 15.0, fontWeight: FontWeight.bold
-                ),
+              Column(
+                children: [
+                  Text(
+                    "Agua bebida hoy",
+                    style: TextStyle(
+                      color: Theme.of(context).canvasColor, 
+                      fontSize: 15.0, fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text(
+                    "${snapshot.data.progress.toStringAsFixed(2)} lts",
+                    style: TextStyle(
+                      color: Theme.of(context).canvasColor, 
+                      fontSize: 40.0, fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text(
+                    "Tu objetivo diario es de ${snapshot.data.goal.toStringAsFixed(2)} lts.\n"
+                    "Debes beber ${snapshot.data.howManyGlassesLeft} vaso"
+                    "${snapshot.data.howManyGlassesLeft == 1? "":"s"} más de agua",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).canvasColor, 
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                "${snapshot.data.progress.toStringAsFixed(2)} lts",
-                style: TextStyle(
-                  color: Theme.of(context).canvasColor, 
-                  fontSize: 40.0, fontWeight: FontWeight.bold
-                ),
-              ),
-              Text(
-                "Tu objetivo diario es de ${snapshot.data.goal.toStringAsFixed(2)} lts",
-                style: TextStyle(
-                  color: Theme.of(context).canvasColor, 
-                  fontSize: 15.0,
-                ),
-              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.settings, color: Theme.of(context).canvasColor),
+                    onPressed: ()=>Navigator.of(context).pushNamed(WATER_PREFERENCES),
+                  )
+                ],
+              )
             ],
           );
         },
@@ -179,4 +221,21 @@ class _WaterScreenState extends State<WaterScreen> {
     );
   }
 
+  void _getRemoveGlassEvent() {
+
+    final progress = widget._provider.model.progress;
+    final glassSize = widget._provider.model.glassSize/1000;
+
+    if(progress == 0) {
+      widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
+        content: Text("¡No puedes quitar más vasos de agua!"),
+      ));
+    }
+    else if(progress < glassSize){
+      widget._provider.restoreProgress();
+    }
+    else{
+      widget._provider.removeWaterGlasses();
+    }
+  }
 } 

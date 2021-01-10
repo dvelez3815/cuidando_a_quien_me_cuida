@@ -36,9 +36,15 @@ class WaterModel {
     'end_minute': this._end.minute
   };
 
+  /// This will give you the glass size measured in liters
   double get progress => this._progress;
+  
+  /// This will give you the glass size measured in liters
   double get goal => this._goal;
+
+  /// This will give you the glass size measured in mililiters
   int get glassSize => this._size;
+
   int get id => this._id;
   TimeOfDay get startTime => this._start;
   TimeOfDay get endTime => this._end;
@@ -51,6 +57,20 @@ class WaterModel {
     final diff = endTime.difference(startTime);
 
     return diff.inMinutes;
+  }
+
+  /// Return the number of glasses of water that user
+  /// needs to drink
+  int get howManyGlasses => this.goal ~/ (this.glassSize / 1000);
+
+  /// Return the number of glasses of water left to
+  /// achieve the daily goal
+  int get howManyGlassesLeft {
+
+    if(this.progress >= this.goal) return 0;
+    if(this.glassSize > this.goal*1000) return 1;
+
+    return 1000 * (this.goal - this.progress) ~/ this.glassSize;
   }
 
   set goal(double value) {
