@@ -59,6 +59,7 @@ class InfoReceta extends StatelessWidget {
             Divider(),
             ExpansionTile(
               title: Text("Ingredientes"),
+              initiallyExpanded: true,
               children: food.ingredientes.isEmpty?
                 [ListTile(leading: Icon(Icons.info), title: Text("Sin ingredientes"))]:
                 food.ingredientes.map((String e){

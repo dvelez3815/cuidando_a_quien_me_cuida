@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
@@ -101,7 +102,7 @@ class ContactsScreen extends StatelessWidget {
                 title: Text("Teléfono"),
                 subtitle: Text(contact.phone ?? "Sin teléfono"),
                 trailing: Icon(Icons.call),
-                onTap: (){},
+                onTap: ()=>launch("tel:${contact.phone}"),
               ),
               Divider(),
               Row(

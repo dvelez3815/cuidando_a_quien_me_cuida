@@ -5,22 +5,22 @@ insert into contacto values
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values
 (0, 'Respiración abdominal', 'La respiración abdominal es fácil de realizar y es muy relajante. Intente este ejercicio básico en cualquier momento que necesite relajarse o aliviar el estrés.', 
-    '[lunes, miercoles, viernes]', '10:30', 3, 'physical',
+    '[lunes, miercoles, viernes]', '10:30', 1, 'physical',
 '[]'),
 (1, 'Respiración 4-7-8', 'Este ejercicio también utiliza la respiración abdominal para ayudarle a relajarse. Puede realizar este ejercicio sentado o recostado.', 
-    '[lunes, miercoles, viernes]', '17:30', 3, 'physical',
+    '[lunes, miercoles, viernes]', '17:30', 1, 'physical',
 '[]'),
 (2, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración. Puede hacerlo en cualquier posición. Pero, mientras aprende, es mejor recostarse boca arriba con las rodillas flexionadas.', 
-    '[lunes, miercoles, viernes]', '20:00', 3, 'physical', 
+    '[lunes, miercoles, viernes]', '20:00', 1, 'physical', 
 '[]'),
 (3, 'Respiración matinal', 'Intente realizar este ejercicio cuando se levanta por la mañana para aliviar la rigidez de los músculos y liberar las vías respiratorias obstruidas. Luego, utilícelo a lo largo del día para aliviar la tensión en la espalda.', 
-    '[lunes, miercoles, viernes]', '08:00', 3, 'physical', 
+    '[lunes, miercoles, viernes]', '08:00', 1, 'physical', 
 '[]'),
 (4, 'Meditación', 'Elija un momento y un lugar donde pueda meditar sin interrupciones. Procure buscar un lugar tranquilo, pero no se preocupe si hay algunos ruidos, como el del tráfico. Ese tipo de ruido es simplemente parte del momento presente.', 
-    '[martes, jueves, sabado]', '21:00', 3, 'physical', 
+    '[martes, jueves, sabado]', '21:00', 1, 'physical', 
 '[]'),
 (5, 'TAICHI', 'La especificidad del taichí de bienestar consiste en una ejecución de secuencias hecha con la sensación de llevar unas bolas de ki.', 
-    '[martes, jueves, sabado]', '10:00', 3, 'physical', '[]'),
+    '[martes, jueves, sabado]', '10:00', 1, 'physical', '[]'),
 
 (6, 'Bailoterapia', 'La música es la libre expresión de las emociones. La expresión corporal en colectividad puede ayudar a elevar el estado de ánimo, liberar tensiones y motivar al anciano a crear empatía con su entorno.', 
     '[martes, jueves, sabado]', '14:00', 1, 'recreación', '[]'),
@@ -36,7 +36,6 @@ values
     '[lunes, miercoles, viernes]', '13:00', 1, 'mental', '[]'),
 (12, 'Sudokus', 'Los sudokus se popularizaron hace años y se han convertido en una presencia permanente en muchas publicaciones, algo así como la versión numérica de las palabras cruzadas.',
     '[martes, jueves, sabado]', '17:00', 1, 'mental', '[]');
-
 
 
 insert into comida(id, nombre, urlImagen, preparacion, ingredientes)

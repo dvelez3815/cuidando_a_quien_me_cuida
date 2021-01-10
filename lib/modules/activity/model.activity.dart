@@ -96,7 +96,7 @@ class Actividad{
 
   ////////////////////////////// Functionality //////////////////////////////
   Future<bool> createAlarms() async {
-      this.daysToNotify.forEach((String element)async{
+    this.daysToNotify.forEach((String element)async{
       AlarmModel alarm = new AlarmModel(
         parseDay(element), // day to be notified
         this.time, // time to be notified
@@ -110,6 +110,7 @@ class Actividad{
 
     return Future.value(true);
   }
+
 
   Future<void> chainStateUpdate()async{
     List<AlarmModel> alarms = await db.getAlarmsByActivity(this.id);
