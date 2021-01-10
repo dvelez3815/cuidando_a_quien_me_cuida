@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 
 import 'package:utm_vinculacion/widgets/components/header.dart' as component;
@@ -20,7 +21,22 @@ class PlaylistScreen extends StatelessWidget {
       body: Column(
         children: [
           component.getHeader(context, "MÚSICA"),
-          _getPlaylist(context)
+          FutureBuilder(
+            future: canLaunch("google.com"),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if(!snapshot.hasData){
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if(!snapshot.data) {
+                return ListTile(
+                  leading: Icon(Icons.wifi_off),
+                  title: Text("Vaya... No tienes conexión a internet"),
+                );
+              }
+              return _getPlaylist(context);
+            },
+          ),
         ],
       ),
     );
