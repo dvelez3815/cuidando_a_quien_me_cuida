@@ -48,7 +48,7 @@ class _AddActividadesState extends State<AddActividades>{
   void initState() {
     time = TimeOfDay.now();
     loadFirstTime = false;
-    selectedType = 0;
+    selectedType = 2;
     litems = [];
     materiales = [];
 
@@ -86,18 +86,20 @@ class _AddActividadesState extends State<AddActividades>{
     if(!loadFirstTime) loadFirstTime = true;
     else return;
 
-    print("Loading updated data");
-    
+    // getting the model from the route parameters
     Actividad activity = updateData["model_data"];
     
+    // Loading values into text controllers
     widget.nombreActividad.text = activity.nombre;
     widget.objetivosActividad.text = activity.descripcion;
     
+    // This is the time where alarms will be activated
     time = activity.time;
 
-    // load actiity type
-    switch(activity.type){
-      
+    // load activity type, it's a number because it is
+    // related with a radio button and it needs the index
+    // of the button which is selected
+    switch(activity.type){      
       case ActivityType.mental:
         this.selectedType = 1;
         break;
@@ -113,6 +115,7 @@ class _AddActividadesState extends State<AddActividades>{
     }
 
     this.materiales = activity.complements;
+    this.actType = activity.type;
     
     // if there are no days to notify, then put one by default
     activity.daysToNotify.forEach((element) {

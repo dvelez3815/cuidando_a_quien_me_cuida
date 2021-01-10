@@ -138,7 +138,7 @@ class _WaterScreenState extends State<WaterScreen> {
                       Theme.of(context).canvasColor.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(size.width*0.8)
               ),
-              child: Center(   
+              child: Center(
                 child: Text(
                   model.progress > 6.0? "SOBREHIDRATACIÓN":"COMPLETADO",
                   style: TextStyle(

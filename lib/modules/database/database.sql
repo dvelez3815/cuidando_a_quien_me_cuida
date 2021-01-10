@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS water(
     start_hour INTEGER NOT NULL, -- time to start alarms
     start_minute INTEGER NOT NULL,
     end_hour INTEGER NOT NULL, -- time to stop alarms
-    end_minute INTEGER NOT NULL
+    end_minute INTEGER NOT NULL,
+    active INTEGER DEFAULT 0
     -- water progress is storaged in cache
 );
 

@@ -21,13 +21,13 @@ DateTime nextDateAlarm(DateTime current, int targetWeekDay, {TimeOfDay time}){
   final bool targetIsEarlier = (targetWeekDay == _currentDay) && (nextTime.difference(current).isNegative);
 
   // If target occurs before current time, then it should be activated next week
-  if(targetIsBefore ||  targetIsEarlier){
+  if(targetIsBefore || targetIsEarlier){
     targetWeekDay +=7;
   }
 
   int diff =  targetWeekDay - _currentDay;
 
-  return current.add(new Duration(days: diff,));
+  return nextTime.add(new Duration(days: diff,));
 }
 
 /// This will show the alarm at the notification bar of your cellphone

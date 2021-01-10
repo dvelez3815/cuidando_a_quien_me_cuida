@@ -5,10 +5,10 @@ insert into contacto values
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values
 (0, 'Respiración abdominal', 'La respiración abdominal es fácil de realizar y es muy relajante. Intente este ejercicio básico en cualquier momento que necesite relajarse o aliviar el estrés.', 
-    '[lunes, miercoles, viernes]', '10:30', 3, 'physical', 
+    '[lunes, miercoles, viernes]', '10:30', 3, 'physical',
 '[]'),
 (1, 'Respiración 4-7-8', 'Este ejercicio también utiliza la respiración abdominal para ayudarle a relajarse. Puede realizar este ejercicio sentado o recostado.', 
-    '[lunes, miercoles, viernes]', '17:30', 3, 'physical', 
+    '[lunes, miercoles, viernes]', '17:30', 3, 'physical',
 '[]'),
 (2, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración. Puede hacerlo en cualquier posición. Pero, mientras aprende, es mejor recostarse boca arriba con las rodillas flexionadas.', 
     '[lunes, miercoles, viernes]', '20:00', 3, 'physical', 

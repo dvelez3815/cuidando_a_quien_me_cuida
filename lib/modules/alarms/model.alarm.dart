@@ -21,11 +21,11 @@ class AlarmModel {
   static DBProvider db = DBProvider.db;
 
   //////////////////////////////// Constructor ////////////////////////////////
-  AlarmModel(this._dayToNotify, this._time, this._title, this._description, {int interval, bool isMinute=false}) {
+  AlarmModel(this._dayToNotify, this._time, this._title, this._description, {int interval, bool isMinute=false, int id}) {
 
     assert(interval==null || interval > 0);
 
-    this._id = generateID();
+    this._id = id ?? generateID();
     this._interval = interval ?? 7; // repeat it every 7 days (every week)
     this._period = isMinute? Duration(minutes: this._interval):Duration(days: this._interval);
     this._active=true;  // at the beginning all alarms will be active
@@ -37,10 +37,14 @@ class AlarmModel {
   /// this with a care or an activity you need to go to that model and search for
   /// that method.
   /// @interval variable will storage the frequency of repetition measured in days.
-  Future<bool> save({int interval, bool isMinute=false}) async {    
+  Future<bool> save({int interval, bool isMinute=false, Function activate}) async {    
     this._interval = interval ?? this._interval;
     this._period = isMinute? Duration(minutes: this._interval):Duration(days: this._interval);
-    await this.activate();
+    
+    // You can create your own activate method if you want to do something else
+    if(activate != null) await activate();
+    else  await this.activate();
+
     return await db.nuevaAlarma(this);
   }
 

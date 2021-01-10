@@ -7,12 +7,14 @@ class WaterModel {
   double _progress;
   int _size;
   int _id;
+  bool _active;
   TimeOfDay _start;
   TimeOfDay _end;
 
   WaterModel(this._goal, this._progress, this._size, {TimeOfDay start, TimeOfDay end}){
     this._start = start;
     this._end = end;
+    this._active = false;
     this._id = generateID();
   }
 
@@ -23,6 +25,7 @@ class WaterModel {
     this._id = json['id'];
     this._start = new TimeOfDay(hour: json['start_hour'], minute: json['start_minute']);
     this._end = new TimeOfDay(hour: json['end_hour'], minute: json['end_minute']);
+    this._active = (json['active'] ?? 0) == 1;
   }
 
   Map<String, dynamic> toJson()=>{
@@ -33,7 +36,8 @@ class WaterModel {
     'start_hour': this._start.hour,
     'start_minute': this._start.minute,
     'end_hour': this._end.hour,
-    'end_minute': this._end.minute
+    'end_minute': this._end.minute,
+    'active': this._active? 1:0
   };
 
   /// This will give you the glass size measured in liters
@@ -59,18 +63,23 @@ class WaterModel {
     return diff.inMinutes;
   }
 
-  /// Return the number of glasses of water that user
-  /// needs to drink
-  int get howManyGlasses => this.goal ~/ (this.glassSize / 1000);
+  /// This will return how many minutes is the period of alarms,
+  /// it means, every X minutes the alarms will notify the user, 
+  /// where X is the period
+  int get periodInMinutes => this.timeDiff ~/ this.howManyGlasses;
 
-  /// Return the number of glasses of water left to
+  /// Returns the number of glasses of water that user
+  /// needs to drink
+  int get howManyGlasses => (this.goal / (this.glassSize / 1000)).ceil();
+
+  /// Returns the number of glasses of water left to
   /// achieve the daily goal
   int get howManyGlassesLeft {
 
     if(this.progress >= this.goal) return 0;
     if(this.glassSize > this.goal*1000) return 1;
 
-    return 1000 * (this.goal - this.progress) ~/ this.glassSize;
+    return (1000 * (this.goal - this.progress) / this.glassSize).ceil();
   }
 
   set goal(double value) {
