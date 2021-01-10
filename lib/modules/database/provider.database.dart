@@ -72,7 +72,7 @@ class DBProvider {
     Directory directory = await getApplicationDocumentsDirectory();
 
     // The logical address of the database
-    final String path = directory.path+"CAQMC.db";
+    final String path = directory.path+"CrackFieraMastodonteGenio.db";
 
     return await openDatabase(
       path,
