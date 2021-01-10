@@ -91,7 +91,7 @@ class Rutina extends StatelessWidget {
     }
     contenido.add(_titleListTile(
         "Mañana",
-        Icon(Icons.wb_sunny, color: Theme.of(context).accentColor), 
+        Icon(Icons.ac_unit_rounded, color: Theme.of(context).accentColor), 
         actividadesManania
         )
     );

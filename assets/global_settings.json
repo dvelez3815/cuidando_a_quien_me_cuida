@@ -28,7 +28,8 @@
         {
             "title": "Agua",
             "description": "La hidratación es fundamental",
-            "route": "water"
+            "route": "water",
+            "icon_url": "assets/icons/agua.png"
         },
         {
             "title": "Emergencia",
