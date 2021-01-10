@@ -88,6 +88,7 @@ class DBProvider {
       onCreate: (db, version)async{
         await initDatabase(db, version);
         await defaultData(db);
+
         print("Database created");
       }
     );
