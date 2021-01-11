@@ -1,17 +1,17 @@
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 
 Future<void> defaultData(Database db) async {
   bool success = await _performQueries(db, "lib/modules/database/database_script.sql");
 
   if(success){
+    print("All default data has been added");
     // Initializing alarms
-    final res = List<Map<String, dynamic>>.from(await db.query("Actividad"));
+    // final res = List<Map<String, dynamic>>.from(await db.query("Actividad"));
 
-    res.forEach((Map<String, dynamic> element)async{
-      await Actividad.fromJson(element).createAlarms();
-    });
+    // res.forEach((Map<String, dynamic> element)async{
+    //   await Actividad.fromJson(element).createAlarms();
+    // });
   }
 }
 

@@ -172,8 +172,8 @@ class _ActividadesState extends State<Actividades>{
                         },
                       ),
                       FlatButton.icon(
-                        icon: Icon(Icons.info, color: Colors.red),
-                        label: Text("Ver más", style: TextStyle(color: Colors.red)),
+                        icon: Icon(Icons.info),
+                        label: Text("Ver más",),
                         onPressed: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: item)
                       )
                     ],
