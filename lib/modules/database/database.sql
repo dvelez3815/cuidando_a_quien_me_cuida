@@ -9,6 +9,20 @@ CREATE TABLE IF NOT EXISTS Actividad(
     complements text
 );
 
+CREATE TABLE IF NOT EXISTS imagenesactividades(
+    id INTEGER PRIMARY KEY,
+    activity_id INTEGER,
+    url text,
+    foreign key(activity_id) references actividad(id)
+);
+
+CREATE TABLE IF NOT EXISTS procedimiento(
+    steps text,
+    id integer primary key,
+    activity_id integer,
+    foreign key(activity_id) references actividad(id)
+);
+
 CREATE TABLE IF NOT EXISTS Comida(
     id INTEGER PRIMARY KEY,
     nombre VARCHAR NOT NULL,

@@ -84,7 +84,7 @@ class WaterModel {
 
   bool get isActive => this._active;
 
-  set isactive(bool value) => this._active = value;
+  set isActive(bool value) => this._active = value;
 
   set goal(double value) {
     assert(value != null && value >= 0);

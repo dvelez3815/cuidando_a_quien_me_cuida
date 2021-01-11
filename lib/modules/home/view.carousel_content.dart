@@ -7,24 +7,40 @@ List<Widget> carouselContent (BuildContext context) {
     return Card(
       color: Theme.of(context).backgroundColor, //Colors.orange[400],
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        padding: const EdgeInsets.all(20.0),
+        child: Stack(
           children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width*0.4,
-              child: Text(
-                text, 
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold
-                ),
-              )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Transform.translate(
+                  offset: Offset(-media.width*0.15, 0),
+                  child: Image.asset(
+                    "assets/icons/Persona.png",
+                    width: media.width*0.5,
+                    height: media.width*0.5,
+                  ),
+                )
+              ],
             ),
-            Container(
-              child: Image.asset("assets/icons/Persona.png",width: media.width*0.3,height: media.width*0.3,)
-              )
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width*0.4,
+                  child: Text(
+                    text, 
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
+                    ),
+                  )
+                ),
+              ],
+            ),
           ],
         ),
       ),

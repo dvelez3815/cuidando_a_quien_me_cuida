@@ -80,8 +80,9 @@ class _ActividadesState extends State<Actividades>{
   Widget alarmTileBody(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     return ListTile(
       title: _daysListView(item, context),
-      trailing: IconButton(
+      trailing: RaisedButton.icon(
         icon: Icon(Icons.settings),
+        label: Text("Ver más"),
         onPressed: ()=>showEditDeleteOptions(context, item, scaffoldKey),
       )
     );
@@ -145,33 +146,7 @@ class _ActividadesState extends State<Actividades>{
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ListTile(
-                    title: Text("Actividad"),
-                    subtitle: Text(item.nombre,),
-                  ),
-                  ListTile(
-                    title: Text("Descripción"),
-                    subtitle: Text(item.descripcion,),
-                  ),
-                  ExpansionTile(
-                    title: Text("Materiales"),
-                    children: item.complements.map((item){
-                      return ListTile(
-                        leading: Icon(Icons.sports_baseball),
-                        title: Text(item["title"])
-                      );
-                    }).toList(),
-                  ),
-                  ListTile(
-                    title: Text("Días para notificar"),
-                    subtitle: _daysListView(item, context)
-                  ),
-                  ListTile(
-                    title: Text("Hora para notificar"),
-                    subtitle: Text("${item.time.format(context)}")
-                  ),
-                  Divider(),
+                children: [                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -195,6 +170,11 @@ class _ActividadesState extends State<Actividades>{
                         onPressed: (){
                           _onDeleteCare(context, item, scaffoldKey);
                         },
+                      ),
+                      FlatButton.icon(
+                        icon: Icon(Icons.info, color: Colors.red),
+                        label: Text("Ver más", style: TextStyle(color: Colors.red)),
+                        onPressed: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: item)
                       )
                     ],
                   )

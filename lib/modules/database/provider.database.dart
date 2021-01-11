@@ -238,6 +238,25 @@ class DBProvider {
     return res>0;
   }
 
+  Future<List<String>> loadActivityImages(int id) async {
+
+    final db = await database;
+
+    final res = await db.query("imagenesactividades", where: "activity_id=?", whereArgs: [id]);
+    final List<String> urls = List<String>.from(res.map((e) => e["url"]));
+
+    return urls;
+  }
+
+  Future<String> loadActivityProcedure(int id) async {
+    final db = await database;
+
+    final res = await db.query("procedimiento", where: "activity_id=?", whereArgs: [id]);
+    final String steps = res[0]["steps"];
+
+    return steps ?? "";
+  }
+
   /////////////////////////// Activity alarms ///////////////////////////
   Future<void> newActivityAlarm(int activityID, int alarmID)async{
     final db = await database;

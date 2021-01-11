@@ -133,7 +133,12 @@ class WaterProvider {
         exact: true,
         rescheduleOnReboot: true
       );
-    });    
+    });
+
+    this.model.isActive = true;
+    await this._dbProvider.updateWater({
+      "active": 1
+    }, this.model.id);
   }
 
   Future<void> destroyAlarms()async{
@@ -142,6 +147,11 @@ class WaterProvider {
 
     await alarmStart.delete();
     await alarmReminders.delete();
+
+    this.model.isActive = false;
+    await this._dbProvider.updateWater({
+      "active": 0
+    }, this.model.id);
   }
 
   int timesToDrinkWater({double maxValueInLts}) {

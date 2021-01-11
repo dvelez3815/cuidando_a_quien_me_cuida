@@ -41,7 +41,9 @@ class AlarmProvider {
     final audio = new AudioCache();
     await audio.play(
       'sonido.mp3',
-      stayAwake: true,   
+      stayAwake: true,
+      isNotification: true,
+      volume: double.infinity, 
     );
   }
 

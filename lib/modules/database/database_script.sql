@@ -355,13 +355,15 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
 );
 
 
-insert into imagenesactividades(0, 0, "assets/imagenes/taichi.jpg"), (1, 0, "assets/imagenes/taichi.jpg");
+insert into imagenesactividades values
+(0, 0, "assets/imagenes/taichi.jpg"),
+(1, 0, "assets/imagenes/taichi.jpg");
 
-insert into procedimiento values ('1.Siéntese o acuéstese en una posición cómoda. 
+insert into procedimiento values 
+('1.Siéntese o acuéstese en una posición cómoda. 
 2.	Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.
 3.	Respire hondo por la nariz y deje que el abdomen le empuje la mano. El pecho no debería moverse.
 4.	Exhale a través de los labios fruncidos como si estuviese silbando. Sienta cómo se hunde la mano sobre su abdomen y utilícela para expulsar todo el aire hacia afuera.
 5.	Realice este ejercicio de respiración entre 3 y 10 veces. Tómese su tiempo con cada respiración.
-6.	Note cómo se siente al final del ejercicio.
-',0, 0);
+6.	Note cómo se siente al final del ejercicio.',0, 0);
 

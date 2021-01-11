@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/activity/screen.activity.dart';
 import 'package:utm_vinculacion/modules/activity/screen.routine.dart';
+import 'package:utm_vinculacion/modules/activity/view.activity_detail.dart';
 import 'package:utm_vinculacion/modules/activity/view.add_activity.dart';
 import 'package:utm_vinculacion/modules/contacts/screen.contacts.dart';
 import 'package:utm_vinculacion/modules/contacts/view.add_contact.dart';
@@ -18,11 +19,12 @@ import 'route.names.dart' as constantesRutas;
 
 Map<String, Widget Function(BuildContext)> getRoutes() {
   return <String, Widget Function(BuildContext _)>{
-    constantesRutas.ACTIVIDADES: (_)=>Actividades(),
-    constantesRutas.ADDACTIVIDADES: (_)=>AddActividades(),
-    constantesRutas.ADDCONTACT: (_)=>CreateContactView(),
-    constantesRutas.ADDPLATOS: (_)=>AddPlatos(),
-    constantesRutas.CALENDAR: (_)=>CalendarScreen(),
+    constantesRutas.ACTIVIDADES: (crack)=>Actividades(),
+    constantesRutas.ACTIVITY_DETAIL: (fiera)=>ActivityDetail(),
+    constantesRutas.ADDACTIVIDADES: (mastodonte)=>AddActividades(),
+    constantesRutas.ADDCONTACT: (idolo)=>CreateContactView(),
+    constantesRutas.ADDPLATOS: (genio)=>AddPlatos(),
+    constantesRutas.CALENDAR: (diva)=>CalendarScreen(),
     constantesRutas.CONTACTS: (_)=>ContactsScreen(),
     constantesRutas.EVENTS: (_)=>Rutina(),
     constantesRutas.HOME: (_)=>Home(),

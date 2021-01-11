@@ -1,4 +1,5 @@
 const String ACTIVIDADES = 'activity';
+const String ACTIVITY_DETAIL = 'activity/detail';
 const String ADDACTIVIDADES = "add_actividades";
 const String ADDCONTACT = "add_contact";
 const String ADDCUIDADOS = "add_cuidados";
