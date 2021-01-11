@@ -5,37 +5,37 @@ insert into contacto values
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values
 (0, 'Respiración abdominal', 'La respiración abdominal es fácil de realizar y es muy relajante. Intente este ejercicio básico en cualquier momento que necesite relajarse o aliviar el estrés.', 
-    '[lunes, miercoles, viernes]', '10:30', 1, 'physical',
+    '[lunes, miercoles, viernes]', '10:30', 0, 'physical',
 '[]'),
 (1, 'Respiración 4-7-8', 'Este ejercicio también utiliza la respiración abdominal para ayudarle a relajarse. Puede realizar este ejercicio sentado o recostado.', 
-    '[lunes, miercoles, viernes]', '17:30', 1, 'physical',
+    '[lunes, miercoles, viernes]', '17:30', 0, 'physical',
 '[]'),
 (2, 'Respiración completa', 'El objetivo de la respiración completa es desarrollar el uso completo de los pulmones y centrarse en el ritmo de su respiración. Puede hacerlo en cualquier posición. Pero, mientras aprende, es mejor recostarse boca arriba con las rodillas flexionadas.', 
-    '[lunes, miercoles, viernes]', '20:00', 1, 'physical', 
+    '[lunes, miercoles, viernes]', '20:00', 0, 'physical', 
 '[]'),
 (3, 'Respiración matinal', 'Intente realizar este ejercicio cuando se levanta por la mañana para aliviar la rigidez de los músculos y liberar las vías respiratorias obstruidas. Luego, utilícelo a lo largo del día para aliviar la tensión en la espalda.', 
-    '[lunes, miercoles, viernes]', '08:00', 1, 'physical', 
+    '[lunes, miercoles, viernes]', '08:00', 0, 'physical', 
 '[]'),
 (4, 'Meditación', 'Elija un momento y un lugar donde pueda meditar sin interrupciones. Procure buscar un lugar tranquilo, pero no se preocupe si hay algunos ruidos, como el del tráfico. Ese tipo de ruido es simplemente parte del momento presente.', 
-    '[martes, jueves, sabado]', '21:00', 1, 'physical', 
+    '[martes, jueves, sabado]', '21:00', 0, 'physical', 
 '[]'),
 (5, 'TAICHI', 'La especificidad del taichí de bienestar consiste en una ejecución de secuencias hecha con la sensación de llevar unas bolas de ki.', 
-    '[martes, jueves, sabado]', '10:00', 1, 'physical', '[]'),
+    '[martes, jueves, sabado]', '10:00', 0, 'physical', '[]'),
 
 (6, 'Bailoterapia', 'La música es la libre expresión de las emociones. La expresión corporal en colectividad puede ayudar a elevar el estado de ánimo, liberar tensiones y motivar al anciano a crear empatía con su entorno.', 
-    '[martes, jueves, sabado]', '14:00', 1, 'recreación', '[]'),
+    '[martes, jueves, sabado]', '14:00', 0, 'recreación', '[]'),
 (7, 'Risoterapia', 'Conocida como terapia de risa. Es ideal para liberar tensiones de forma natural usando herramientas como: juegos de mesa, de azar, bailes o chistes.', 
-    '[martes, jueves, sabado]', '7:00', 1, 'recreación', '[]'),
+    '[martes, jueves, sabado]', '7:00', 0, 'recreación', '[]'),
 (8, 'Juegos al aire libre', 'Las actividades physical en exteriores fomentan un envejecimiento sano. A través de movimiento en equipo como: pasar la pelota, mejorar el equilibrio, juego con globos.', 
-    '[lunes, miercoles, viernes]', '7:00', 1, 'recreación', '[]'),
+    '[lunes, miercoles, viernes]', '7:00', 0, 'recreación', '[]'),
 (9, 'Natación', 'Puede aportar no solo ejercicio físico sino, favorecer la energía y vitalidad del adulto. Además, el contacto con el agua puede relajarlo y subir su estado de ánimo.', 
-    '[martes, jueves, sabado]', '8:00', 1, 'care', '[]'),
+    '[martes, jueves, sabado]', '8:00', 0, 'care', '[]'),
 (10, 'Caminar', 'Ideal para para los que que deseen preservar su masa muscular, mejorar su salud cardiovascular y perder peso como método de prevención a posibles fracturas o lesiones a nivel de vertebras.',
-    '[martes, jueves, sabado]', '13:00', 1, 'care', '[]'),
+    '[martes, jueves, sabado]', '13:00', 0, 'care', '[]'),
 (11, 'Crucigramas', 'Los juegos con palabras también son de gran ayuda, ya que el lenguaje es un elemento clave en el funcionamiento de los "engranajes" cerebrales.',
-    '[lunes, miercoles, viernes]', '13:00', 1, 'mental', '[]'),
+    '[lunes, miercoles, viernes]', '13:00', 0, 'mental', '[]'),
 (12, 'Sudokus', 'Los sudokus se popularizaron hace años y se han convertido en una presencia permanente en muchas publicaciones, algo así como la versión numérica de las palabras cruzadas.',
-    '[martes, jueves, sabado]', '17:00', 1, 'mental', '[]');
+    '[martes, jueves, sabado]', '17:00', 0, 'mental', '[]');
 
 
 insert into comida(id, nombre, urlImagen, preparacion, ingredientes)
@@ -356,14 +356,54 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
 
 
 insert into imagenesactividades values
-(0, 0, "assets/imagenes/taichi.jpg"),
-(1, 0, "assets/imagenes/taichi.jpg");
+(0,0,'assets/imagenes/abdominal.jpg'),
+(1,1,'assets/imagenes/478.jpg'),
+(2,2,'assets/imagenes/completa.jpg'),
 
-insert into procedimiento values 
+(4,4,'assets/imagenes/meditacion.jpg'),
+(5, 5, "assets/imagenes/taichi.jpg"),
+(6, 5, "assets/imagenes/taichi1.jpg"),
+(7, 5, "assets/imagenes/taichi2.jpg"),
+(8, 5, "assets/imagenes/taichi3.jpg"),
+(9, 5, "assets/imagenes/taichi4.jpg");
+
+insert into procedimiento values
+('1. Siéntese o acuéstese en una posición cómoda. 
+2.	Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.
+3.	Respire hondo por la nariz y deje que el abdomen le empuje la mano. El pecho no debería moverse.
+4.	Exhale a través de los labios fruncidos como si estuviese silbando. Sienta cómo se hunde la mano sobre su abdomen y utilícela para expulsar todo el aire hacia afuera.
+5.	Realice este ejercicio de respiración entre 3 y 10 veces. Tómese su tiempo con cada respiración.
+6.	Note cómo se siente al final del ejercicio.',0,0), 
+('1. Para comenzar, coloque una mano sobre el abdomen y la otra sobre el pecho, al igual que en el ejercicio de respiración abdominal.
+2.	Respire profunda y lentamente desde el abdomen y cuente en silencio hasta 4 a medida que inhala.
+3.	Contenga la respiración y cuente en silencio del 1 al 7.
+4.	Exhale por completo a medida que cuenta en silencio del 1 al 8. Intente sacar todo el aire de los pulmones para cuando llegue a 8.
+5.	Repítalo entre 3 y 7 veces o hasta que se sienta tranquilo.
+6.	Note cómo se siente al final del ejercicio. ',1,1),
+
+('1. Para comenzar, coloque una mano sobre el abdomen y la otra sobre el pecho, al igual que en el ejercicio de respiración abdominal.
+2.	Respire profunda y lentamente desde el abdomen y cuente en silencio hasta 4 a medida que inhala.
+3.	Contenga la respiración y cuente en silencio del 1 al 7.
+4.	Exhale por completo a medida que cuenta en silencio del 1 al 8. Intente sacar todo el aire de los pulmones para cuando llegue a 8.
+5.	Repítalo entre 3 y 7 veces o hasta que se sienta tranquilo.
+6.	Note cómo se siente al final del ejercicio. ',2,2),
+
+('1. Coloque la mano izquierda sobre el abdomen y la mano derecha sobre el pecho. Observe cómo se mueven las manos al inhalar y exhalar.
+2.	Practique llenar la parte inferior de los pulmones respirando, de modo que la mano "del abdomen" (izquierda) suba cuando inhala y la mano "del pecho" permanezca quieta. Siempre inhale por la nariz y exhale por la boca. Haga esto 8 a 10 veces.
+3.	Cuando haya llenado y vaciado la parte inferior de los pulmones entre 8 y 10 veces, agregue el segundo paso a su respiración: primero, inhale aire hacia la parte inferior de los pulmones como antes y, después, siga inhalando aire hacia la parte superior del pecho. Respire lenta y regularmente. Mientras lo hace, la mano derecha se levantará y la mano izquierda bajará un poco a medida que el abdomen baja.
+4.	A medida que exhala lentamente por la boca, haga un sonido leve y sibilante a medida que baja la mano izquierda, primero, y la mano derecha, después. Mientras exhala, sienta cómo la tensión deja el cuerpo a medida que se relaja cada vez más.
+5.	Practique inhalar y exhalar de esta forma entre 3 y 5 minutos. Note que el movimiento del abdomen y del pecho sube y baja como el balanceo de las olas.
+6.	Note cómo se siente al final del ejercicio.',3,3),
+
+('1. En posición de pie, inclínese hacia adelante desde la cintura con las rodillas levemente flexionadas y permita que los brazos cuelguen cerca del suelo.
+2.	Mientras inhala lenta y profundamente, regrese a la posición de pie enderezándose lentamente y levantando, por último, la cabeza.
+3.	Contenga la respiración solo por unos pocos segundos en esta posición de pie.
+4.	Exhale lentamente a medida que regresa a la posición original, flexionándose hacia adelante desde la cintura.
+5.	Note cómo se siente al final del ejercicio.',4,4),
 ('1.Siéntese o acuéstese en una posición cómoda. 
 2.	Coloque una mano sobre el abdomen justo debajo de las costillas y la otra mano sobre el pecho.
 3.	Respire hondo por la nariz y deje que el abdomen le empuje la mano. El pecho no debería moverse.
 4.	Exhale a través de los labios fruncidos como si estuviese silbando. Sienta cómo se hunde la mano sobre su abdomen y utilícela para expulsar todo el aire hacia afuera.
 5.	Realice este ejercicio de respiración entre 3 y 10 veces. Tómese su tiempo con cada respiración.
-6.	Note cómo se siente al final del ejercicio.',0, 0);
+6.	Note cómo se siente al final del ejercicio.',5, 5);
 

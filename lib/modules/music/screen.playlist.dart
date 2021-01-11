@@ -22,7 +22,7 @@ class PlaylistScreen extends StatelessWidget {
         children: [
           component.getHeader(context, "MÚSICA"),
           FutureBuilder(
-            future: canLaunch("google.com"),
+            future: canLaunch("https://www.google.com/"),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if(!snapshot.hasData){
                 return Center(child: CircularProgressIndicator());
