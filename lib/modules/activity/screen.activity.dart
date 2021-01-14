@@ -66,9 +66,9 @@ class _ActividadesState extends State<Actividades>{
             final String title = activityTypes[key];
 
             return ExpansionTile(
-              title: Text(title.capitalize()),
-              maintainState: true,
-              initiallyExpanded: false,              
+              title: Text(title.capitalize(), style: TextStyle(fontWeight: FontWeight.bold),),
+              maintainState: false,
+              initiallyExpanded: true,              
               children: _getActivityData(key, snapshot.data)
             );
           })
@@ -171,11 +171,11 @@ class _ActividadesState extends State<Actividades>{
                           _onDeleteCare(context, item, scaffoldKey);
                         },
                       ),
-                      FlatButton.icon(
-                        icon: Icon(Icons.info),
-                        label: Text("Ver más",),
-                        onPressed: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: item)
-                      )
+                      // FlatButton.icon(
+                      //   icon: Icon(Icons.info),
+                      //   label: Text("Ver más",),
+                      //   onPressed: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: item)
+                      // )
                     ],
                   )
                 ],
@@ -236,12 +236,55 @@ class _ActividadesState extends State<Actividades>{
     });
 
     return List<Widget>.from(filteredData.map((Actividad activity){
-      return new Column(
+      
+      final leading = new Column(
         children: [
-          alarmTileHead(activity, setState),
-          alarmTileBody(context, activity, widget._scaffoldKey),
-          Divider()
+          Icon(Icons.alarm),
+          Text(activity.time.format(context))
         ],
+      );
+
+      final body = new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            activity.nombre,
+            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
+          ),
+          _daysListView(activity, context),
+        ],
+      );
+
+      final trailing = new Column(
+        children: [
+          Switch(value: activity.estado, onChanged: (value)=>setState((){activity.estado = value;})),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
+          ),
+        ],
+      );
+      
+      return GestureDetector(        
+        onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  leading, SizedBox(width: 15.0,), Expanded(child: body), trailing
+                ],
+              ),
+              Divider()
+            ],
+          ),
+        ),
       );
     }));
   }
