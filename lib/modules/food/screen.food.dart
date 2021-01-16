@@ -29,7 +29,7 @@ class _RecetasState extends State<Recetas> {
       body: Column(
         children: [
           getHeader(context, "RECETAS"),
-          listaContenido(),
+          Expanded(child: _listaContenido()),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -39,80 +39,89 @@ class _RecetasState extends State<Recetas> {
     );
   }
 
-  Widget listaContenido(){
-    return Expanded(
-      child: ListView(
-        physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-            children: <Widget>[
-              StreamBuilder(
-                stream: widget.dbProvider.comidaStream,
-                builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
-                  
-                  if(!snapshot.hasData) return Center(child: CircularProgressIndicator());
-                  if(snapshot.data.isEmpty) return sinDatos();
+  Widget _listaContenido(){
+    return ListView(
+      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+      children: <Widget>[
+        StreamBuilder(
+          stream: widget.dbProvider.comidaStream,
+          builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
+            
+            if(!snapshot.hasData) return Center(child: CircularProgressIndicator());
+            if(snapshot.data.isEmpty) return sinDatos();
 
-                  final List<Widget> widgets = new List<Widget>();
+            final List<Widget> widgets = new List<Widget>();
 
-                  widgets.addAll(snapshot.data.map((item)=>ListTile(
-                    onTap: (){
-                      //Aca mando los datos de la comida que desea ver y los muestros en info comida
-                      Comida comida = item;
-                      Navigator.pushNamed(context, INFO_COMIDA, arguments: comida);
-                    },
-                    leading: Container(
-                      width: MediaQuery.of(context).size.width*0.2,
-                      child: item.urlImagen != null?Image.asset(item.urlImagen):Container()
-                    ),
-                    title: Text(item.nombre),
-                    subtitle: Text(
-                      item.preparacion,
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.settings),
-                      onPressed: (){
-                        showDialog(
-                          context: context,
-                          builder: (context){
-                            return AlertDialog(
-                              title: Text("Opciones"),
-                              content: Text("Seleccione una acción"),
-                              actions: [
-                                FlatButton.icon(
-                                  icon: Icon(Icons.edit),
-                                  label: Text("Editar"),
-                                  onPressed: (){
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pushNamed(ADDPLATOS, arguments:{
-                                      "model_data": item
-                                    });
-                                  }
-                                ),
-                                FlatButton.icon(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  label: Text("Eliminar", style: TextStyle(color: Colors.red)),
-                                  onPressed: (){
-                                    widget.dbProvider.eliminarComida(item);
-                                    Navigator.of(context).pop();
-                                  }
-                                ),
+            widgets.addAll(snapshot.data.map((Comida item)=>Column(
+              children: [
+                _getFoodTile(item),
+                Divider()
+              ],
+            )).toList());
 
-                              ],
-                            );
-                          }
-                        );
-                      },
-                    ),
-                  )).toList());
+            // This is a blank space to allow user tap on option button
+            // of the las tile, because there is the "add" button and
+            // the last tile has a little problem to be showed
+            widgets.add(SizedBox(height: 50.0));
 
-                  return Column(
-                      children: widgets,
-                    );
-                },
-              ),
-            ],
+            return Column(
+              children: widgets,
+            );
+          },
         ),
+      ],
+    );
+  }
+
+  Widget _getFoodTile(Comida item) {
+    return ListTile(
+      onTap: (){
+        Navigator.pushNamed(context, INFO_COMIDA, arguments: item);
+      },
+      leading: Container(
+        width: MediaQuery.of(context).size.width*0.2,
+        child: item.urlImagen != null?Image.asset(item.urlImagen):Container()
+      ),
+      title: Text(item.nombre),
+      trailing: IconButton(
+        icon: Icon(Icons.settings),
+        onPressed: (){
+          _showEditDeleteOptions(item);
+        },
+      ),
+    );
+  }
+
+  Future _showEditDeleteOptions(Comida item) {
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Opciones"),
+          content: Text("Seleccione una acción"),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.edit),
+              label: Text("Editar"),
+              onPressed: (){
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(ADDPLATOS, arguments:{
+                  "model_data": item
+                });
+              }
+            ),
+            FlatButton.icon(
+              icon: Icon(Icons.delete, color: Colors.red),
+              label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+              onPressed: (){
+                widget.dbProvider.eliminarComida(item);
+                Navigator.of(context).pop();
+              }
+            ),
+
+          ],
+        );
+      }
     );
   }
 }

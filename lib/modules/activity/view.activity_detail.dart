@@ -36,10 +36,30 @@ class ActivityDetail extends StatelessWidget {
       ListTile(
         leading: Icon(Icons.info),
         title: Text("Descripción"),
-        subtitle: Text(model.descripcion),
+        subtitle: Text(model.descripcion, textAlign: TextAlign.justify,),
+      ),
+      ListTile(
+        title: Text("Hora para notificar"),
+        subtitle: Text("${model.time.format(context)}")
+      ),
+      ListTile(
+        title: Text("Días para notificar"),
+        subtitle: _daysListView(model, context)
       ),
       Divider(),
       _getImages(context, model),
+      Divider(),
+      ExpansionTile(
+        title: Text("Materiales"),
+        children: model.complements.isEmpty?
+              <Widget>[ListTile(title: Text("No hay materiales"))]:
+              model.complements.map((item){
+                return ListTile(
+                  leading: Icon(Icons.sports_baseball),
+                  title: Text(item["title"])
+                );
+              }).toList(),
+      ),
       Divider(),
       FutureBuilder(
         future: DBProvider.db.loadActivityProcedure(model.id),
@@ -60,29 +80,12 @@ class ActivityDetail extends StatelessWidget {
               return ListTile(
                 leading: Icon(Icons.info),
                 title: Text("Procedimiento"),
-                subtitle: Text(snapshot.data),
+                subtitle: Text(snapshot.data, textAlign: TextAlign.justify,),
               );
           }
         },
       ),
-      ExpansionTile(
-        title: Text("Materiales"),
-        children: model.complements.map((item){
-          return ListTile(
-            leading: Icon(Icons.sports_baseball),
-            title: Text(item["title"])
-          );
-        }).toList(),
-      ),
-      ListTile(
-        title: Text("Hora para notificar"),
-        subtitle: Text("${model.time.format(context)}")
-      ),
-      ListTile(
-        title: Text("Días para notificar"),
-        subtitle: _daysListView(model, context)
-      ),
-      Divider(),
+      SizedBox(height: 20.0,)
     ];
   }
 

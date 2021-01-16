@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
 
   Widget _getBanner(Size size) {
 
-    final color = Theme.of(context).accentColor; //brightness == Brightness.dark? Colors.white:Colors.indigo[900];
+    final color = Theme.of(context).accentColor;
 
     return Container(
       height: size.height*0.35,
@@ -86,12 +86,18 @@ class _HomeState extends State<Home> {
   Widget _getActivitiesButton() {
     return Container(
       width: MediaQuery.of(context).size.width*0.95,
-      child: MaterialButton(
+      height: MediaQuery.of(context).size.height*0.15,
+      child: FlatButton.icon(
         padding: EdgeInsets.all(15.0),
         color: Theme.of(context).bottomAppBarColor, // Colors.orange[400],
-        child: Text(
+        icon: Image.asset("assets/icons/MIS EVENTOS.png"),
+        label: Text(
           "MIS EVENTOS",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+            fontWeight: FontWeight.bold, 
+            color: Colors.black,
+            fontSize: 20.0
+          ),
         ),
         onPressed: (){
           Navigator.of(context).pushNamed(EVENTS);

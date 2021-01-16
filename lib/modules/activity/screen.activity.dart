@@ -37,7 +37,7 @@ class _ActividadesState extends State<Actividades>{
           Expanded(
             child: SingleChildScrollView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-              child: listaContenido(setState, widget._scaffoldKey)
+              child: _listaContenido(setState, widget._scaffoldKey)
             )
           ),
         ],
@@ -49,7 +49,7 @@ class _ActividadesState extends State<Actividades>{
     );
   }
 
-  Widget listaContenido(Function setState, GlobalKey<ScaffoldState> scaffoldKey){
+  Widget _listaContenido(Function setState, GlobalKey<ScaffoldState> scaffoldKey){
 
     return StreamBuilder(
       stream: dbProvider.actividadStream,
@@ -77,16 +77,16 @@ class _ActividadesState extends State<Actividades>{
     );
   }
 
-  Widget alarmTileBody(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
-    return ListTile(
-      title: _daysListView(item, context),
-      trailing: RaisedButton.icon(
-        icon: Icon(Icons.settings),
-        label: Text("Ver más"),
-        onPressed: ()=>showEditDeleteOptions(context, item, scaffoldKey),
-      )
-    );
-  }
+  // Widget alarmTileBody(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
+  //   return ListTile(
+  //     title: _daysListView(item, context),
+  //     trailing: RaisedButton.icon(
+  //       icon: Icon(Icons.settings),
+  //       label: Text("Ver más"),
+  //       onPressed: ()=>showEditDeleteOptions(context, item, scaffoldKey),
+  //     )
+  //   );
+  // }
 
   Widget _daysListView(Actividad item, BuildContext context) {
     return SingleChildScrollView(
@@ -112,28 +112,28 @@ class _ActividadesState extends State<Actividades>{
     );
   }
 
-  Widget alarmTileHead(Actividad item, Function setState) {
+  // Widget alarmTileHead(Actividad item, Function setState) {
   
-    return SwitchListTile(
-      value: item.estado,
-      onChanged: (status){
-        item.estado = status;
-        setState(() {});
-      },
-      subtitle: Text(item.descripcion, maxLines: 4, overflow: TextOverflow.ellipsis,),
-      title: Text("${item.nombre ?? "Sin nombre"}"),
-      secondary: _showTimeCareInfo(item),
-    );
-  }
+  //   return SwitchListTile(
+  //     value: item.estado,
+  //     onChanged: (status){
+  //       item.estado = status;
+  //       setState(() {});
+  //     },
+  //     subtitle: Text(item.descripcion, maxLines: 4, overflow: TextOverflow.ellipsis,),
+  //     title: Text("${item.nombre ?? "Sin nombre"}"),
+  //     secondary: _showTimeCareInfo(item),
+  //   );
+  // }
 
-  Widget _showTimeCareInfo(Actividad item) {
-    return Column(
-      children: [            
-        Icon(Icons.alarm),
-        Text("${item.time.format(context)}"), 
-      ],
-    );
-  }
+  // Widget _showTimeCareInfo(Actividad item) {
+  //   return Column(
+  //     children: [            
+  //       Icon(Icons.alarm),
+  //       Text("${item.time.format(context)}"), 
+  //     ],
+  //   );
+  // }
 
   void showEditDeleteOptions(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     showModalBottomSheet(
@@ -244,27 +244,10 @@ class _ActividadesState extends State<Actividades>{
         ],
       );
 
-      final body = new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            activity.nombre,
-            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
-          ),
-          _daysListView(activity, context),
-        ],
-      );
-
-      final trailing = new Column(
-        children: [
-          Switch(value: activity.estado, onChanged: (value)=>setState((){activity.estado = value;})),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
-          ),
-        ],
+      final trailing = new IconButton(
+        icon: Icon(Icons.settings),
+        padding: EdgeInsets.zero,
+        onPressed: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
       );
       
       return GestureDetector(        
@@ -274,12 +257,22 @@ class _ActividadesState extends State<Actividades>{
           padding: EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  leading, SizedBox(width: 15.0,), Expanded(child: body), trailing
-                ],
+              ListTile(
+                leading: leading,
+                title: Text(
+                  activity.nombre,
+                  style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
+                ),
+                trailing: Switch(
+                  value: activity.estado, 
+                  onChanged: (value)=>setState((){activity.estado = value;})
+                ),
+                onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
+              ),
+              ListTile(
+                title: _daysListView(activity, context),
+                trailing: trailing,
+                onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
               ),
               Divider()
             ],

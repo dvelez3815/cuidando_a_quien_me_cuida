@@ -51,12 +51,6 @@ class InfoReceta extends StatelessWidget {
               ],
             ):ListTile(title: Text("No hay imágen")),
             Divider(),
-            ListTile(
-              leading: Icon(Icons.restaurant),
-              title: Text("Preparación"),
-              subtitle: Text(food.preparacion ?? "Sin descripción"),
-            ),
-            Divider(),
             ExpansionTile(
               title: Text("Ingredientes"),
               initiallyExpanded: true,
@@ -68,6 +62,15 @@ class InfoReceta extends StatelessWidget {
                     title: Text(e ?? "Sin nombre"),
                   );
                 }).toList(),
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.restaurant),
+              title: Text("Preparación\n"),
+              subtitle: Text(
+                food.preparacion ?? "Sin descripción",
+                textAlign: TextAlign.justify,
+              ),
             ),
           ],
         )
