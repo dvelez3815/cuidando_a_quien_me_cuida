@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: [const Locale('en', 'US'), const Locale('es', 'ES')],
           debugShowCheckedModeBanner: false,
           theme: getMainTheme(),
-          darkTheme: getDarkTheme(),
+          darkTheme: ThemeData.dark(),// getDarkTheme(),
           themeMode: (UserPreferences().darkMode ?? false)? ThemeMode.dark:ThemeMode.light,
           initialRoute: '/',
           routes: rutas.getRoutes(),

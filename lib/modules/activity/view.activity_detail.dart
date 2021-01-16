@@ -46,7 +46,11 @@ class ActivityDetail extends StatelessWidget {
         title: Text("Días para notificar"),
         subtitle: _daysListView(model, context)
       ),
-      Divider(),
+      ListTile(
+        leading: Icon(Icons.image),
+        title: Text("Imágenes"),
+        subtitle: Text("Deslice a la derecha para ver más"),
+      ),
       _getImages(context, model),
       Divider(),
       ExpansionTile(
@@ -100,26 +104,40 @@ class ActivityDetail extends StatelessWidget {
         }
 
         if(snapshot.data.isEmpty){
-          return ListTile(title: Text("No hay imágenes"));
+          return ListTile(
+            leading: Icon(Icons.image_not_supported),
+            title: Text("No hay imágenes")
+          );
         }  
 
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
+          physics: ScrollPhysics(parent: BouncingScrollPhysics()),
           child: Row(
-              children: snapshot.data.map((url)=>FadeInImage(
-                placeholder: AssetImage("assets/loader.gif"),
-                image: AssetImage(
-                  url,
-                ),
-                fit: BoxFit.contain,
-                width: MediaQuery.of(context).size.width*0.85,
-                height: MediaQuery.of(context).size.width,
-              )).toList()
+              children: snapshot.data.map((url)=>_getImageContainer(context, url)).toList()
           ),
         );
       },
     );
 
+  }
+
+  Container _getImageContainer(BuildContext context, String url) {
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).dividerColor)
+      ),
+      child: FadeInImage(
+        placeholder: AssetImage("assets/loader.gif"),
+        image: AssetImage(
+          url,
+        ),
+        fit: BoxFit.fitHeight,
+        imageSemanticLabel: "Imágen de la actividad",
+        height: MediaQuery.of(context).size.width,
+      ),
+    );
   }
 
   Widget _daysListView(Actividad item, BuildContext context) {

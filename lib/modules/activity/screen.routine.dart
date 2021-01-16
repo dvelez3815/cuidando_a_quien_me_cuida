@@ -26,6 +26,7 @@ class Rutina extends StatelessWidget {
                 }
 
                 return ListView(
+                  physics: ScrollPhysics(parent: BouncingScrollPhysics()),
                   children: _listaContenido(context, snapshot.data),
                 );
               },
@@ -35,7 +36,31 @@ class Rutina extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: ()=>onPressedEvent(context),
+        onPressed: (){
+          showDialog(
+            context: context,
+            builder: (context){
+              return AlertDialog(
+                title: Text("Información"),
+                content: Text(
+                  "Para agregar una nueva actividad a \"mis eventos\" deberás activar algunas"
+                  " de las actividades que se mostrarán a continuación.\n\nPresiona OK para continuar.",
+                  textAlign: TextAlign.justify,
+                ),
+                actions: [
+                  FlatButton.icon(
+                    icon: Icon(Icons.check_circle),
+                    label: Text("OK"),
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, ACTIVIDADES);
+                    }
+                  )
+                ],
+              );
+            }
+          );
+        }
       ),
     );
   }
@@ -51,6 +76,8 @@ class Rutina extends StatelessWidget {
     // Filtrando todo 
     for(int i=0; i<actividadesGenerales.length; ++i){
 
+      if(!actividadesGenerales[i].estado) continue;
+
       if(actividadesGenerales[i].time.hour>=6 && actividadesGenerales[i].time.hour<12){
         maniana.add(actividadesGenerales[i]);
       }
@@ -65,18 +92,10 @@ class Rutina extends StatelessWidget {
     final List<Widget> contenido = [];
 
 
-    List<ListTile> actividadesManania = maniana.map((item){
-      return _createActivityTile(context, item);
-    }).toList();
-    List<ListTile> actividadesTarde = tarde.map((item){
-      return _createActivityTile(context, item);
-    }).toList();
-    List<ListTile> actividadesNoche = noche.map((item){
-      return _createActivityTile(context, item);
-    }).toList();
-    List<ListTile> actividadesND = noDefinida.map((item){
-      return _createActivityTile(context, item);
-    }).toList();
+    List<Widget> actividadesManania = maniana.map((Actividad item)=> _createActivityTile(context, item)).toList();
+    List<Widget> actividadesTarde = tarde.map((item)=> _createActivityTile(context, item)).toList();
+    List<Widget> actividadesNoche = noche.map((item)=> _createActivityTile(context, item)).toList();
+    List<Widget> actividadesND = noDefinida.map((item)=> _createActivityTile(context, item)).toList();
 
 
     if(actividadesNoche.isEmpty) actividadesNoche.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
@@ -112,33 +131,27 @@ class Rutina extends StatelessWidget {
 
   }
 
-  ListTile _createActivityTile(BuildContext context, Actividad item){
-    return new ListTile(
-      title: Text(item.nombre ?? "Sin nombre"),
-      subtitle: Text(item.descripcion ?? "No disponible"),
-      trailing: RaisedButton.icon(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
-        onPressed: (){
-          Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {
-              "title": item.nombre,
-              "description": item.descripcion,
-              "model_data": item
-            });
-        }, 
-        icon: Icon(Icons.edit),
-        label: Text("Editar")
-      ),
-      leading: Column(
-        children: [
-          Text("${item.time.hour}:${item.time.minute}"),
-        ],
-      ),
+  Widget _createActivityTile(BuildContext context, Actividad item){
+    return Column(
+      children: [
+        new ListTile(
+          title: Text(item.nombre ?? "Sin nombre"),
+          leading: Text("${item.time.format(context)}"),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: ()=>Navigator.of(context).pushNamed(ACTIVITY_DETAIL, arguments: item)
+        ),
+        Divider()
+      ],
     );
   }
 
-  Widget _titleListTile(String title, Icon icon, List<ListTile> activities){
+  Widget _titleListTile(String title, Icon icon, List<Widget> activities){
     return ExpansionTile(
-      title: Text(title ?? "Sin título"),
+      title: Text(
+        title ?? "Sin título",
+        style: TextStyle(fontWeight: FontWeight.bold)
+      ),
+      initiallyExpanded: true,
       leading: icon,
       children: activities,
     );
