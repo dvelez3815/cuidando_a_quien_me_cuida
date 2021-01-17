@@ -186,7 +186,12 @@ class Actividad{
   /////////////////////////////// Setters ///////////////////////////////
   set estado(bool status) {
     this._estado = status;
-    chainStateUpdate();
+    DBProvider.db.getAlarmsByActivity(this.id).then((v)async{
+      if(v.isEmpty) {
+        await this.createAlarms();
+      }
+      await chainStateUpdate();
+    });
   }
 
 

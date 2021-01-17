@@ -372,6 +372,7 @@ class DBProvider {
     return events;    
   }
 
+
   ///////////////////////////////// Food /////////////////////////////////
   ///
   Future<int> eliminarComida(Comida food) async {
