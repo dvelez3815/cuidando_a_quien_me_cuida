@@ -1,4 +1,4 @@
-package com.example.utm_vinculacion
+package com.cuidandoaquienmecuida.utm_vinculacion
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
