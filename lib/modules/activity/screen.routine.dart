@@ -98,31 +98,48 @@ class Rutina extends StatelessWidget {
     List<Widget> actividadesND = noDefinida.map((item)=> _createActivityTile(context, item)).toList();
 
 
-    if(actividadesNoche.isEmpty) actividadesNoche.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
-    if(actividadesTarde.isEmpty) actividadesTarde.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
-    if(actividadesManania.isEmpty) actividadesManania.add(ListTile(title: Text("Sin eventos"), trailing: Icon(Icons.sentiment_dissatisfied)));
+    if(actividadesNoche.isEmpty){
+      actividadesNoche.add(_getEmptyActivity(context));
+    }
+    if(actividadesTarde.isEmpty) {
+      actividadesTarde.add(_getEmptyActivity(context));
+    }
+    if(actividadesManania.isEmpty) {
+      actividadesManania.add(_getEmptyActivity(context));
+    }
 
     
     // maniana
     // contenido.add(Divider());
     if(noDefinida.isNotEmpty){
-      contenido.add(_titleListTile("Sin hora definida", null, actividadesND));
+      contenido.add(_titleListTile(
+        context,
+        "Sin hora definida", 
+        null, 
+        actividadesND)
+      );
     }
+
+    contenido.add(SizedBox(height: 30,));
+
     contenido.add(_titleListTile(
+        context,
         "Mañana",
-        Icon(Icons.ac_unit_rounded, color: Theme.of(context).accentColor), 
+        Icons.ac_unit_rounded,
         actividadesManania
-        )
+      )
     );
     contenido.add(_titleListTile(
+        context,
         "Tarde",
-        Icon(Icons.wb_cloudy , color: Theme.of(context).accentColor),
+        Icons.wb_cloudy,
         actividadesTarde
-        )
+      )
     );
     contenido.add(_titleListTile(
+        context,
         "Noche",
-        Icon(Icons.nights_stay,color: Theme.of(context).accentColor),
+        Icons.nights_stay,
         actividadesNoche
       )
     );
@@ -131,29 +148,76 @@ class Rutina extends StatelessWidget {
 
   }
 
-  Widget _createActivityTile(BuildContext context, Actividad item){
-    return Column(
-      children: [
-        new ListTile(
-          title: Text(item.nombre ?? "Sin nombre"),
-          leading: Text("${item.time.format(context)}"),
-          trailing: Icon(Icons.arrow_forward_ios),
-          onTap: ()=>Navigator.of(context).pushNamed(ACTIVITY_DETAIL, arguments: item)
-        ),
-        Divider()
-      ],
+  Widget _getEmptyActivity(context) {
+    return ListTileTheme(
+      tileColor: Theme.of(context).canvasColor,
+      child: ListTile(
+        title: Text("Sin eventos"), 
+        trailing: Icon(Icons.sentiment_dissatisfied)
+      ),
     );
   }
 
-  Widget _titleListTile(String title, Icon icon, List<Widget> activities){
-    return ExpansionTile(
-      title: Text(
-        title ?? "Sin título",
-        style: TextStyle(fontWeight: FontWeight.bold)
+  Widget _createActivityTile(BuildContext context, Actividad item){
+    
+    return ListTileTheme(
+      tileColor: Theme.of(context).canvasColor,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(item.nombre ?? "Sin nombre"),
+            subtitle: _daysListView(item, context),
+            leading: Text("${item.time.format(context)}"),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: ()=>Navigator.of(context).pushNamed(ACTIVITY_DETAIL, arguments: item)
+          ),
+          Divider()
+        ],
       ),
-      initiallyExpanded: true,
-      leading: icon,
-      children: activities,
+    );
+  }
+
+  Widget _titleListTile(BuildContext context, String title, IconData icon, List<Widget> activities){
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          leading: Icon(icon, color: Theme.of(context).canvasColor),
+          tileColor: Theme.of(context).accentColor,
+          textColor: Theme.of(context).canvasColor,   
+          title: Text(
+            title ?? "Sin título",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).canvasColor)
+          ),
+          children: activities
+        ),
+      ),
+    );
+  }
+
+   Widget _daysListView(Actividad item, BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: item.daysToNotify.map((day){
+          return Container(
+            margin: EdgeInsets.only(right: 5.0),
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).accentColor,
+              radius: 12.0,            
+              child: Text(
+                day != "miercoles"? day[0].toUpperCase(): "X", 
+                style: TextStyle(
+                  color: Colors.grey[300],
+                  fontSize: 10.0
+                ),
+              )
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 

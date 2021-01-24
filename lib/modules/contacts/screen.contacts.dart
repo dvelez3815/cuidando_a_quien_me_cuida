@@ -57,10 +57,8 @@ class ContactsScreen extends StatelessWidget {
               ),
               title: Text(snapshot.data[index].title.capitalize() ?? "Sin título"),
               subtitle: Text(snapshot.data[index].description ?? "Sin descripción"),
-              trailing: IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: ()=> _getOptionAction(context, snapshot.data[index]),
-              ),
+              trailing: Icon(Icons.settings),
+              onTap: ()=> _getOptionAction(context, snapshot.data[index]),
             );
           },
         );

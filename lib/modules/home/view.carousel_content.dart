@@ -27,17 +27,20 @@ List<Widget> carouselContent (BuildContext context) {
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width*0.4,
-                  child: Text(
-                    text, 
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold
-                    ),
-                  )
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*0.4,
+                    child: Text(
+                      text, 
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
+                  ),
                 ),
               ],
             ),

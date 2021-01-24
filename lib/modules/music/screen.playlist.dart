@@ -21,6 +21,7 @@ class PlaylistScreen extends StatelessWidget {
       body: Column(
         children: [
           component.getHeader(context, "MÚSICA"),
+          SizedBox(height: 30,),
           FutureBuilder(
             future: canLaunch("https://www.google.com/"),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -61,11 +62,22 @@ class PlaylistScreen extends StatelessWidget {
           );
         }
 
-        return Column(
-          children: snapshot.data.map((PlayList playlist){
-            return _getPlayListTile(context, playlist);
-          }).toList(),
-        );
+        final playlistElements = new List<Widget>.from(snapshot.data.map((PlayList playlist){
+          return _getPlayListTile(context, playlist);
+        }));
+
+        playlistElements.addAll([
+          SizedBox(height: 30,),
+          RaisedButton.icon(
+            onPressed: ()=>launch("https://www.youtube.com/channel/UCRFgeSNI_UmvjtNoj2eLobQ?view_as=subscriber"), 
+            icon: Icon(Icons.play_arrow_rounded), 
+            label: Text("Abrir en YouTube"),
+            color: Colors.red,
+            textColor: Colors.white,
+          )
+        ]);
+
+        return new Column(children: playlistElements,);
 
       },
     );
@@ -73,12 +85,16 @@ class PlaylistScreen extends StatelessWidget {
   }
 
   Widget _getPlayListTile(BuildContext context, PlayList playlist) {
-    return ListTile(
-      leading: getImage(playlist.image),
-      title: Text(playlist.title ?? "Sin título"),
-      subtitle: Text((playlist.description.isEmpty)? "Sin descripción":playlist.description),
-      trailing: Icon(Icons.arrow_forward_ios),
-      onTap: ()=>Navigator.of(context).pushNamed(MUSIC_DETAIL, arguments: playlist),
+    return Column(
+      children: [
+        ListTile(
+          leading: getImage(playlist.image),
+          title: Text(playlist.title ?? "Sin título"),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: ()=>Navigator.of(context).pushNamed(MUSIC_DETAIL, arguments: playlist),
+        ),
+        Divider()
+      ],
     );
   }
 }

@@ -33,7 +33,8 @@ class _ActividadesState extends State<Actividades>{
       key: widget._scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, "MIS ACTIVIDADES"),
+          getHeader(context, "ACTIVIDADES"),
+          SizedBox(height: 30.0,),
           Expanded(
             child: SingleChildScrollView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),
@@ -60,33 +61,34 @@ class _ActividadesState extends State<Actividades>{
 
         final Map<String, dynamic> activityTypes = AppSettings().settings["activities_type"];
         
-        return Column(
-          children: List<ExpansionTile>.from(activityTypes.keys.map((String key){
+        final content = new List<Widget>();
+        content.addAll(List<Widget>.from(activityTypes.keys.map((String key){
 
             final String title = activityTypes[key];
 
-            return ExpansionTile(
-              title: Text(title.capitalize(), style: TextStyle(fontWeight: FontWeight.bold),),
-              maintainState: false,
-              initiallyExpanded: true,              
-              children: _getActivityData(key, snapshot.data)
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: ExpansionTile(
+                  tileColor: Theme.of(context).accentColor,
+                  textColor: Theme.of(context).canvasColor,   
+                  title: Text(title.capitalize(), style: TextStyle(fontWeight: FontWeight.bold),),
+                  children: _getActivityData(key, snapshot.data),
+                  maintainState: false,
+                  initiallyExpanded: true,   
+                ),
+              ),
             );
           })
         ));
+
+        return Column(
+          children: content,
+        );
       },
     );
   }
-
-  // Widget alarmTileBody(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
-  //   return ListTile(
-  //     title: _daysListView(item, context),
-  //     trailing: RaisedButton.icon(
-  //       icon: Icon(Icons.settings),
-  //       label: Text("Ver más"),
-  //       onPressed: ()=>showEditDeleteOptions(context, item, scaffoldKey),
-  //     )
-  //   );
-  // }
 
   Widget _daysListView(Actividad item, BuildContext context) {
     return SingleChildScrollView(
@@ -111,29 +113,6 @@ class _ActividadesState extends State<Actividades>{
       ),
     );
   }
-
-  // Widget alarmTileHead(Actividad item, Function setState) {
-  
-  //   return SwitchListTile(
-  //     value: item.estado,
-  //     onChanged: (status){
-  //       item.estado = status;
-  //       setState(() {});
-  //     },
-  //     subtitle: Text(item.descripcion, maxLines: 4, overflow: TextOverflow.ellipsis,),
-  //     title: Text("${item.nombre ?? "Sin nombre"}"),
-  //     secondary: _showTimeCareInfo(item),
-  //   );
-  // }
-
-  // Widget _showTimeCareInfo(Actividad item) {
-  //   return Column(
-  //     children: [            
-  //       Icon(Icons.alarm),
-  //       Text("${item.time.format(context)}"), 
-  //     ],
-  //   );
-  // }
 
   void showEditDeleteOptions(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     showModalBottomSheet(

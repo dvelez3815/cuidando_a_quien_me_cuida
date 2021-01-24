@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
     final color = Theme.of(context).accentColor;
 
     return Container(
-      height: size.height*0.35,
+      height: size.height*0.41,
       width: size.width,
       child: CustomPaint(
         painter: BannerWidget(color)
