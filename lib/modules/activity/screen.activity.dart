@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
+import 'package:utm_vinculacion/widgets/widget.tunned_listtile.dart';
 
 import 'model.activity.dart';
 
@@ -18,6 +20,50 @@ class Actividades extends StatefulWidget {
 
   @override
   _ActividadesState createState() => _ActividadesState();
+
+  static void onDeleteCare(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey){
+
+    bool deleting = false;
+
+    showDialog(
+      context: context,
+      builder: (contextInternal){
+        return AlertDialog(
+          title: Text("¡Atención!"),
+          content: Text("Está a punto de eliminar esta actividad, ¿desea continuar?"),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.cancel),
+              label: Text("Cancelar"),
+              onPressed: ()=>Navigator.of(contextInternal).pop(),
+            ),
+            FlatButton.icon(
+              icon: Icon(Icons.check_circle, color: Colors.red),
+              label: Text("Eliminar", style: TextStyle(color: Colors.red)),
+              onPressed: ()async{
+                if(!deleting){
+                  final ok = await Actividades.deleteEvent(item);
+
+                  scaffoldKey.currentState.showSnackBar(new SnackBar(
+                    content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
+                    duration: Duration(seconds: 2),
+                  ));
+
+                  Navigator.of(contextInternal).pop();
+                  Navigator.of(context).pop();
+                }
+              },
+            )
+          ],
+        );
+      }, 
+    );    
+  }
+
+  
+  static Future<bool> deleteEvent(Actividad item) async {
+    return await item.delete();
+  }
 }
 
 class _ActividadesState extends State<Actividades>{
@@ -43,10 +89,24 @@ class _ActividadesState extends State<Actividades>{
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES),
-      ),
+      floatingActionButton: SpeedDial(
+        child: Icon(Icons.more_horiz),
+        visible: true,
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.add),     
+            label: "Agregar",       
+            onTap: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.calendar_today),     
+            label: "Calendario",
+            onTap: ()=>Navigator.of(context).pushNamed(CALENDAR),
+          ),
+        ],
+      )
+      
+      
     );
   }
 
@@ -90,30 +150,6 @@ class _ActividadesState extends State<Actividades>{
     );
   }
 
-  Widget _daysListView(Actividad item, BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: item.daysToNotify.map((day){
-          return Container(
-            margin: EdgeInsets.only(right: 5.0),
-            child: CircleAvatar(
-              backgroundColor: Theme.of(context).accentColor,
-              radius: 12.0,            
-              child: Text(
-                day != "miercoles"? day[0].toUpperCase(): "X", 
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 10.0
-                ),
-              )
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   void showEditDeleteOptions(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey) {
     showModalBottomSheet(
       context: context, 
@@ -137,8 +173,6 @@ class _ActividadesState extends State<Actividades>{
                           Navigator.of(context).pushNamed(
                             ADDACTIVIDADES, 
                             arguments: {
-                            "title": item.nombre,
-                            "description": item.descripcion,
                             "model_data": item
                           });
                         },
@@ -147,14 +181,9 @@ class _ActividadesState extends State<Actividades>{
                         icon: Icon(Icons.delete, color: Colors.red),
                         label: Text("Eliminar", style: TextStyle(color: Colors.red)),
                         onPressed: (){
-                          _onDeleteCare(context, item, scaffoldKey);
+                          Actividades.onDeleteCare(context, item, scaffoldKey);
                         },
                       ),
-                      // FlatButton.icon(
-                      //   icon: Icon(Icons.info),
-                      //   label: Text("Ver más",),
-                      //   onPressed: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: item)
-                      // )
                     ],
                   )
                 ],
@@ -165,48 +194,6 @@ class _ActividadesState extends State<Actividades>{
     );
   }
 
-  Future<bool> deleteEvent(Actividad item) async {
-    return await item.delete();
-  }
-
-  void _onDeleteCare(BuildContext context, Actividad item, GlobalKey<ScaffoldState> scaffoldKey){
-
-    bool deleting = false;
-
-    showDialog(
-      context: context,
-      builder: (contextInternal){
-        return AlertDialog(
-          title: Text("¡Atención!"),
-          content: Text("Está a punto de eliminar esta actividad, ¿desea continuar?"),
-          actions: [
-            FlatButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancelar"),
-              onPressed: ()=>Navigator.of(contextInternal).pop(),
-            ),
-            FlatButton.icon(
-              icon: Icon(Icons.check_circle, color: Colors.red),
-              label: Text("Eliminar", style: TextStyle(color: Colors.red)),
-              onPressed: ()async{
-                if(!deleting){
-                  final ok = await deleteEvent(item);
-
-                  scaffoldKey.currentState.showSnackBar(new SnackBar(
-                    content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
-                    duration: Duration(seconds: 2),
-                  ));
-
-                  Navigator.of(contextInternal).pop();
-                  Navigator.of(context).pop();
-                }
-              },
-            )
-          ],
-        );
-      }, 
-    );    
-  }
 
   List<Widget> _getActivityData(String key, List<Actividad> fullData) {
 
@@ -215,48 +202,21 @@ class _ActividadesState extends State<Actividades>{
     });
 
     return List<Widget>.from(filteredData.map((Actividad activity){
-      
-      final leading = new Column(
-        children: [
-          Icon(Icons.alarm),
-          Text(activity.time.format(context))
-        ],
-      );
 
-      final trailing = new IconButton(
-        icon: Icon(Icons.settings),
-        padding: EdgeInsets.zero,
-        onPressed: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
+      final trailing = Switch(
+        value: activity.estado, 
+        onChanged: (value)=>setState((){activity.estado = value;})
       );
       
-      return GestureDetector(        
-        onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              ListTile(
-                leading: leading,
-                title: Text(
-                  activity.nombre,
-                  style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),
-                ),
-                trailing: Switch(
-                  value: activity.estado, 
-                  onChanged: (value)=>setState((){activity.estado = value;})
-                ),
-                onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
-              ),
-              ListTile(
-                title: _daysListView(activity, context),
-                trailing: trailing,
-                onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: activity),
-              ),
-              Divider()
-            ],
+      return Column(
+        children: [
+          TunnedListTile(
+            activity: activity,
+            leadingEvent: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
+            trailing: trailing,
           ),
-        ),
+          Divider()
+        ],
       );
     }));
   }

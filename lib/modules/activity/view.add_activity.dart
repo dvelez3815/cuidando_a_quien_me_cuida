@@ -68,7 +68,7 @@ class _AddActividadesState extends State<AddActividades>{
       key: widget.scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, "Agregar actividad"),
+          getHeader(context, updateData.isNotEmpty?"Editar Actividad":"Agregar actividad"),
           Expanded(
             child: ListView(
               physics: ScrollPhysics(parent: BouncingScrollPhysics()),
@@ -249,23 +249,23 @@ class _AddActividadesState extends State<AddActividades>{
     TextEditingController controller = new TextEditingController();
 
     return <Widget>[
-      ListTile(
+      (updateData["restricted"] ?? false)?Container():ListTile(
         title: Text("Defina su actividad"),
       ),
-      _getTitleField(),
-      _getDescriptionField(),
-      getExpansionTile(
+      (updateData["restricted"] ?? false)?Container():_getTitleField(),
+      (updateData["restricted"] ?? false)?Container(): _getDescriptionField(),
+      (updateData["restricted"] ?? false)?Container():getExpansionTile(
         controller: controller,
         items: this.materiales,
         setState: setState,
         title: "Materiales",
         onPressed: ()=>_getDialog(controller),
       ),
-      Divider(),
-      ListTile(
+      (updateData["restricted"] ?? false)?Container():Divider(),
+      (updateData["restricted"] ?? false)?Container():ListTile(
         title: Text("Seleccione el tipo de actividad"),
       ),
-      RadioListTile(
+      (updateData["restricted"] ?? false)?Container():RadioListTile(
         groupValue: this.selectedType,
         value: 0,
         secondary: Icon(Icons.directions_run),
@@ -277,7 +277,7 @@ class _AddActividadesState extends State<AddActividades>{
         },
         title: Text("Física"),
       ),
-      RadioListTile(
+      (updateData["restricted"] ?? false)?Container():RadioListTile(
         groupValue: this.selectedType,
         secondary: Icon(Icons.lightbulb),
         onChanged: (value){
@@ -289,7 +289,7 @@ class _AddActividadesState extends State<AddActividades>{
         value: 1,
         title: Text("Mental"),
       ),
-      RadioListTile(
+      (updateData["restricted"] ?? false)?Container():RadioListTile(
         groupValue: this.selectedType,
         secondary: Icon(Icons.sports_baseball),
         onChanged: (value){
@@ -301,7 +301,7 @@ class _AddActividadesState extends State<AddActividades>{
         value: 2,
         title: Text("Recreación"),
       ),
-      RadioListTile(
+      (updateData["restricted"] ?? false)?Container():RadioListTile(
         groupValue: this.selectedType,
         secondary: Icon(Icons.volunteer_activism),
         onChanged: (value){
@@ -313,7 +313,7 @@ class _AddActividadesState extends State<AddActividades>{
         value: 3,
         title: Text("Bienestar"),
       ),
-      Divider(),
+      (updateData["restricted"] ?? false)?Container():Divider(),
       ListTile(
         title: Text("Seleccione los días en que realizará la actividad")
       ),

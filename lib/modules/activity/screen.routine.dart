@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
+import 'package:utm_vinculacion/widgets/widget.tunned_listtile.dart';
 
 class Rutina extends StatelessWidget {
 
   final DBProvider _db = DBProvider.db;
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +17,10 @@ class Rutina extends StatelessWidget {
     _db.getActivities();
     
     return Scaffold(
+      key: _scaffoldKey,
       body: Column(
         children: [
-          getHeader(context, "MIS EVENTOS"),
+          getHeader(context, "EVENTOS"),
           Expanded(
             child: StreamBuilder(
               stream: _db.actividadStream,
@@ -34,34 +38,48 @@ class Rutina extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (context){
-              return AlertDialog(
-                title: Text("Información"),
-                content: Text(
-                  "Para agregar una nueva actividad a \"mis eventos\" deberás activar algunas"
-                  " de las actividades que se mostrarán a continuación.\n\nPresiona OK para continuar.",
-                  textAlign: TextAlign.justify,
-                ),
-                actions: [
-                  FlatButton.icon(
-                    icon: Icon(Icons.check_circle),
-                    label: Text("OK"),
-                    onPressed: (){
-                      Navigator.of(context).pop();
-                      Navigator.pushNamed(context, ACTIVIDADES);
-                    }
-                  )
-                ],
-              );
-            }
-          );
-        }
-      ),
+      floatingActionButton: SpeedDial(
+        child: Icon(Icons.more_horiz),
+        visible: true,
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.add),     
+            label: "Agregar",       
+            onTap: ()=>_getAddEvent(context)
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.calendar_today),     
+            label: "Calendario",
+            onTap: ()=>Navigator.of(context).pushNamed(CALENDAR),
+          ),
+        ],
+      )
+    );
+  }
+
+  Future _getAddEvent(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Información"),
+          content: Text(
+            "Para agregar una nueva actividad a \"mis eventos\" deberás activar algunas"
+            " de las actividades que se mostrarán a continuación.\n\nPresiona OK para continuar.",
+            textAlign: TextAlign.justify,
+          ),
+          actions: [
+            FlatButton.icon(
+              icon: Icon(Icons.check_circle),
+              label: Text("OK"),
+              onPressed: (){
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, ACTIVIDADES);
+              }
+            )
+          ],
+        );
+      }
     );
   }
 
@@ -160,20 +178,16 @@ class Rutina extends StatelessWidget {
 
   Widget _createActivityTile(BuildContext context, Actividad item){
     
-    return ListTileTheme(
-      tileColor: Theme.of(context).canvasColor,
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(item.nombre ?? "Sin nombre"),
-            subtitle: _daysListView(item, context),
-            leading: Text("${item.time.format(context)}"),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: ()=>Navigator.of(context).pushNamed(ACTIVITY_DETAIL, arguments: item)
-          ),
-          Divider()
-        ],
-      ),
+    return Column(
+      children: [
+        TunnedListTile(
+          activity: item,
+          leadingEvent: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {"model_data": item, "restricted":true}),
+          trailing: Icon(Icons.arrow_forward_ios),
+          leadingIcon: Icons.edit,
+        ),
+        Divider()
+      ],
     );
   }
 
@@ -196,30 +210,4 @@ class Rutina extends StatelessWidget {
       ),
     );
   }
-
-   Widget _daysListView(Actividad item, BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: item.daysToNotify.map((day){
-          return Container(
-            margin: EdgeInsets.only(right: 5.0),
-            child: CircleAvatar(
-              backgroundColor: Theme.of(context).accentColor,
-              radius: 12.0,            
-              child: Text(
-                day != "miercoles"? day[0].toUpperCase(): "X", 
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 10.0
-                ),
-              )
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  void onPressedEvent(BuildContext context) => Navigator.of(context).pushNamed(ADDACTIVIDADES);
 }

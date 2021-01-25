@@ -4,7 +4,6 @@
 // Contador: 1 
 
 import 'package:flutter/material.dart';
-import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/water/widget.water_goal_editor.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/input.dart';
@@ -226,27 +225,27 @@ class _WaterPreferencesState extends State<WaterPreferences> {
     );
   }
 
-  Future<void> _createAlarmsEvent() async {
+  // Future<void> _createAlarmsEvent() async {
 
-    // Validate that glass Size is not bigger than goal size
-    final WaterModel waterModel = widget._provider.model;
-    final int howManyReminders = waterModel.goal ~/ (waterModel.glassSize / 1000);
+  //   // Validate that glass Size is not bigger than goal size
+  //   final WaterModel waterModel = widget._provider.model;
+  //   final int howManyReminders = waterModel.goal ~/ (waterModel.glassSize / 1000);
     
-    // How many minutes are between start and end date
-    final int timeDiff = waterModel.timeDiff;
+  //   // How many minutes are between start and end date
+  //   final int timeDiff = waterModel.timeDiff;
 
-    final startAlarm = new AlarmModel(
-      DateTime.monday, 
-      waterModel.startTime, 
-      "Beber agua", "Recuerda mantenerte hidratado",
-      interval: timeDiff ~/ howManyReminders
-    );
+  //   final startAlarm = new AlarmModel(
+  //     DateTime.monday, 
+  //     waterModel.startTime, 
+  //     "Beber agua", "Recuerda mantenerte hidratado",
+  //     interval: timeDiff ~/ howManyReminders
+  //   );
 
-    // startAlarm.activate();
+  //   // startAlarm.activate();
 
 
 
-  }
+  // }
 
   // Future<void> _showDefineHourAlert({bool isStart = true}) async {
     
