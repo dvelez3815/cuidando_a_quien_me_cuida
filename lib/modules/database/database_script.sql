@@ -93,36 +93,6 @@ values
 ',
     '[{"title":"6 papas"}, {"title":"Aceite de oliva u otro que uses para cocinar"},{"title":"Sal y pimienta a gusto"},{"title":"Para el relleno: Jamón, queso, pollo picado, tomate, cebollines, brócoli y otros vegetales, crema agria, u otras adiciones disponibles"}]'
 ),
-(5, 'Rollitos De Jamón Con Queso', 'assets/imagenes/rollo.jpg', 
-    '1.	Cortar todas las orillas de los panes.
-2.	Aplanar las rebanadas con un rodillo.
-3.	Untarles los frijoles, luego agregar la rebanada de jamón y queso.
-4.	Enrolla.
-',
-    '[{"title":"4 rebanadas de pan blanco"}, {"title":"4 cucharadas de frijol refrito"},{"title":"4 rebanadas de queso amarillo"}, {"title":"2 rebanadas de jamón"}]'
-),
-(6, 'Omelet con Espinacas y Jamón', 'assets/imagenes/omelet.jpg', 
-    '1.	Separa las hojas de las espinacas y desecha sus tallos. Lava las hojas en abundante agua y desinféctalas. Escúrrelas, dejando unas gotas de agua en las hojas, que servirán para su cocción. Puedes conocer el tiempo de cocción de las espinacas y más alimentos en tiempodecoccion.net
-2.	Pica finamente las lonchas de queso gouda y divide en dos porciones.
-3.	Calienta una sartén a fuego medio alto, sin aceite ni mantequilla, agrega las espinacas con un poco de sal, remueve constantemente hasta que estén completamente cocidas. Este paso no durará más de 1 minuto.
-4.	Una vez cocidas, colócalas en un colador y escúrrelas. Presiona suavemente con una cuchara para extraer la mayor cantidad de agua.
-5.	Pica finamente las espinacas, colócalas en un tazón y agrega los huevos, sal y pimienta. Bate con ayuda de un tenedor.
-6.	Calienta nuevamente la sartén, y agrega una cucharada de mantequilla, espera a que se derrita e inmediatamente agrega la mitad de la mezcla de huevo y espinaca.
-7.	Cocina el huevo, sin voltear, ayudándote de una espátula de plástico, para distribuir uniformemente las espinacas, hasta que el huevo comience a espesar.
-8.	Inclina un poco la sartén para distribuir el huevo de la parte central del omelete. Una vez que la tortilla de huevo esté firme, espolvorea, en una mitad de la tortilla una porción de queso y distribuye encima del queso 2 rebanadas de jamón.
-9.	Con la ayuda de la espátula, dobla la tortilla por la mitad, deja 30 segundos más en el fuego y transfiere el omelet de espinacas a un plato.
-10.	Repite los pasos del 6 al 9 con el resto de la mezcla de huevo con espinacas, la porción restante de queso y las otras 2 rebanadas de jamón.
-',
-    '[{"title":"1 manojo de espinacas"},{"title":"4 huevos"},{"title":"4 rebanadas de jamón de pavo"},{"title":"4 rebanadas finas de queso gouda"},{"title":"2 cucharadas de mantequilla"},{"title":"Sal y Pimienta"}]'
-),
-(7, 'ENCAPSULADO DE JAMÓN, HUEVO Y QUESO CHEDDAR', 'assets/imagenes/capsula.jpg', 
-    '1.	Cortar una tapa al pan o bollo, ahuecarlos y reservar.
-2.	Corta el jamon en rebanadas y cubre el interior del bollo. Agregar un huevo al interior del bollo, sazona con sal y pimienta, agrega queso cheddar y luego perejil.
-3.	Hornear a 180° C los panes para permitir que gratine el queso. Retirar del horno y agrega mas queso y perejil, Cubrir con la tapa y cocinar en el horno por 5 minutos más.
-',
-    '[{"title":"5 panes, con costra redondo o bollo"},{"title":"5 rebanadas de jamón tipo york"},{"title":"5 huevos"},{"title":"250 gramos de queso cheddar"},{"title":"perejil, al gusto"},{"title":"sal, cantidad necesaria"},{"title":"pimientas, al gusto"},{"title":"1 taza de vinagre blanco"},{"title":"1 taza de agua"}]'
-),
-
 (8, 'Pescado a la Plancha con Verduras', 'assets/imagenes/pescado.jpg', 
     '1.	Cortar el pescado o bien adquirirlo hecho filetes, esparcir con una mezcla de aceite, sal y pimienta.
 Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado etc.) y recortar unos espárragos. Ponerlo todo en una plancha o bien una sartén a fuego fuerte salpimentando las verduras. Ir pincelando el pescado de cuando en cuando con la mezcla del aceite.
@@ -267,26 +237,6 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
     {"title":"Salsa teriyaki"}]
     '
 ),
-(16, 'Ensalada de jamón y brócoli', 'assets/imagenes/jb.jpg', 
-    '1.	Lavar las verduras con abundante agua, cocínalos con poca agua e introdúcelos cuando empiece a hervir. 
-2.	Déjalos por poco tiempo en el agua caliente y finalmente pásalo por agua fría.
-3.	Trocea la lechuga y colócala en una fuente.
-4.	Agrega jamón y vegetales restantes en forma decorativa.
-5.	En un tazón combina el aceite, la salsa inglesa, la mostaza, el ajo, el orégano y la azúcar por 3 minutos y sirve sobre la ensalada.
-',
-    '[{"title":"1 Unidad Lechuga Bien lavada"},
-    {"title":"1/2 Taza Brócoli Cocido"},
-    {"title":"2 Tajadas Jamón Picado en tiras"},
-    {"title":"1/2 Taza Champiñones Picados"},
-    {"title":"1/4 Taza Aceite Vegetal"},
-    {"title":"1/2 Taza Tomate Cherry"},
-    {"title":"1 Cucharada Salsa Inglesa"},
-    {"title":"1 Cucharadita Mostaza"},
-    {"title":"1 Unidad Ajo Diente triturado"},
-    {"title":"2 Cucharaditas Azúcar"},
-    {"title":"1/2 Cucharadita Orégano Fresco"}]
-    '
-),
 
 (17, 'Tostada de aguacate', 'assets/imagenes/ta.jpg', 
     '1.	Prepara la mayonesa mezclándola con sal de ajo, paprika, y Puré de Tomate, reserva.
@@ -300,40 +250,6 @@ Adecentar y recortar en rodajas las verduras (suchi, cebolla, pimiento colorado 
     {"title":"1 Cucharadita Sal de Ajo"},
     {"title":"1 Cucharadita Paprika"},
     {"title":"1 Cucharadita de Puré de Tomate"}]
-    '
-),
-
-(18, 'Guisantes con jamón', 'assets/imagenes/guisante.jpg', 
-    '1.	Comenzamos cortando la cebolla y picándola en brunoise . Ponemos la cebolla a fuego lento en una sartén con dos cucharadas de aceite de oliva
-2.	Mientras la cebolla refríen, vamos cociendo los guisantes.
-3.	Cocerlos durante unos 8 minutos para que estén perfectos
-4.	Cuando la cebolla está transparente y comience a sudar, agregamos el jamón serrano muy picado -se agradecen los trocitos de tocino que aportan mucha jugosidad- y se rehogan con la cebolla.
-5.	Se añade también una puntita de harina y un cucharón del agua de la cocción de los guisantes.
-6.	Se liga un poco esa salsa de cebolla, jamón y harina y se agregan los guisantes bien escurridos. Se mezcla el conjunto hasta que forma un cuerpo uniforme y se decora con una hojita de salvia o con otro brote aromático y se lleva a la mesa inmediatamente.
-',
-    '[{"title":"Guisantes 300 g"},
-    {"title":"Cebolla cortada en brunoise fino 100 g"},
-    {"title":"Jamón serrano en tacos 150 g"},
-    {"title":"Harina de trigo 10 g"}]
-    '
-),
-(19, 'Tacos de atún', 'assets/imagenes/tacos.jpg', 
-    '1.	Vamos a calentar unas gotas de aceite de oliva en un sartén en el que colocaremos los filetes de atún fresco que sazonamos con tomillo, sal y pimienta negra. 
-2.	Los sellaremos a fuego fuerte por un par de minutos de ambos lados. Bajamos la lumbre a intensidad medio baja y dejamos unos 10 minutos más. Hora picamos la cebolla y el tomate.
-3.	Pelamos los aguacates, retiramos los huesos. Uno de ellos lo cortamos en dados y el otro en gajos. Mezclamos los dados de aguacate con el tomate, la cebolla, el jugo de la lima, sal y pimienta.
-4.	Cuando el atún esté listo, lo retiramos de la lumbre y cortamos en trozos que agregamos a los demás ingredientes. 
-5.	Revolvemos añadiendo un poco de aceite de oliva y ajustando el sazón. Colocamos los gajos de aguacate y unas cucharadas de la mezcla de atún y verduras sobre las tortillas calientes. Acompañamos de una salsa picante mexicana como una salsa verde o roja.
-',
-    '[{"title":"Atún fresco (fileteado) 400 g"},
-    {"title":"Aguacate 2"},
-    {"title":"Tomate maduro 1"},
-    {"title":"Cebolla 100 g"},
-    {"title":"Lima 1"},
-    {"title":"Tortillas de harina o maíz  4"},
-    {"title":"Aceite de oliva virgen extra 15 ml"},
-    {"title":"Tomillo seco"},
-    {"title":"Sal"},
-    {"title":"Pimienta negra molida"}]
     '
 ),
 (20, 'Ensaladilla de patata con mayonesa de limón y mostaza', 'assets/imagenes/ensaladilla.jpg', 

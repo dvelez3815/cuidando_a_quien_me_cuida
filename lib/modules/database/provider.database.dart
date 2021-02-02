@@ -252,8 +252,10 @@ class DBProvider {
     final db = await database;
 
     final res = await db.query("procedimiento", where: "activity_id=?", whereArgs: [id]);
-    final String steps = res[0]["steps"];
-
+    String steps = "";
+    if(res!=null)
+      steps = res[0]["steps"];
+      
     return steps ?? "";
   }
 
