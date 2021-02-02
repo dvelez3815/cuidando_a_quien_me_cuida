@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:utm_vinculacion/modules/global/helpers.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 
 import 'package:utm_vinculacion/widgets/components/header.dart' as component;
@@ -15,15 +16,13 @@ class PlaylistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    _musicProvider.queryPlaylist();
-
     return Scaffold(
       body: Column(
         children: [
           component.getHeader(context, "MÚSICA"),
           SizedBox(height: 30,),
           FutureBuilder(
-            future: canLaunch("https://www.google.com/"),
+            future: isInternet(),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if(!snapshot.hasData){
                 return Center(child: CircularProgressIndicator());
@@ -35,6 +34,8 @@ class PlaylistScreen extends StatelessWidget {
                   title: Text("Vaya... No tienes conexión a internet"),
                 );
               }
+              
+              _musicProvider.queryPlaylist();
               return _getPlaylist(context);
             },
           ),

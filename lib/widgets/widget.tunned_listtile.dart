@@ -9,13 +9,15 @@ class TunnedListTile extends StatefulWidget {
   final Widget trailing;
   final IconData leadingIcon;
   final Function leadingEvent;
+  final Widget title;
+  final Widget subtitle;
 
   const TunnedListTile({
     Key key, 
     @required this.activity, 
     @required this.trailing, 
     this.leadingEvent, 
-    this.leadingIcon
+    this.leadingIcon, this.title, this.subtitle
   }) : super(key: key);
 
   @override
@@ -31,10 +33,10 @@ class _TunnedListTileState extends State<TunnedListTile> {
         padding: EdgeInsets.zero,
         onPressed: widget.leadingEvent,
       ),
-      title: Column(
+      title: widget.title ?? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.activity.nombre, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text( widget.activity.nombre, style: TextStyle(fontWeight: FontWeight.bold)),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5.0),
             padding: EdgeInsets.all(5.0),
@@ -56,9 +58,9 @@ class _TunnedListTileState extends State<TunnedListTile> {
           )
         ],
       ),
-      subtitle: DayList(activity: widget.activity),
+      subtitle: widget.subtitle ?? DayList(activity: widget.activity),
       trailing: widget.trailing,
-      onTap: ()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: widget.activity),
+      onTap: (widget.activity == null)?null:()=>Navigator.pushNamed(context, ACTIVITY_DETAIL, arguments: widget.activity),
     );
   }
 

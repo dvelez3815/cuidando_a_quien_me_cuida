@@ -39,11 +39,11 @@ class Rutina extends StatelessWidget {
         ],
       ),
       floatingActionButton: SpeedDial(
-        child: Icon(Icons.more_horiz),
+        child: Icon(Icons.add),
         visible: true,
         children: [
           SpeedDialChild(
-            child: Icon(Icons.add),     
+            child: Icon(Icons.add_box_sharp),     
             label: "Agregar",       
             onTap: ()=>_getAddEvent(context)
           ),

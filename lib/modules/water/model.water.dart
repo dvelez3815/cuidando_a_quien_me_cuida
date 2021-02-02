@@ -33,10 +33,10 @@ class WaterModel {
     'goal': this._goal,
     'progress': this._progress,
     'size': this._size,
-    'start_hour': this._start.hour,
-    'start_minute': this._start.minute,
-    'end_hour': this._end.hour,
-    'end_minute': this._end.minute,
+    'start_hour': this._start.hour ?? 7,
+    'start_minute': this._start.minute ?? 0,
+    'end_hour': this._end.hour ?? 9,
+    'end_minute': this._end.minute ?? 0,
     'active': this._active? 1:0
   };
 

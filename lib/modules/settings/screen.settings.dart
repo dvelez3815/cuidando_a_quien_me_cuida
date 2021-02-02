@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
-import 'package:utm_vinculacion/user_preferences.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -44,11 +43,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 //   trailing: Icon(Icons.arrow_forward_ios),
                 // ),
                 // Divider(),
-                SwitchListTile(
-                  title: Text("Modo oscuro"),
-                  value: UserPreferences().darkMode ?? false,
-                  onChanged: (value){UserPreferences().darkMode = value; setState((){});},
-                ),
+                // SwitchListTile(
+                //   title: Text("Modo oscuro"),
+                //   value: UserPreferences().darkMode ?? false,
+                //   onChanged: (value){UserPreferences().darkMode = value; setState((){});},
+                // ),
                 Divider(),
                 ListTile(
                   leading: Icon(Icons.privacy_tip),

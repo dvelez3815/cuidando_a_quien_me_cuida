@@ -7,10 +7,17 @@ class WaterGoalEditor extends StatefulWidget {
   final _provider = new WaterProvider();
   final GlobalKey<ScaffoldState> _scaffoldKey;
 
-  final _maxValue = 7.0;
-  final _minValue = 2.0;
+  final double maxValue;// = 7.0;
+  final double minValue; // = 2.0;
+  final String title;
+  final String unit;
+  final String unitPrefix;
+  final int division;
+  final String initialValue;
 
-  WaterGoalEditor(this._scaffoldKey);
+  WaterGoalEditor(this._scaffoldKey, {
+    @required this.maxValue, 
+    @required this.minValue, this.title, this.unit, this.unitPrefix, this.division, this.initialValue});
 
   @override
   _WaterGoalEditorState createState() => _WaterGoalEditorState();
@@ -23,7 +30,7 @@ class _WaterGoalEditorState extends State<WaterGoalEditor> {
   @override
   void initState() {
     this._goalEditController = new TextEditingController();
-    this._goalEditController.text = widget._provider.model.goal.toStringAsFixed(2);
+    this._goalEditController.text = widget.initialValue ?? widget._provider.model.goal.toStringAsFixed(2);
 
     super.initState();
   }
@@ -34,18 +41,18 @@ class _WaterGoalEditorState extends State<WaterGoalEditor> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("Ingrese el valor en litros"),
+          Text(widget.title ?? "Ingrese el valor en ${widget.unit ?? "litros"}"),
           Slider(
-            divisions: (2 * (widget._maxValue - widget._minValue))~/1,
+            divisions: widget.division ?? (2 * (widget.maxValue - widget.minValue))~/1,
             onChanged: (value)=>setState(()=>this._goalEditController.text = value.toStringAsFixed(2)),
             value: double.parse(this._goalEditController.text ?? '0', (error)=>0.0),
-            label: (this._goalEditController.text ?? '0') + " Lts",
-            min: widget._minValue,
-            max: widget._maxValue,
+            label: (this._goalEditController.text ?? '0') + " "+(widget.unitPrefix ?? "Lts"),
+            min: widget.minValue,
+            max: widget.maxValue,
           ),
-          Text("Objetivo cambiado a ${this._goalEditController.text ?? 0} Lts"),
+          Text("Valor cambiado a ${this._goalEditController.text ?? 0} ${widget.unitPrefix ?? "Lts"}"),
           SizedBox(height: 10,),
-          (double.parse(this._goalEditController.text) < 7)? 
+          (double.parse(this._goalEditController.text) < 7 || widget.unit != null)? 
             Container():
             Text(
               "¡Cuidado con la sobrehidratación!",
@@ -71,11 +78,16 @@ class _WaterGoalEditorState extends State<WaterGoalEditor> {
           icon: Icon(Icons.check_circle),
           label: Text("Aceptar"),
           onPressed: ()async{
-            await widget._provider.updateGoal(double.parse(this._goalEditController.text ?? "3.0"));
+
+            if(widget.unit != null) {
+              await widget._provider.updateGlassContent(double.parse(this._goalEditController.text ?? "250") ~/1);
+            }
+            else {
+              await widget._provider.updateGoal(double.parse(this._goalEditController.text ?? "3.0"));
+            }
             Navigator.of(context).pop();
-            
             widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
-              content: Text("Objetivo actualizado"),
+              content: Text("Valor actualizado"),
             ));
           }
         ),
