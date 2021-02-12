@@ -9,7 +9,17 @@ import 'package:utm_vinculacion/user_preferences.dart';
 
 class WaterProvider {
 
-  static const START_ALARM_ID = -1;
+  final BehaviorSubject<WaterModel> _modelStreamController = new BehaviorSubject<WaterModel>();
+
+  Function(WaterModel) get _modelSink => _modelStreamController.sink.add;
+
+  Stream<WaterModel> get modelStream => _modelStreamController.stream;
+
+  WaterModel get model => _modelStreamController.value ?? _getDefaultModel();
+
+  dispose(){
+    _modelStreamController?.close();
+  }
 
   final _dbProvider = DBProvider.db;
 
@@ -25,33 +35,25 @@ class WaterProvider {
 
   WaterProvider._();
 
-  final BehaviorSubject<WaterModel> _modelStreamController = new BehaviorSubject<WaterModel>();
-
-  Function(WaterModel) get _modelSink => _modelStreamController.sink.add;
-
-  Stream<WaterModel> get modelStream => _modelStreamController.stream;
-
-  WaterModel get model => _modelStreamController.value;
-
-  dispose(){
-    _modelStreamController?.close();
-  }
-
   Future<void> init()async{
 
     WaterModel water = await _dbProvider.lastWater();
 
     if(water == null) {
-      water = new WaterModel(
-        2.0, 
-        UserPreferences().waterProgress ?? 0.0, 
-        225,
-        start: TimeOfDay(hour: 6, minute: 0),
-        end: TimeOfDay(hour: 21, minute: 0)
-      );
+      water = _getDefaultModel();
       await this.storageInDB(water: water);
     }
     this._modelSink(water);
+  }
+
+  WaterModel _getDefaultModel() {
+    return new WaterModel(
+      2.0, 
+      UserPreferences().waterProgress ?? 0.0, 
+      225,
+      start: TimeOfDay(hour: 6, minute: 0),
+      end: TimeOfDay(hour: 21, minute: 0)
+    );
   }
 
   void addWaterLts({double lts}) {

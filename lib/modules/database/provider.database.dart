@@ -65,12 +65,13 @@ class DBProvider {
 
     if(!UserPreferences().areWaterAlarmsCreated){
       await loadWaterData();
+      UserPreferences().areWaterAlarmsCreated = true;
     }
 
     return _database;
   }
 
-  // this initialices the database
+  /// this initialices the database
   Future<Database> initDB() async{
 
     // This is part of an external package
@@ -99,8 +100,9 @@ class DBProvider {
     );
   }
 
-
-  //////////////////////////////// Alarms ////////////////////////////////
+  
+  /// You can storage an alarm in database providing a model in [alarma]
+  /// param.
   Future<bool> nuevaAlarma(AlarmModel alarma) async {
     final db = await database;
 
@@ -116,7 +118,7 @@ class DBProvider {
     return res>0;
   }
 
-  // Updates all fields except the ID
+  /// Updates all fields specified in [params], except the [id]
   Future<bool> updateAlarm(Map<String, dynamic> params, int id) async {
 
     final db = await database;
@@ -259,7 +261,9 @@ class DBProvider {
     final res = await db.query("procedimiento", where: "activity_id=?", whereArgs: [id]);
     String steps = "";
     if(res!=null)
+    {
       steps = res[0]["steps"];
+    }
       
     return steps ?? "";
   }

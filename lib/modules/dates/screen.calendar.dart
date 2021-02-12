@@ -6,14 +6,28 @@ import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
-
+/// Bueno, ya que esta cosa es la parte mas compleja y confusa del proyecto, vamos
+/// a tratar de documentarla
+/// 
+/// ACTUALIZACION:  Futuro desarrollador que se enfrente a esto, HUYA DE AQUI SOLDADO!!!
+///                 Esto esta mas dificil de lo que uno piensa. Si no quiere sufrir traumas
+///                 de por vida y tener pesadillas por las noches le aconsejo que se aleje 
+///                 de aqui, vaya a otra seccion del proyecto, no toque esto, no hable de
+///                 esto, es mas, por Dios, ni siquiera se le ocurra volver a pensar en 
+///                 esto, olvide que existe.
+/// 
+/// Contador de las veces que maldijo objetos inanimados por culpa de este
+/// archivo se muestra a continuacion:
+///       contador -> 7
 
 class CalendarScreen extends StatefulWidget {
-  final double pWidth = 392.7; 
+  final double pWidth = 392.7; // WTF!!! Que carajos es esto? Parece ser el ancho
 
-  /// Animation duration
+  /// Esta asumo que es la animacion de cuando el calendario se expande,
+  /// de todas formas fuera bueno que la variable tuviese un nombre mas representativo
   final Duration _kExpand = Duration(milliseconds: 300);
 
+  /// Estas dos cosas raras de aca creo que son las animaciones de expansion/contraccion
   final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeInOut);
   final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
 
@@ -88,6 +102,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
 
+    // Algun ser humano que explique para que es esto???
     double scaleFactor = MediaQuery.of(context).size.width / widget.pWidth;
     double calendarWidth = MediaQuery.of(context).size.width * 0.85;
 
@@ -223,6 +238,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     );
   }
 
+
+  /// Esta cosa no es mas que las flechas de izquierda y derecha (creo)
   AnimatedBuilder _leftRightArrow() {
     return AnimatedBuilder(
       animation: _arrowColor,
@@ -246,6 +263,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     );
   }
 
+  /// El boton raro ese que esta en la parte inferior del centro
   IconButton _getExpandedButton() {
     return IconButton(
       enableFeedback: _expanded,
@@ -420,6 +438,10 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         ),
       ),
     ];
+
+
+    // ya mejor llevame Diosito :'(
+
     List<List<int>> rowValueList = generateMonth(start);
     for (int i = 0; i < rowValueList.length; i++) {
       List<Widget> itemList = [];
@@ -440,7 +462,6 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
               child: Center(
                 child:GestureDetector(
                   onTap: ()async {
-                    print("Tap");
                     final DBProvider _db = DBProvider.db;
                     int mes = showDate.month;
                     int anio = showDate.year;

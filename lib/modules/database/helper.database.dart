@@ -5,18 +5,21 @@ import 'package:sqflite/sqflite.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/water/helper.water.dart' as waterHelper;
 import 'package:utm_vinculacion/modules/water/provider.water.dart';
-import 'package:utm_vinculacion/user_preferences.dart';
 
+/// Loads all default data defined in database_script.sql file and
+/// saves it in [db] what is an instance of database
 Future<void> defaultData(Database db) async {
   bool success = await _performQueries(db, "lib/modules/database/database_script.sql");
 
   if(success){
     print("All default data has been added");
-    await loadWaterData();
-    UserPreferences().areWaterAlarmsCreated = true;
+  }
+  else {
+    throw new ErrorDescription("There were some errors while trying to load default data");
   }
 }
 
+/// Loads default data for water module
 Future<void> loadWaterData()async{
   final model = WaterProvider().model;
 
@@ -64,11 +67,14 @@ Future<void> loadWaterData()async{
   await lastAlarm.save();
 }
 
+/// Initialize an instance of the database [db] with the [version]
 Future<void> initDatabase(Database db, int version) async{
   await _performQueries(db, "lib/modules/database/database.sql");
 
 }
 
+/// This will transform all queries in database_script.sql located in [route] into a
+/// string that can be interpretated by the [db]
 Future<bool> _performQueries(Database db, String route) async {
   final batch = db.batch(); // to excecute atomic operations
 

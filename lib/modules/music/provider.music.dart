@@ -10,11 +10,14 @@ import 'model.music.dart';
 
 class MusicProvider {
 
-  final String apiKey = DotEnv().env['API_KEY_YT'];
-  final String url = "https://www.googleapis.com/youtube/v3/";
+  static const String URL = "https://www.googleapis.com/youtube/v3/";
+  static const String CHANNEL_ID = "UCRFgeSNI_UmvjtNoj2eLobQ";
+  static const String PLAYLIST_REQUIREMENTS = "id,contentDetails,player,contentDetails,id,snippet,status";
+
+  static final String apiKey = DotEnv().env['API_KEY_YT']; // YouTube API key
   final List<String> playElements = new List<String>();
 
-  // Singleton
+  // Singleton pattern
   static MusicProvider _instance;
 
   factory MusicProvider(){
@@ -27,21 +30,27 @@ class MusicProvider {
   MusicProvider._();
 
 
-  final playlistYTUrl = "https://www.googleapis.com/youtube/v3/playlists?part=id,contentDetails,player,contentDetails,id,snippet,status&channelId=UCRFgeSNI_UmvjtNoj2eLobQ&key=AIzaSyAl1kiIpX-nJzwttFqxRt9QVZSSsRKqzss&maxResults=10";
+  // This will get all playlist in the channel
+  final playlistYTUrl = "${MusicProvider.URL}playlists?part=${MusicProvider.PLAYLIST_REQUIREMENTS}&channelId=${MusicProvider.CHANNEL_ID}&key=$apiKey&maxResults=10";
   
   final playlistList = new StreamController<List<PlayList>>.broadcast();
 
   Stream<List<PlayList>> get playlistStream => playlistList.stream;
   Function(List<PlayList>) get playlistSink => playlistList.sink.add;
 
+  /// This will kill the playlist stream
   dispose(){
     playlistList?.close();
   }
 
-  Future<void> init()async{
+  /// Initialize the playlist stream
+  void init(){
+    // This is important in order to avoid the app crash
     playlistSink([]);
   }
 
+  /// This will get all playlist in the channel, with its name, 
+  /// description, thumbnails, and the playlist ID
   Future<void> queryPlaylist() async{
 
     final response = await http.get(playlistYTUrl);
@@ -59,16 +68,20 @@ class MusicProvider {
     playlistSink(playlist);
   }
 
+  /// This will load all music in a playlist that match with [playlistID]
   Future<List<MusicModel>> loadMusicList(String playlistID) async {
     
-    final url = "${this.url}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=30";
+    final url = "${MusicProvider.URL}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=30";
     
     final res = await http.get(url);
     final Map<String, dynamic> decoded = json.decode(res.body);
 
+    // This will clear the stream every time a request is made, in order to avoid
+    // repetitions in the elements or some bugs.
     playElements.clear();
     playElements.addAll(List<String>.from(decoded["items"].map((music)=>music["snippet"]["resourceId"]["videoId"])));
 
+    // 
     return List<MusicModel>.from(decoded["items"].map((music){
       return new MusicModel(
         description: music["snippet"]["description"],
@@ -76,6 +89,6 @@ class MusicProvider {
         id: music["snippet"]["resourceId"]["videoId"],
         image: music["snippet"]["thumbnails"]["default"]["url"]
       );
-    })).toList();
+    }));
   }
 }

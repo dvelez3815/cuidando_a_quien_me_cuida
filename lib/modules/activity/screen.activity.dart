@@ -143,6 +143,8 @@ class _ActividadesState extends State<Actividades>{
           })
         ));
 
+        content.add(SizedBox(height: 50.0,));
+
         return Column(
           children: content,
         );

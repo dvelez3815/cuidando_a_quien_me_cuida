@@ -20,7 +20,6 @@ class _WaterScreenState extends State<WaterScreen> {
   @override
   void initState() { 
     super.initState();
-    widget._provider.init();
   }
 
   @override
