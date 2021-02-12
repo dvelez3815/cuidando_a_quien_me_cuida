@@ -24,14 +24,19 @@ class Comida {
     id = item['id'];
     nombre = item['nombre'];
     preparacion = item['preparacion'];
-    ingredientes = List<String>.from(jsonDecode(item['ingredientes'] ?? "[]").map((i)=>i['title']));
+    try {
+      ingredientes = List<String>.from(jsonDecode(item['ingredientes'] ?? "[]").map((i)=>i['title']));
+    }catch(error){
+      print(error);
+      ingredientes = List<String>.from(jsonDecode(item['ingredientes'] ?? "[]"));
+    }
     urlImagen = item['urlImagen'];
   }
 
   Map<String, dynamic> toJson() => {
     "nombre":nombre,
     "preparacion":preparacion,
-    "ingredientes": jsonEncode(ingredientes ?? []),
+    "ingredientes": jsonEncode(ingredientes.map((String i)=>{"title": i}).toList() ?? []),
     "urlImagen":urlImagen,
   };
 

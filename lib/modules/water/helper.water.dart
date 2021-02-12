@@ -1,10 +1,7 @@
 // This is the callback that will be executed when the start alarm
 // is notifying. It needs to be a high order function in order to
 // be exceuted correctly
-import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/alarms/provider.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/water/provider.water.dart';
@@ -23,11 +20,26 @@ import 'package:utm_vinculacion/modules/water/provider.water.dart';
 // 
 // Veces que insultó al creador del paquete de alarmas: 12
 
-const REMINDER_ALARM_ID = -1999;
+const MORNIGN_REMINDER_ALARM_ID = -1999;
+const MIDDAY_REMINDER_ALARM_ID = -2000;
+const FIRST_REMINDER_ALARM_ID = -2001;
+const LAST_REMINDER_ALARM_ID = -2001;
+
+/// This callback is used only to activate other alarms, do not
+/// use it in an AlarmProvider object because it's not designed
+/// to show any alert or message in screen, it just trigger other
+/// alarms to reming when to drink water
+Future<void> startCallback() async {  
+  final model = WaterProvider().model;
+
+  // this restart all progress
+  model.progress = 0.0;
+}
+
 
 /// This callback is used to notify to user about when he/she needs
 /// to drink water. DO NOT USE IT OUTSIDE OF THIS MODULE.
-Future<void> _reminderCallback(int id) async {
+Future<void> reminderCallback(int id) async {
   final alarm = await DBProvider.db.getAlarma(id);
 
   if(alarm == null) return;
@@ -69,47 +81,4 @@ Future<void> _reminderCallback(int id) async {
     payload: alarm.id.toString()
   );
 
-}
-
-/// This callback is only for the first alarm in the reminder.
-/// Do not use it in another part of the app 'cause it will
-/// case bugs with alarms
-Future<void> startRoutineCallback(int id) async {
-
-  final alarm = await DBProvider.db.getAlarma(id);
-
-  if(alarm == null) return;
-
-  final localNotification = FlutterLocalNotificationsPlugin();
-  await localNotification.show(
-    alarm.id, alarm.title, alarm.description, 
-    NotificationDetails(
-      android: AlarmProvider.androidChannel, 
-      iOS: AlarmProvider.iOSChannel
-    ),
-    payload: alarm.id.toString()
-  );
-
-  await AlarmProvider.playSong();
-
-  // Creating alarms for the rest of the day
-  final model = WaterProvider().model;
-
-  final reminder = new AlarmModel(
-    DateTime.now().weekday, TimeOfDay.now(),
-    "¡Bebe un poco de agua!", "Recuerda mantenerte hidratado",
-    isMinute: true, interval: model.periodInMinutes, id: REMINDER_ALARM_ID
-  );
-
-  // TODO: make sure startAt parameter is right
-  await reminder.save(activate:()async{
-    await AndroidAlarmManager.periodic(
-      Duration(minutes: model.periodInMinutes), // It will notify us every X minutes
-      reminder.id,  // It's always the same ID
-      _reminderCallback, // It is our tuned callback
-      exact: true,
-      rescheduleOnReboot: true,
-      startAt: DateTime.now()
-    );
-  });
 }

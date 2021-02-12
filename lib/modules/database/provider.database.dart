@@ -62,6 +62,11 @@ class DBProvider {
     }
 
     _database = await initDB();
+
+    if(!UserPreferences().areWaterAlarmsCreated){
+      await loadWaterData();
+    }
+
     return _database;
   }
 
@@ -387,18 +392,18 @@ class DBProvider {
   Future<bool> nuevaComida(Comida comida) async {
 
     final db = await database;
-    final res1 = await db.insert("Comida", comida.toJson()); 
+    final response = await db.insert("Comida", comida.toJson()); 
     
     await getComidas();
 
-    return res1 > 0;
+    return response > 0;
   }
 
   Future<void> getComidas() async {
     final db = await database;
-    List<Map<String, dynamic>> res = await db.query("Comida");
+    List<Map<String, dynamic>> res = await db.query("Comida", orderBy: "nombre");
     
-    comidaSink(List<Comida>.from(res.map((f)=>Comida.fromJson(f)).toList()));
+    comidaSink(List<Comida>.from(res.map((f)=>Comida.fromJson(f))));
   }
 
   Future<bool> storeWater(WaterModel water) async {

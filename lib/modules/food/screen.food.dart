@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
+import 'package:utm_vinculacion/widgets/components/widget.searchBar.dart';
 
 import 'model.food.dart';
 
@@ -16,10 +19,19 @@ class Recetas extends StatefulWidget {
 
 class _RecetasState extends State<Recetas> {
 
+
+  final _elementsStream = new StreamController<List<String>>.broadcast();
+
   @override
   void initState() {
     widget.dbProvider.getComidas();
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    _elementsStream?.close();
+    super.dispose();
   }
 
   @override
@@ -29,7 +41,7 @@ class _RecetasState extends State<Recetas> {
       body: Column(
         children: [
           getHeader(context, "RECETAS"),
-          Expanded(child: _listaContenido()),
+          _listaContenido(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -40,19 +52,35 @@ class _RecetasState extends State<Recetas> {
   }
 
   Widget _listaContenido(){
-    return ListView(
-      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-      children: <Widget>[
-        StreamBuilder(
-          stream: widget.dbProvider.comidaStream,
-          builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
+    return StreamBuilder(
+      stream: widget.dbProvider.comidaStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Comida>> snapshot){
+        
+        if(!snapshot.hasData) return Center(child: CircularProgressIndicator());
+        if(snapshot.data.isEmpty) return sinDatos();
+
+        final List<Widget> widgets = new List<Widget>();
+
+        widgets.add(
+          SearchBar(
+            elements: snapshot.data.map((i)=>i.nombre).toList(), 
+            sink: _elementsStream.sink.add,
+          )
+        );
+
+        return StreamBuilder(
+          stream: _elementsStream.stream,
+          initialData: List<String>.from(snapshot.data.map((i)=>i.nombre)),
+          builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot2){
             
-            if(!snapshot.hasData) return Center(child: CircularProgressIndicator());
-            if(snapshot.data.isEmpty) return sinDatos();
+            List<Comida> search = snapshot.data.where(
+              (element) => snapshot2.data.contains(element.nombre)
+            ).toList();
 
-            final List<Widget> widgets = new List<Widget>();
+            // Removing all elements to refill with the search ones. It doesn't delete the search bar
+            widgets.removeRange(1, widgets.length);
 
-            widgets.addAll(snapshot.data.map((Comida item)=>Column(
+            widgets.addAll(search.map((Comida item)=>Column(
               children: [
                 _getFoodTile(item),
                 Divider()
@@ -64,12 +92,23 @@ class _RecetasState extends State<Recetas> {
             // the last tile has a little problem to be showed
             widgets.add(SizedBox(height: 50.0));
 
-            return Column(
-              children: widgets,
+            return Expanded(
+              child: Column(
+                children: [
+                  widgets[0],
+                  SizedBox(height: 20.0),
+                  Expanded(
+                    child: ListView(
+                      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+                      children: widgets.length>1?widgets.sublist(1):[sinDatos(message: "Comida no encontrada")],
+                    ),
+                  ),
+                ],
+              ),
             );
           },
-        ),
-      ],
+        );
+      },
     );
   }
 

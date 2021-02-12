@@ -1,14 +1,9 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 
-import 'helper.water.dart';
-
-// TODO: hacer la creación de las alarmas algo dinámico. De momento
 // cuando se edita el tamaño del vaso o el objetivo diario, estas 
 // permanecen intactas, es más, habrán bugs.
 
@@ -113,46 +108,6 @@ class WaterProvider {
   }
 
   Future<void> storageInDB({WaterModel water}) async => await this._dbProvider.storeWater(water ?? this.model);
-
-  Future<void> enableAlarms()async{
-    
-    // IMPORTANT: This alarm model does not work with the same
-    // callback that activity models, it has its own callback
-    // defined at the top of this file.
-    final startAlarm = new AlarmModel(
-      DateTime.now().weekday, TimeOfDay.now(), 
-      "Tomar agua", "Bebe un poco de agua", 
-      interval: 1, id: START_ALARM_ID
-    );
-
-    await startAlarm.save(activate: ()async{
-      await AndroidAlarmManager.periodic(
-        Duration(days: 1), // It will notify us every day
-        startAlarm.id, // It's the same ID always
-        startRoutineCallback, // It is our tuned callback
-        exact: true,
-        rescheduleOnReboot: true
-      );
-    });
-
-    this.model.isActive = true;
-    await this._dbProvider.updateWater({
-      "active": 1
-    }, this.model.id);
-  }
-
-  Future<void> destroyAlarms()async{
-    final alarmStart = await DBProvider.db.getAlarma(START_ALARM_ID);
-    final alarmReminders = await DBProvider.db.getAlarma(REMINDER_ALARM_ID);
-
-    await alarmStart.delete();
-    await alarmReminders.delete();
-
-    this.model.isActive = false;
-    await this._dbProvider.updateWater({
-      "active": 0
-    }, this.model.id);
-  }
 
   int timesToDrinkWater({double maxValueInLts}) {
     return (maxValueInLts ?? this.model.goal) ~/ (this.model.glassSize / 1000);

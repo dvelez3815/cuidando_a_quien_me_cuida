@@ -34,6 +34,11 @@ class UserPreferences{
     _prefs.setDouble('water_progress', lts);
   }
 
+  set areWaterAlarmsCreated(bool value) {
+    _prefs.setBool('water_alarms', value);
+  }
+
+  bool get areWaterAlarmsCreated => _prefs.getBool('water_alarms') ?? false;
   bool get darkMode => _prefs.getBool('dark_mode');
   Stream<bool> get darkStream => darkModeController.stream;
   double get waterProgress => _prefs.getDouble("water_progress");

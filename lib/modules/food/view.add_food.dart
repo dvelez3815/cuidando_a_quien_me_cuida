@@ -147,7 +147,7 @@ class _AddPlatosState extends State<AddPlatos> {
     widget.descriptionController.text = food.preparacion;
     widget.titleController.text = food.nombre;
     
-    widget.ingredientes.addAll(food.ingredientes.map((String i)=><String, dynamic>{"title": i}).toList());
+    widget.ingredientes.addAll(food.ingredientes.map((String i)=><String, dynamic>{"title": i}));
 
     setState((){});
   }
@@ -155,13 +155,12 @@ class _AddPlatosState extends State<AddPlatos> {
   Future<void> _saveAction()async{
 
     if(updateData.isNotEmpty){
-      Comida food = updateData['model_data'];
-      await widget.dbProvider.eliminarComida(food);
+      await widget.dbProvider.eliminarComida(updateData['model_data']);
     }
 
     // The food we're gonna save
     Comida food = new Comida(
-      ingredientes: List<String>.from(widget.ingredientes.map((e) => e["title"]).toList()),
+      ingredientes: List<String>.from(widget.ingredientes.map((e) => e["title"])),
       nombre: widget.titleController.text ?? "Sin nombre",
       preparacion: widget.descriptionController.text ?? "Sin descripción",
       urlImagen: "assets/imagenes/recetas.jpg"

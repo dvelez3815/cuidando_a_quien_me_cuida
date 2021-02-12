@@ -10,8 +10,6 @@ import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'model.water.dart';
 import 'provider.water.dart';
 
-// TODO: Remember that you need to provide the 'waterReminder' key in json from DB
-
 class WaterPreferences extends StatefulWidget {
 
   final _waterLtsController = new TextEditingController();
@@ -107,44 +105,6 @@ class _WaterPreferencesState extends State<WaterPreferences> {
       }
     );
   }
-
-  Widget _getAlarmRemainder() {
-    return SwitchListTile(
-      value: this.alarmsActive ?? false,
-      onChanged: (value)=>setState((){this.alarmsActive = value;}),
-      title: Text("Alarmas"),
-      subtitle: Text("¿Desea que se le recuerde cada vez que deba tomar agua?"),
-      secondary: Icon((this.alarmsActive ?? false)? Icons.notifications_active:Icons.notifications_off)
-    );
-  }
-
-  // Widget _getAlarmsSettings() {
-  //   return StreamBuilder<WaterModel>(
-  //     stream: widget._provider.modelStream,
-  //     builder: (context, AsyncSnapshot<WaterModel> snapshot) {
-
-  //       if(!snapshot.hasData){
-  //         return Center(child: CircularProgressIndicator());
-  //       }
-
-  //       return Column(
-  //         children: [
-  //           ListTile(
-  //             leading: Text("${snapshot.data.startTime.format(context)}"),
-  //             title: Text("Hora de inicio"),
-  //             subtitle: Text("A esta hora sonará el primer recordatorio"),
-  //           ),
-  //           ListTile(
-  //             leading: Text("${snapshot.data.endTime.format(context)}"),
-  //             title: Text("Hora de finalización"),
-  //             subtitle: Text("Hora de la última alarma"),
-  //           ),
-  //         ],
-  //       );
-  //     }
-  //   );
-  // }
-
 
   void _editGlassEvent(){
     showDialog(

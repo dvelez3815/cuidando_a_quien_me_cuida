@@ -99,13 +99,13 @@ class CreateContactView extends StatelessWidget {
   }
 
   String phoneValidator(String content) {
-    if(!regExp.hasMatch(content)) {
-      this._scaffoldKey.currentState.showSnackBar(new SnackBar(
-        content: Text("El número de teléfono que ingresó no es válido"),
-      ));
-      return "Número de teléfono inválido";
-    }
-    print(content);
+    // if(!regExp.hasMatch(content)) {
+    //   this._scaffoldKey.currentState.showSnackBar(new SnackBar(
+    //     content: Text("El número de teléfono que ingresó no es válido"),
+    //   ));
+    //   return "Número de teléfono inválido";
+    // }
+    // print(content);
     return null;
   }
 

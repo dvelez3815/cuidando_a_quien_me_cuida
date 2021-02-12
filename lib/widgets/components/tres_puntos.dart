@@ -88,8 +88,8 @@ void mostrarAlerta(mensaje, context, {titulo = "Mensaje"}){
   });
 }
 
-ListTile sinDatos()=>ListTile(
+ListTile sinDatos({String message})=>ListTile(
   leading: Icon(Icons.do_not_disturb_alt),
-  title: Text('No hay datos que cargar'),
+  title: Text(message ?? 'No hay datos que cargar'),
   trailing: Icon(Icons.speaker_notes_off),
 );
