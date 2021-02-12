@@ -3,11 +3,11 @@
 ### Proyecto de vinculación
 
 ## Integrantes
-- Garcia Arteaga Joel Junior
 - Franco Cantos Jandry Hernaldo
-- Jair
-- 
+- Garcia Arteaga Joel Junior
+- Mendoza Macias Yahir
 - Loor Zambrano Bernis Alfredo
+- Santillan ganchozo
 - Palacios Balderramo Emerson Javier
 - Velez Cedeño Maria José
 - Velez Zambrano Darwin Xavier
