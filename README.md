@@ -3,18 +3,22 @@
 ### Proyecto de vinculación
 
 ## Integrantes
-- asdasd
-- asdasd
-- asdasd
-- asdasd
+- Garcia Arteaga Joel Junior
+- Franco Cantos Jandry Hernaldo
+- Jair
+- 
+- Loor Zambrano Bernis Alfredo
+- Palacios Balderramo Emerson Javier
+- Velez Cedeño Maria José
+- Velez Zambrano Darwin Xavier
 
-### Tutor: blabla
-### Coordinador: blabla
 
+### Tutor: Ing. SANTANA CAMPOVERDE FABRICIO JAVIER
+### Coordinadora: Ing. ZAMBRANO SOLORZANO ELBA TATIANA
 
-## Nombre de la app
+## Cuidando a quien me cuida
 
-Esta app tiene como objetivo blablabla
+Cuidado a quien me cuida es una aplicativo que tiene como objetivo el de reducir el estres de los cuidadores, mediante la realiación de un control sobre su dieta y control sobre los ejercicios que realiza
 
 # Procesos  
 ## Agregar una nueva actividad  
