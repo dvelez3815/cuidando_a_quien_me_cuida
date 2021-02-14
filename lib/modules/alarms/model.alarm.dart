@@ -45,6 +45,7 @@ class AlarmModel {
     if(activate != null) await activate();
     else  await this.activate();
 
+    await db.deleteAlarm(this.id);
     return await db.nuevaAlarma(this);
   }
 

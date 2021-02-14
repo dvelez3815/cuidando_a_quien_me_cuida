@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences{
 
-  static final UserPreferences _userPrefs = new UserPreferences._internal();
+  static UserPreferences _userPrefs;
 
   StreamController<bool> darkModeController = new StreamController<bool>();
 
@@ -13,6 +13,9 @@ class UserPreferences{
   }
 
   factory UserPreferences(){
+    if(_userPrefs == null) {
+      _userPrefs = new UserPreferences._internal();
+    }
     return _userPrefs;
   }
 
@@ -23,6 +26,8 @@ class UserPreferences{
   initPrefs() async {
     this._prefs = await SharedPreferences.getInstance();
   }
+
+  bool get isInitialized => this._prefs != null;
 
 
   set darkMode(bool value) {
@@ -35,10 +40,10 @@ class UserPreferences{
   }
 
   set areWaterAlarmsCreated(bool value) {
-    _prefs.setBool('water_alarms', value);
+    _prefs.setBool('water_reminders', value);
   }
 
-  bool get areWaterAlarmsCreated => _prefs.getBool('water_alarms') ?? false;
+  bool get areWaterAlarmsCreated => _prefs.getBool('water_reminders') ?? false;
   bool get darkMode => _prefs.getBool('dark_mode');
   Stream<bool> get darkStream => darkModeController.stream;
   double get waterProgress => _prefs.getDouble("water_progress");

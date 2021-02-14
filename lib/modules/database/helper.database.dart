@@ -2,9 +2,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/water/helper.water.dart' as waterHelper;
-import 'package:utm_vinculacion/modules/water/provider.water.dart';
 
 /// Loads all default data defined in database_script.sql file and
 /// saves it in [db] what is an instance of database
@@ -21,50 +19,14 @@ Future<void> defaultData(Database db) async {
 
 /// Loads default data for water module
 Future<void> loadWaterData()async{
-  final model = WaterProvider().model;
 
   // This restart the water reminder object and all streams around it
   await AndroidAlarmManager.periodic(
     Duration(days: 1), 
     waterHelper.FIRST_REMINDER_ALARM_ID, 
-    waterHelper.startCallback
+    waterHelper.startCallback,
+    startAt: new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0).add(Duration(days: 1))
   );
-
-  await AndroidAlarmManager.periodic(
-    Duration(days: 1), 
-    waterHelper.MORNIGN_REMINDER_ALARM_ID, 
-    waterHelper.reminderCallback
-  );
-
-  final AlarmModel startAlarm = new AlarmModel(
-    DateTime.now().weekday,
-    TimeOfDay(hour: 7, minute: 0),
-    "¡Recuerda mantenerte hidratado!",
-    "Bebe un vaso de agua",
-    interval: 1, id: waterHelper.MORNIGN_REMINDER_ALARM_ID
-  );
-
-  final AlarmModel middayAlarm = new AlarmModel(
-    DateTime.now().weekday,
-    TimeOfDay(hour: 13, minute: 0),
-    "¡Recuerda mantenerte hidratado!",
-    "Bebe un vaso de agua",
-    interval: 1, id: waterHelper.MIDDAY_REMINDER_ALARM_ID
-  );
-
-  final AlarmModel lastAlarm = new AlarmModel(
-    DateTime.now().weekday,
-    TimeOfDay(hour: 13, minute: 0),
-    model.howManyGlassesLeft > 0? "¡Aún puedes alcazar tu meta diaria!":
-        "¡Felicidades! ¡Cumpliste tu objetivo diario!",
-    model.howManyGlassesLeft > 0? "Te faltan ${model.howManyGlassesLeft} vasos de agua":
-        "¡Has bebido ${model.goal} litros de agua hoy!",
-    interval: 1, id: waterHelper.LAST_REMINDER_ALARM_ID
-  );
-
-  await startAlarm.save();
-  await middayAlarm.save();
-  await lastAlarm.save();
 }
 
 /// Initialize an instance of the database [db] with the [version]

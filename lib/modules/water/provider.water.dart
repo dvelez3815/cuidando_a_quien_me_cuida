@@ -15,7 +15,7 @@ class WaterProvider {
 
   Stream<WaterModel> get modelStream => _modelStreamController.stream;
 
-  WaterModel get model => _modelStreamController.value ?? _getDefaultModel();
+  WaterModel get model => _modelStreamController.value;
 
   dispose(){
     _modelStreamController?.close();
@@ -103,10 +103,15 @@ class WaterProvider {
     UserPreferences().waterProgress = this.model.progress;
   }
 
-  void restoreProgress() {    
+  Future<void> restoreProgress() async {
+
+    if(this.model == null) await this.init();
+
     this.model.progress = 0.0;
-    this._modelSink(this.model);
+    this._modelStreamController.sink.add(this.model);
     UserPreferences().waterProgress = 0;
+
+    print("process restored");
   }
 
   Future<void> storageInDB({WaterModel water}) async => await this._dbProvider.storeWater(water ?? this.model);

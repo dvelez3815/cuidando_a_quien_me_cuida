@@ -11,18 +11,20 @@ import 'package:utm_vinculacion/modules/water/provider.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 import 'modules/alarms/provider.alarm.dart';
 
+import 'modules/database/helper.database.dart';
 import 'routes/routes.dart' as rutas;
 
 void main() async {
   // Esto es para que los widgets tengan prioridad en la carga
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Cache memory for non critical data, like theme, water progress, etc.
+  final UserPreferences pref = new UserPreferences();
+  await pref.initPrefs(); // user preferences
   
   // This will initialize all application data like name, texts, 
   // colors, etc.
   final AppSettings appSettings = new AppSettings();
-
-  // Cache memory for non critical data, like theme, water progress, etc.
-  final UserPreferences pref = new UserPreferences();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -30,13 +32,19 @@ void main() async {
     ),
   );
   
-  await pref.initPrefs(); // user preferences
-  await WaterProvider().init(); // water settings
+  // WARNING: the way and order next methods are called matters! Be careful if
+  // you want to change it
   await DotEnv().load('.env'); // environment variables
-
   await AndroidAlarmManager.initialize(); // To create alarms
+  await WaterProvider().init(); // water settings
   await appSettings.initState(); // application settings
   MusicProvider().init(); // It does nothing :| but it's important
+
+  // TODO: complete this
+  if(!UserPreferences().areWaterAlarmsCreated){
+    await loadWaterData();
+    UserPreferences().areWaterAlarmsCreated = true;
+  }
 
   runApp(MyApp());
 }

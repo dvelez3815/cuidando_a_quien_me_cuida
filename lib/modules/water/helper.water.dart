@@ -1,10 +1,16 @@
 // This is the callback that will be executed when the start alarm
 // is notifying. It needs to be a high order function in order to
 // be exceuted correctly
+import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:utm_vinculacion/modules/alarms/provider.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/modules/water/provider.water.dart';
+import 'package:utm_vinculacion/user_preferences.dart';
+import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
+
+import 'package:utm_vinculacion/modules/water/helper.water.dart' as waterHelper;
 
 // Dear future user, please don't try to optimize this code,
 // it's a disaster, and it's so because Dart has no access to
@@ -23,17 +29,55 @@ import 'package:utm_vinculacion/modules/water/provider.water.dart';
 const MORNIGN_REMINDER_ALARM_ID = -1999;
 const MIDDAY_REMINDER_ALARM_ID = -2000;
 const FIRST_REMINDER_ALARM_ID = -2001;
-const LAST_REMINDER_ALARM_ID = -2001;
+const LAST_REMINDER_ALARM_ID = -2002;
 
 /// This callback is used only to activate other alarms, do not
 /// use it in an AlarmProvider object because it's not designed
 /// to show any alert or message in screen, it just trigger other
 /// alarms to reming when to drink water
-Future<void> startCallback() async {  
+Future<void> startCallback() async { 
+
+  if(!(UserPreferences().isInitialized)) await UserPreferences().initPrefs();
+
+  if(WaterProvider().model == null) {
+    await WaterProvider().init();
+  }
+
   final model = WaterProvider().model;
 
+  final AlarmModel startAlarm = new AlarmModel(
+    DateTime.now().weekday,
+    TimeOfDay(hour: 7, minute: 0),
+    "¡Recuerda mantenerte hidratado!",
+    "Bebe un vaso de agua",
+    interval: 1, id: waterHelper.MORNIGN_REMINDER_ALARM_ID
+  );
+
+  final AlarmModel middayAlarm = new AlarmModel(
+    DateTime.now().weekday,
+    TimeOfDay(hour: 13, minute: 0),
+    "¡Recuerda mantenerte hidratado!",
+    "Bebe un vaso de agua",
+    interval: 1, id: waterHelper.MIDDAY_REMINDER_ALARM_ID
+  );
+
+  final AlarmModel lastAlarm = new AlarmModel(
+    DateTime.now().weekday,
+    TimeOfDay(hour: 19, minute: 0),
+    model.howManyGlassesLeft > 0? "¡Aún puedes alcazar tu meta diaria!":
+        "¡Felicidades! ¡Cumpliste tu objetivo diario!",
+    model.howManyGlassesLeft > 0? "Te faltan ${model.howManyGlassesLeft} vasos de agua":
+        "¡Has bebido ${model.goal} litros de agua hoy!",
+    interval: 1, id: waterHelper.LAST_REMINDER_ALARM_ID
+  );
+
+  await startAlarm.save();
+  await middayAlarm.save();
+  await lastAlarm.save();
+  
   // this restart all progress
-  model.progress = 0.0;
+  await WaterProvider().restoreProgress();
+  print("All services has been restored");
 }
 
 

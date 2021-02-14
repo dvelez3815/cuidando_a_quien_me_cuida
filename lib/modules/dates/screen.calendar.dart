@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
-import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 /// Bueno, ya que esta cosa es la parte mas compleja y confusa del proyecto, vamos
 /// a tratar de documentarla
@@ -22,6 +21,8 @@ import 'package:utm_vinculacion/widgets/components/tres_puntos.dart';
 
 class CalendarScreen extends StatefulWidget {
   final double pWidth = 392.7; // WTF!!! Que carajos es esto? Parece ser el ancho
+
+  final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
   /// Esta asumo que es la animacion de cuando el calendario se expande,
   /// de todas formas fuera bueno que la variable tuviese un nombre mas representativo
@@ -107,6 +108,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     double calendarWidth = MediaQuery.of(context).size.width * 0.85;
 
     return Scaffold(
+      key: widget._scaffoldState,
       body: Column(
         children: [
           getHeader(context, "CALENDARIO"),
@@ -471,16 +473,19 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
                     int dSemana = actual.weekday;
                     
-                    String listadoActividad = "";
+                    // String listadoActividad = "";
 
-                      List<AlarmModel> actividades  = new List<AlarmModel>();
+                    List<AlarmModel> actividades  = new List<AlarmModel>();
 
-                      actividades.addAll(await _db.eventsByWeekday(dSemana));
+                    actividades.addAll(await _db.eventsByWeekday(dSemana));
 
-                      actividades.forEach((element) {
-                        listadoActividad = listadoActividad + element.title + "\n";
-                      });
-                      mostrarAlerta(listadoActividad, context, titulo: "Actividades");
+                      // actividades.forEach((element) {
+                      //   listadoActividad = listadoActividad + element.title + "\n";
+                      // });
+
+                    _showEventsAlert(context, actividades, dia);
+
+                      // mostrarAlerta(listadoActividad, context, titulo: "Actividades");
                     
                   },
                   child: Text( //Rojo si tiene actividades
@@ -538,5 +543,56 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
   bool areYearsSame(DateTime a, DateTime b) {
     return a.year == b.year;
+  }
+
+  void _showEventsAlert(BuildContext context, List<AlarmModel> actividades, int day) {
+
+    widget._scaffoldState.currentState.showBottomSheet((BuildContext context){
+
+
+      final List<Widget> elements = new List<Widget>();
+
+      elements.add(ListTile(
+        leading: Icon(Icons.date_range),
+        title: Text(
+          "Mostrando eventos del dia "
+          "${DateFormat("MMMM dd, yyyy").format(DateTime(DateTime.now().year, DateTime.now().month, day))}",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ));
+
+      if(actividades.isEmpty) {
+        elements.add(
+          ListTile(
+            title: Text("No hay eventos para este día"),
+          )
+        );
+      }
+
+      else{
+        elements.addAll(actividades.map((alarm)=>ListTile(
+          leading: Icon(Icons.alarm),
+          title: Text(alarm.title),
+          trailing: Text(alarm.time.format(context)),
+        )));
+      }
+
+      elements.add(
+        FlatButton(
+          onPressed: ()=>Navigator.of(context).pop(),
+          child: Text("Aceptar"),
+          color: Theme.of(context).accentColor,
+          textColor: Theme.of(context).canvasColor,
+        )
+      );
+
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: elements
+        ),
+      );
+    }, elevation: 2.0, backgroundColor: Colors.grey[100]);
+
   }
 }

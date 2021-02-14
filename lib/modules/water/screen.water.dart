@@ -58,6 +58,10 @@ class _WaterScreenState extends State<WaterScreen> {
       children: [
         _getProgressComponent(size),
         _getWaterGlassComponent(),
+        // FlatButton(
+        //   child: Icon(Icons.ac_unit),
+        //   onPressed: ()=>WaterProvider().restoreProgress(),
+        // )
       ],
     );
   }

@@ -63,11 +63,6 @@ class DBProvider {
 
     _database = await initDB();
 
-    if(!UserPreferences().areWaterAlarmsCreated){
-      await loadWaterData();
-      UserPreferences().areWaterAlarmsCreated = true;
-    }
-
     return _database;
   }
 
@@ -176,9 +171,13 @@ class DBProvider {
     final res = await db.delete("Alarma", where: "id=?", whereArgs: [id]);
 
     if(res > 0){
-      final toDelete = alarmas.firstWhere((element) => element.id==id);
-      alarmas.remove(toDelete);
-      alarmSink(alarmas); // this updates all dependencies
+      final toDelete = alarmas.firstWhere((element) => element.id==id, orElse: ()=>null);
+      
+      if(toDelete != null){
+        alarmas.remove(toDelete);
+        alarmSink(alarmas); // this updates all dependencies        
+      }
+
     }
 
     return res > 0;
@@ -370,22 +369,16 @@ class DBProvider {
   Future<List<AlarmModel>> eventsByWeekday(int weekday) async {
     final db = await database;
 
-    List<AlarmModel> events = new List<AlarmModel>();
+    List<AlarmModel> raw = (await db.rawQuery(
+      'select * from alarma where active=? and day=? order by time', 
+      [1, weekday])
+    ).map((i)=>AlarmModel.readFromDB(i)).toList();
 
-    List<AlarmModel> raw = (await db.rawQuery('select * from alarma where active=?', [1])).map((i)=>AlarmModel.readFromDB(i)).toList();
-
-    raw.forEach((element) {
-      if(element.dayToNotify == weekday){
-        events.add(element);
-      }
-    });
-
-    return events;    
+    return raw;    
   }
 
 
   ///////////////////////////////// Food /////////////////////////////////
-  ///
   Future<int> eliminarComida(Comida food) async {
     final db = await database;
     final res = await db.delete('Comida', where: "id=?", whereArgs: [food.id]);
