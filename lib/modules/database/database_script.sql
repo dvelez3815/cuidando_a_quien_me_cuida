@@ -35,7 +35,25 @@ values
 (11, 'Crucigramas', 'Los juegos con palabras también son de gran ayuda, ya que el lenguaje es un elemento clave en el funcionamiento de los "engranajes" cerebrales.',
     '[lunes, miercoles, viernes]', '13:00', 0, 'mental', '[]'),
 (12, 'Sudokus', 'Los sudokus se popularizaron hace años y se han convertido en una presencia permanente en muchas publicaciones, algo así como la versión numérica de las palabras cruzadas.',
-    '[martes, jueves, sabado]', '17:00', 0, 'mental', '[]');
+    '[martes, jueves, sabado]', '17:00', 0, 'mental', '[]'),
+(13, 'Juego De Números', 'Permite trabajar las parte cognitiva de identificar los números, además de reforzar la estabilidad, movilidad y fuerza de tronco y piernas a nivel físico.',
+    '[lunes, miercoles, viernes]', '9:00', 0, 'mental', '[]'),
+(14, 'Juego De La Canasta', 'Se estimula a nivel cognitivo la memoria, como el reconocimiento de colores y se trabaja la parte de piernas a nivel físico.',
+    '[lunes, miercoles, viernes]', '14:00', 0, 'mental', '[]'),    
+(15, 'Juego De Movimientos', 'Se estimula la memoria del aspecto cognitivo y la amplitud articular en el aspecto físico.',
+    '[lunes, miercoles, viernes]', '15:00', 0, 'mental', '[]'),    
+(16, 'Juego De La Baraja', 'Con esta actividad se trabaja la atención divida y selectiva.',
+    '[martes, jueves, sabado]', '15:00', 0, 'mental', '[]'),    
+(17, 'Juego De Encuentra A La Reina', 'Se trabaja y estimula la atención sostenida.',
+    '[martes, jueves, sabado]', '16:00', 0, 'mental', '[]'),        
+(18, 'Juego De Domina El Dominó', 'Se estimulan las funciones ejecutivas, particularmente las memorias de trabajo.',
+    '[martes, jueves, sabado]', '17:00', 0, 'mental', '[]'),
+(19, 'Juego Efecto Stroop', 'Se estimulan la inhibición y la atención.',
+    '[martes, jueves, sabado]', '18:00', 0, 'mental', '[]'),    
+(20, 'Juego De Lectura De Memoria', 'Se estimula la memoria audio verbal y la memoria de trabajo.',
+    '[martes, jueves, sabado]', '19:00', 0, 'mental', '[]'),        
+(21, 'Juego De Secuencias', 'Se estimulan el control mental, ampliando la retentiva de la persona.',
+    '[martes, jueves, sabado]', '20:00', 0, 'mental', '[]');
 
 
 insert into comida(id, nombre, urlImagen, preparacion, ingredientes)
