@@ -53,3 +53,5 @@ insert into procedimiento values
  ('***Instrucciones:*** Se le dice al paciente que diga una serie de números o palabras, luego que las haya dicho, se le pide que las vuelva a repetir en orden inverso, así sucesivamente aumentando la dificultad.  
  ***Observación:*** Se recomienda empezar con una serie de 3 números o palabras.',
  6,22);
+
+
