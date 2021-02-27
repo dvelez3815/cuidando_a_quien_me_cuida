@@ -92,37 +92,55 @@ values
 
 
 insert into procedimiento values
-('### Instrucciones:###  Se colocan los objetos con los números en el piso frente a la persona, esta tendrá que lanzar el dado y dependiendo del número que salga, deberá tocar dicho objeto.
- ### Observación:###  En caso de no poder agacharse a tocar los objetos, este tendrá que estar sentado alrededor de los mismos.',
+('### Instrucciones:
+Se colocan los objetos con los números en el piso frente a la persona, esta tendrá que lanzar el dado y dependiendo del número que salga, deberá tocar dicho objeto.
+ ### Observación:
+ En caso de no poder agacharse a tocar los objetos, este tendrá que estar sentado alrededor de los mismos.',
  6,13),
  ('### Instrucciones:
   Se debe sentar al paciente y colocarle en cada extremidad un pañuelo, luego se debe decir el nombre de un color y el paciente deberá alzar la extremidad que tenga ese color.
  ### Observación:
   Con más colores se posean, más difícil se podrá hacer la actividad.',
  7,14),
- ('### Instrucciones:###  Se colocan los pañuelos en una superficie (mesa, silla, entre otros), el cuidador tendrá que decir un color y el paciente deberá tomarlo y ponerlo dentro de la canasta, al final se le pregunta que colores se colocaron en la canasta.
- ### Observación:###  Con más colores se posean, más difícil se podrá hacer la actividad.',
+ ('### Instrucciones:   
+ Se colocan los pañuelos en una superficie (mesa, silla, entre otros), el cuidador tendrá que decir un color y el paciente deberá tomarlo y ponerlo dentro de la canasta, al final se le pregunta que colores se colocaron en la canasta.
+ ### Observación:   
+ Con más colores se posean, más difícil se podrá hacer la actividad.',
  8,15),
- ('### Instrucciones:###  Se deberá sentar al paciente y el cuidador/a deberá realizar una serie de movimientos como por ejemplo, alzar un brazo, aplaudir, girar la cabeza, entre otros (queda a creatividad del cuidador), y el paciente deberá repetirlos. Todo esto en un orden empezando con 3 movimientos y aumentado la dificultad poco a poco.
- ### Observación:###  Realizar movimientos en base a la movilidad del paciente.',
+ ('### Instrucciones:   
+ Se deberá sentar al paciente y el cuidador/a deberá realizar una serie de movimientos como por ejemplo, alzar un brazo, aplaudir, girar la cabeza, entre otros (queda a creatividad del cuidador), y el paciente deberá repetirlos. Todo esto en un orden empezando con 3 movimientos y aumentado la dificultad poco a poco.
+ ### Observación:   
+ Realizar movimientos en base a la movilidad del paciente.',
  9,16),
- ('### Instrucciones:###  Se procede a decirle que recuerde una carta al paciente, después se esconden las cartas en los vasos mostrándole donde va cada una y se comienzan a mover durante 30 segundos, finalmente se le pide que seleccione el vaso en donde está la carta mostrada al principio, o puede ir volteando los vasos en orden descendente o ascendente de las cartas.
- ### Observación:###  Se puede aumentar la dificultad pidiendo que recuerde las demás cartas.',
+ ('### Instrucciones:   
+ Se procede a decirle que recuerde una carta al paciente, después se esconden las cartas en los vasos mostrándole donde va cada una y se comienzan a mover durante 30 segundos, finalmente se le pide que seleccione el vaso en donde está la carta mostrada al principio, o puede ir volteando los vasos en orden descendente o ascendente de las cartas.
+ ### Observación:   
+ Se puede aumentar la dificultad pidiendo que recuerde las demás cartas.',
  10,17),
- ('### Instrucciones:###  Se toman 3 naipes y se le muestran al paciente donde uno de ellos será la reina de corazones (el naipe con la letra Q) y luego se comienza a revolver durante 30 segundos o más, al final se le pide que muestre donde se quedó la reina de corazones y sino adivina, se vuelve a repetir el proceso.
- ### Observación:###  Se trabaja y estimula la atención sostenida.',
+ ('### Instrucciones:   
+ Se toman 3 naipes y se le muestran al paciente donde uno de ellos será la reina de corazones (el naipe con la letra Q) y luego se comienza a revolver durante 30 segundos o más, al final se le pide que muestre donde se quedó la reina de corazones y sino adivina, se vuelve a repetir el proceso.
+ ### Observación:   
+ Se trabaja y estimula la atención sostenida.',
  11,18),
- ('### Instrucciones:###  Se colocan 5 fichas de dominó o más boca abajo en fila, luego se procede a mostrar la primera y se la vuelve a dejar como estaba, después se procede a mostrar la segunda y se le pregunta la ¿Cuántos puntos tenía la ficha anterior?, así sucesivamente hasta terminar de mostrar todas las fichas, en caso de que falle, vuelve a repetir el juego.
- ### Observación:###  Si quiere aumentar la dificultad, puede mostrar más de una ficha en orden y luego le pregunta el orden.',
+ ('### Instrucciones:   
+ Se colocan 5 fichas de dominó o más boca abajo en fila, luego se procede a mostrar la primera y se la vuelve a dejar como estaba, después se procede a mostrar la segunda y se le pregunta la ¿Cuántos puntos tenía la ficha anterior?, así sucesivamente hasta terminar de mostrar todas las fichas, en caso de que falle, vuelve a repetir el juego.
+ ### Observación:   
+ Si quiere aumentar la dificultad, puede mostrar más de una ficha en orden y luego le pregunta el orden.',
  12,19),
- ('### Instrucciones:###  Se muestran una a una las tarjetas al paciente y se le dice que mencione el color de la palabra, sin leer la palabra.
- ### Observación:###  Se puede invertir el juego pidiendo que diga lo escrito y no el color.',
+ ('### Instrucciones:   
+ Se muestran una a una las tarjetas al paciente y se le dice que mencione el color de la palabra, sin leer la palabra.
+ ### Observación:   
+ Se puede invertir el juego pidiendo que diga lo escrito y no el color.',
  13,20),
- ('### Instrucciones:###  Se le pedirá que recuerde la última palabra de cada frase dicha y se le procede a leer, una vez terminada la lectura, se le pregunta que palabra fue la última mencionada.  
- ### Observación:###  Si el ejercicio es muy fácil puede extender la lectura o pedirle al paciente.',
+ ('### Instrucciones:   
+ Se le pedirá que recuerde la última palabra de cada frase dicha y se le procede a leer, una vez terminada la lectura, se le pregunta que palabra fue la última mencionada.  
+ ### Observación:   
+ Si el ejercicio es muy fácil puede extender la lectura o pedirle al paciente.',
  14,21),
- ('### Instrucciones:###  Se le dice al paciente que diga una serie de números o palabras, luego que las haya dicho, se le pide que las vuelva a repetir en orden inverso, así sucesivamente aumentando la dificultad.  
- ### Observación:###  Se recomienda empezar con una serie de 3 números o palabras.',
+ ('### Instrucciones:   
+ Se le dice al paciente que diga una serie de números o palabras, luego que las haya dicho, se le pide que las vuelva a repetir en orden inverso, así sucesivamente aumentando la dificultad.  
+ ### Observación:   
+ Se recomienda empezar con una serie de 3 números o palabras.',
  15,22),
 ('1.	Sentado en una silla, inclina la espalda un poco hacia adelante y mantener los pies alineados con cadera y hombros.
 2.	Con la mano derecha intente tocar su oreja izquierda, pasando la mano por encima de la cabeza.
