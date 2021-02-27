@@ -7,22 +7,24 @@ import 'package:utm_vinculacion/widgets/components/header.dart';
 
 /// Bueno, ya que esta cosa es la parte mas compleja y confusa del proyecto, vamos
 /// a tratar de documentarla
-/// 
+///
 /// ACTUALIZACION:  Futuro desarrollador que se enfrente a esto, HUYA DE AQUI SOLDADO!!!
 ///                 Esto esta mas dificil de lo que uno piensa. Si no quiere sufrir traumas
-///                 de por vida y tener pesadillas por las noches le aconsejo que se aleje 
+///                 de por vida y tener pesadillas por las noches le aconsejo que se aleje
 ///                 de aqui, vaya a otra seccion del proyecto, no toque esto, no hable de
-///                 esto, es mas, por Dios, ni siquiera se le ocurra volver a pensar en 
+///                 esto, es mas, por Dios, ni siquiera se le ocurra volver a pensar en
 ///                 esto, olvide que existe.
-/// 
+///
 /// Contador de las veces que maldijo objetos inanimados por culpa de este
 /// archivo se muestra a continuacion:
 ///       contador -> 7
 
 class CalendarScreen extends StatefulWidget {
-  final double pWidth = 392.7; // WTF!!! Que carajos es esto? Parece ser el ancho
+  final double pWidth =
+      392.7; // WTF!!! Que carajos es esto? Parece ser el ancho
 
-  final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   /// Esta asumo que es la animacion de cuando el calendario se expande,
   /// de todas formas fuera bueno que la variable tuviese un nombre mas representativo
@@ -36,54 +38,72 @@ class CalendarScreen extends StatefulWidget {
   _CalendarScreenState createState() => _CalendarScreenState();
 }
 
-class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStateMixin{
-
+class _CalendarScreenState extends State<CalendarScreen>
+    with TickerProviderStateMixin {
   ValueChanged<bool> onExpansionChanged;
-  AnimationController _monthController; // Animation controller that handles the expand_more icon fading in/out event 
-  Animatable<Color> _arrowColorTween;   // Color tween for -> and <- icons
-  Animatable<Color> _monthColorTween;   // Color tween for expand_less icon
-  AnimationController _controller;      // Animation controller that handles the calendar expansion event and the expand_more icon rotation event
-  PageController pageController;        // PageController to handle the changing month views on click
-  double collapsedHeightFactor;         // The height of an individual week row
-  Animation<double> _iconTurns;         // Animation for the rotating expand_more/less icon
-  Animation<Color> _arrowColor;         // Color animation for the -> and <- arrows that change the month view
-  Animation<Color> _monthColor;         // Color animation for the ^ arrow that handles expansion of view
-  double activeRowYPosition;            // The y coordinate of the active week row
-  Animation<double> _anim;              // The animation for the changing height with the y coordinates in calendar expansion
-  List<Widget> calList;                 // The list that stores the week rows of the month
-  DateTime displayDate;                 // The date var that handles the changing months on click
-  DateTime showDate;                    // The date that is shown as Month , Year between the arrows
-  bool _expanded;                       // Boolean to handle calendar expansion
-  int activeRow;                        // The row that contains the current week withing the list of rows generated
+  AnimationController
+      _monthController; // Animation controller that handles the expand_more icon fading in/out event
+  Animatable<Color> _arrowColorTween; // Color tween for -> and <- icons
+  Animatable<Color> _monthColorTween; // Color tween for expand_less icon
+  AnimationController
+      _controller; // Animation controller that handles the calendar expansion event and the expand_more icon rotation event
+  PageController
+      pageController; // PageController to handle the changing month views on click
+  double collapsedHeightFactor; // The height of an individual week row
+  Animation<double>
+      _iconTurns; // Animation for the rotating expand_more/less icon
+  Animation<Color>
+      _arrowColor; // Color animation for the -> and <- arrows that change the month view
+  Animation<Color>
+      _monthColor; // Color animation for the ^ arrow that handles expansion of view
+  double activeRowYPosition; // The y coordinate of the active week row
+  Animation<double>
+      _anim; // The animation for the changing height with the y coordinates in calendar expansion
+  List<Widget> calList; // The list that stores the week rows of the month
+  DateTime
+      displayDate; // The date var that handles the changing months on click
+  DateTime
+      showDate; // The date that is shown as Month , Year between the arrows
+  bool _expanded; // Boolean to handle calendar expansion
+  int activeRow; // The row that contains the current week withing the list of rows generated
 
-  _CalendarScreenState(){
-    displayDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    _monthColorTween = ColorTween(begin: Color(0xffEC520B), end: Color(0x00EC520B));
-    _arrowColorTween = ColorTween(begin: Color(0x00FFA68A), end: Color(0xffFFA68A));
+  _CalendarScreenState() {
+    displayDate =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    _monthColorTween =
+        ColorTween(begin: Color(0xffEC520B), end: Color(0x00EC520B));
+    _arrowColorTween =
+        ColorTween(begin: Color(0x00FFA68A), end: Color(0xffFFA68A));
     pageController = PageController(initialPage: 0);
   }
 
   @override
-  void initState() { 
+  void initState() {
     _expanded = false;
     showDate = displayDate;
 
     // [returnRowList] called and stored in [rowListReturned] to make use of in the next occurrences
-    List<Widget> rowListReturned = returnRowList(DateTime(displayDate.year, displayDate.month, 1));
-    
+    List<Widget> rowListReturned =
+        returnRowList(DateTime(displayDate.year, displayDate.month, 1));
+
     //Determine the height of one week row
     collapsedHeightFactor = 1 / rowListReturned.length;
 
     //Determine the y coordinate of the current week row with this formula
-    activeRowYPosition = ((2 / (rowListReturned.length - 1)) * getActiveRow()) - 1;
+    activeRowYPosition =
+        ((2 / (rowListReturned.length - 1)) * getActiveRow()) - 1;
 
     //Initialize animation controllers
-    _controller = AnimationController(duration: widget._kExpand, vsync: this);
-    _monthController = AnimationController(duration: widget._kExpand, vsync: this);
+    _controller = AnimationController(duration: widget._kExpand, value: this);
+    _monthController =
+        AnimationController(duration: widget._kExpand, value: this);
     _anim = _controller.drive(widget._easeInTween);
-    _arrowColor = _controller.drive(_arrowColorTween.chain(widget._easeInTween));
-    _iconTurns = _controller.drive(widget._halfTween.chain(widget._easeInTween));
-    _monthColor = _monthController.drive(_monthColorTween.chain(widget._easeInTween));
+    _arrowColor =
+        _controller.drive(_arrowColorTween.chain(widget._easeInTween));
+    _iconTurns =
+        _controller.drive(widget._halfTween.chain(widget._easeInTween));
+    _monthColor =
+        _monthController.drive(_monthColorTween.chain(widget._easeInTween));
 
     //initial value = false
     _expanded = PageStorage.of(context)?.readState(context) ?? false;
@@ -92,17 +112,15 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     //calList contains the list of week Rows of the displayed month
     calList = <Widget>[
       Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.min,
-        children: rowListReturned
-      )
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: rowListReturned)
     ];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // Algun ser humano que explique para que es esto???
     double scaleFactor = MediaQuery.of(context).size.width / widget.pWidth;
     double calendarWidth = MediaQuery.of(context).size.width * 0.85;
@@ -115,9 +133,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           SizedBox(height: 15.0),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white
-            ),
+                borderRadius: BorderRadius.circular(15), color: Colors.white),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,14 +143,16 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                   // height: 50,
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: 13*scaleFactor, bottom: 8*scaleFactor, 
-                      left: 16*scaleFactor, right: 16*scaleFactor
-                    ),
+                        top: 13 * scaleFactor,
+                        bottom: 8 * scaleFactor,
+                        left: 16 * scaleFactor,
+                        right: 16 * scaleFactor),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         _getExpandedButton(),
-                        _getFormattedDate(scaleFactor), // Displayed Month, Displayed Year                      
+                        _getExpandedButton(),
+                        _getFormattedDate(
+                            scaleFactor), // Displayed Month, Displayed Year
                         Material(
                           color: Colors.transparent,
                           child: IconButton(
@@ -166,7 +184,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                   showDate = DateTime(
                                       showDate.year, showDate.month + 1, 1);
                                 });
-                                
+
                                 //Fade in/out the expand icon if current month is not displayed month
                                 if (areMonthsSame(curr, DateTime.now())) {
                                   _monthController.forward();
@@ -182,7 +200,8 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                                 }
                                 pageController.jumpToPage(0);
                                 pageController.nextPage(
-                                    duration: widget._kExpand, curve: Curves.easeInOut);
+                                    duration: widget._kExpand,
+                                    curve: Curves.easeInOut);
                               }
                             },
                           ),
@@ -229,7 +248,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
                 turns: _iconTurns,
                 child: Icon(
                   Icons.expand_more,
-                  size: 35*scaleFactor,
+                  size: 35 * scaleFactor,
                   color: _monthColor.value,
                 ),
               ),
@@ -240,13 +259,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     );
   }
 
-
   /// Esta cosa no es mas que las flechas de izquierda y derecha (creo)
   AnimatedBuilder _leftRightArrow() {
     return AnimatedBuilder(
       animation: _arrowColor,
-      builder: (BuildContext context, Widget child) =>
-          SvgPicture.asset(
+      builder: (BuildContext context, Widget child) => SvgPicture.asset(
         'assets/imagenes/derecha.svg',
         color: _arrowColor.value,
       ),
@@ -257,10 +274,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     return Text(
       formatDate(showDate),
       style: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        color: Colors.black
-      ),
+          fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
       textScaleFactor: scaleFactor,
     );
   }
@@ -288,8 +302,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
             Future.delayed(Duration(milliseconds: 1), () {
               setState(() {});
             });
-          } else if (areMonthsSame(
-              showDate, DateTime.now())) {
+          } else if (areMonthsSame(showDate, DateTime.now())) {
             _monthController.reverse();
             Future.delayed(widget._kExpand, () {
               setState(() {});
@@ -297,8 +310,7 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
           }
           pageController.jumpToPage(1);
           pageController.previousPage(
-            duration: widget._kExpand, curve: Curves.easeInOut
-          );
+              duration: widget._kExpand, curve: Curves.easeInOut);
         }
       },
     );
@@ -306,44 +318,32 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
 
   List<Widget> _getMonthCallList() {
     return [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: returnRowList(
-                DateTime(
-                  showDate.year,
-                  showDate.month - 1,
-                  1
-                )
-              )
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: returnRowList(
-                DateTime(
-                  showDate.year, showDate.month, 1
-                )
-              )
-            ),
-          ];
+      Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children:
+              returnRowList(DateTime(showDate.year, showDate.month - 1, 1))),
+      Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: returnRowList(DateTime(showDate.year, showDate.month, 1))),
+    ];
   }
 
   AnimatedBuilder _getLeftAnimation() {
     return AnimatedBuilder(
       animation: _arrowColor,
-      builder: (BuildContext context, Widget child) =>
-        SvgPicture.asset(
-          'assets/imagenes/izquierda.svg',
-          color: _arrowColor.value,
-        ),
+      builder: (BuildContext context, Widget child) => SvgPicture.asset(
+        'assets/imagenes/izquierda.svg',
+        color: _arrowColor.value,
+      ),
     );
   }
 
   //Format the received date into full month and year format
   String formatDate(DateTime date) => new DateFormat("MMMM yyyy").format(date);
 
-  // Used to handle calendar expansion and icon rotation events 
+  // Used to handle calendar expansion and icon rotation events
   void _handleTap() {
     setState(() {
       _expanded = !_expanded;
@@ -425,7 +425,11 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     List<Widget> rowList = <Widget>[
       Padding(
         //do not change this padding
-        padding: EdgeInsets.only(bottom: 22, left: 36, right: 36,),
+        padding: EdgeInsets.only(
+          bottom: 22,
+          left: 36,
+          right: 36,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -441,74 +445,75 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
       ),
     ];
 
-
     // ya mejor llevame Diosito :'(
 
     List<List<int>> rowValueList = generateMonth(start);
     for (int i = 0; i < rowValueList.length; i++) {
       List<Widget> itemList = [];
       for (int j = 0; j < rowValueList[i].length; j++) {
-        itemList.add(Expanded(
-          child: Container(
-              height: 22,
-              width: 22,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: rowValueList[i][j] == DateTime.now().day &&
-                          start.month == DateTime.now().month &&
-                          start.year == DateTime.now().year &&
-                      !((i == 0 && rowValueList[i][j] > 7) ||
-                          (i >= 4 && rowValueList[i][j] < 7))
-                      ? Color(0xffFFA68A)
-                      : Colors.transparent),
-              child: Center(
-                child:GestureDetector(
-                  onTap: ()async {
-                    final DBProvider _db = DBProvider.db;
-                    int mes = showDate.month;
-                    int anio = showDate.year;
-                    int dia = rowValueList[i][j];
-                    
-                    DateTime actual = DateTime(anio, mes,dia);
+        itemList.add(
+          Expanded(
+              child: Container(
+            height: 22,
+            width: 22,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: rowValueList[i][j] == DateTime.now().day &&
+                        start.month == DateTime.now().month &&
+                        start.year == DateTime.now().year &&
+                        !((i == 0 && rowValueList[i][j] > 7) ||
+                            (i >= 4 && rowValueList[i][j] < 7))
+                    ? Color(0xffFFA68A)
+                    : Colors.transparent),
+            child: Center(
+              child: GestureDetector(
+                onTap: () async {
+                  final DBProvider _db = DBProvider.db;
+                  int mes = showDate.month;
+                  int anio = showDate.year;
+                  int dia = rowValueList[i][j];
 
-                    int dSemana = actual.weekday;
-                    
-                    // String listadoActividad = "";
+                  DateTime actual = DateTime(anio, mes, dia);
 
-                    List<AlarmModel> actividades  = new List<AlarmModel>();
+                  int dSemana = actual.weekday;
 
-                    actividades.addAll(await _db.eventsByWeekday(dSemana));
+                  // String listadoActividad = "";
 
-                      // actividades.forEach((element) {
-                      //   listadoActividad = listadoActividad + element.title + "\n";
-                      // });
+                  List<AlarmModel> actividades = new List<AlarmModel>();
 
-                    _showEventsAlert(context, actividades, dia);
+                  actividades.addAll(await _db.eventsByWeekday(dSemana));
 
-                      // mostrarAlerta(listadoActividad, context, titulo: "Actividades");
-                    
-                  },
-                  child: Text( //Rojo si tiene actividades
-                      rowValueList[i][j].toString(),
-                      style: (rowValueList[i][j] == DateTime.now().day &&
+                  // actividades.forEach((element) {
+                  //   listadoActividad = listadoActividad + element.title + "\n";
+                  // });
+
+                  _showEventsAlert(context, actividades, dia);
+
+                  // mostrarAlerta(listadoActividad, context, titulo: "Actividades");
+                },
+                child: Text(
+                  //Rojo si tiene actividades
+                  rowValueList[i][j].toString(),
+                  style: (rowValueList[i][j] == DateTime.now().day &&
                               start.month == DateTime.now().month &&
                               start.year == DateTime.now().year) &&
-                              !((i == 0 && rowValueList[i][j] > 7) || (i >= 4 && rowValueList[i][j] < 7))
-                          ? TextStyle(
-                              fontWeight: FontWeight.bold,
-                            )
-                          //Grey out the previous month's and next month's values or dates
-                          : TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: ((i == 0 && rowValueList[i][j] > 7) ||
-                                      (i >= 4 && rowValueList[i][j] < 7))
-                                  ? Colors.grey
-                                  : Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
+                          !((i == 0 && rowValueList[i][j] > 7) ||
+                              (i >= 4 && rowValueList[i][j] < 7))
+                      ? TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )
+                      //Grey out the previous month's and next month's values or dates
+                      : TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: ((i == 0 && rowValueList[i][j] > 7) ||
+                                  (i >= 4 && rowValueList[i][j] < 7))
+                              ? Colors.grey
+                              : Colors.black),
+                  textAlign: TextAlign.center,
                 ),
-                ),
-              )),
+              ),
+            ),
+          )),
         );
       }
       Widget temp = Padding(
@@ -545,11 +550,9 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
     return a.year == b.year;
   }
 
-  void _showEventsAlert(BuildContext context, List<AlarmModel> actividades, int day) {
-
-    widget._scaffoldState.currentState.showBottomSheet((BuildContext context){
-
-
+  void _showEventsAlert(
+      BuildContext context, List<AlarmModel> actividades, int day) {
+    widget._scaffoldState.currentState.showBottomSheet((BuildContext context) {
       final List<Widget> elements = new List<Widget>();
 
       elements.add(ListTile(
@@ -561,38 +564,28 @@ class _CalendarScreenState extends State<CalendarScreen> with TickerProviderStat
         ),
       ));
 
-      if(actividades.isEmpty) {
-        elements.add(
-          ListTile(
-            title: Text("No hay eventos para este día"),
-          )
-        );
+      if (actividades.isEmpty) {
+        elements.add(ListTile(
+          title: Text("No hay eventos para este día"),
+        ));
+      } else {
+        elements.addAll(actividades.map((alarm) => ListTile(
+              leading: Icon(Icons.alarm),
+              title: Text(alarm.title),
+              trailing: Text(alarm.time.format(context)),
+            )));
       }
 
-      else{
-        elements.addAll(actividades.map((alarm)=>ListTile(
-          leading: Icon(Icons.alarm),
-          title: Text(alarm.title),
-          trailing: Text(alarm.time.format(context)),
-        )));
-      }
-
-      elements.add(
-        FlatButton(
-          onPressed: ()=>Navigator.of(context).pop(),
-          child: Text("Aceptar"),
-          color: Theme.of(context).accentColor,
-          textColor: Theme.of(context).canvasColor,
-        )
-      );
+      elements.add(FlatButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text("Aceptar"),
+        color: Theme.of(context).accentColor,
+        textColor: Theme.of(context).canvasColor,
+      ));
 
       return SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: elements
-        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: elements),
       );
     }, elevation: 2.0, backgroundColor: Colors.grey[100]);
-
   }
 }
