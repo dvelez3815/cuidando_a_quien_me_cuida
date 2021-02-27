@@ -5,6 +5,50 @@
 -- [database_script.sql], then you need to put here the new
 -- code and increase the database version in one unit.
 
+
+delete from actividad where id = '1';
+delete from comida where id = '15';
+delete from comida where id = '20';
+
+insert into comida(id, nombre, urlImagen, preparacion, ingredientes)
+values
+(21, 'Crema de espinaca', 'assets/imagenes/espinaca.jpg', 
+    '1.	Se pica la zanahoria y la papa en cuadros pequeños y se pone a hervir en 1 litro de agua con la cebolla y el pimiento por 25 minutos a fuego medio.
+2.	Se agrega la espinaca y se deja coser por 25 minutos más.
+3.	Después, se deja enfriar para proceder a licuar.
+4.	Siguiente, se le agrega el queso y la leche al gusto al gusto y se revuelve.
+5.	Por último, precalentar de nuevo todo y se le agrega la sal al gusto.',
+    '[{"title":"2 papa medianas."},{"title":"1 zanahoria mediana."},{"title":"1 taza llena de espinaca."},{"title":"½ de cebolla blanca."},{"title":"½ de cebolla paiteña."},{"title":"Sal al gusto."},{"title":"4 onzas de Queso."},{"title":"¼ de leche."}]'
+),
+(22, 'Crema de zapallo', 'assets/imagenes/zapallo.jpg', 
+    '1.	Se pela el zapallo, la papa y se pica en cuadritos.
+2.	Siguiente se pone a hervir en 1 litro de agua, el zapallo, la papa, la cebolla blanca, la cebolla paiteña por 25 minutos.
+3.	Después de que esté cocido, se procese a dejar refrescar para licuar todo.
+4.	Posteriormente, se le añade sal al gusto y leche.
+5.	Se sirve en plato, se añade cilantro y queso rallado encima.',
+    '[{"title":"Un zapallo mediano."},{"title":"1 papa mediana."},{"title":"½ cebolla blanca."},{"title":"½ cebolla paiteña."},{"title":"¼ de leche."},{"title":"Sal al gusto."},{"title":"Cilantro al gusto."},{"title":"Queso al gusto."},{"title":""},{"title":""},{"title":""}]'
+),
+(23, 'Crema de zanahoria', 'assets/imagenes/zanahoria.jpg', 
+    '1.	Se lava y se pica la zanahoria, el brócoli y la coliflor.
+2.	Siguiente se pone a hervir en 1 litro de agua todo lo anterior junto con la cebolla blanca, la cebolla paiteña por 25 minutos.
+3.	Después de que esté cocido, se procese a dejar refrescar para licuar todo.
+4.	Posteriormente, se le añade sal al gusto y leche.
+5.	Se sirve en plato, se añade cilantro y queso rallado encima.',
+    '[{"title":"3 zanahorias medianas."},{"title":"1 porción de coliflor."},{"title":"1 porción de brócoli."},{"title":"½ cebolla blanca."},{"title":"½ cebolla paiteña."},{"title":"¼ de leche."},{"title":"Sal al gusto."},{"title":"Cilantro al gusto."},{"title":"Queso al gusto."}]'
+),
+(24, 'Entomatado', 'assets/imagenes/entomatado.jpg', 
+    '1.	se pican los tomates de forma minúscula (casi puré)
+2.	se pone a cocinar los tomates picados siempre observando que no se queme
+3.	Cuando se comience a secar tirarle agua necesaria para mantener con volumen el tomate
+4.	Al pasar entre 40 minutos a 1 hora se procede a tirarle, azúcar al gusto para quitarle lo ácido del tomate
+5.	Tirarle queso en cubitos
+6.	Tirarle leche al gusto (Al gusto)
+7.	Antes de servir tirarle cilandro picado',
+    '[{"title":"6 tomates"},{"title":"1 cucharada Azúcar"},{"title":"½ litro de Agua"},{"title":"¼ Queso"},{"title":"10 lamitas Cilandro"},{"title":"1 taza de Leche"}]'
+)
+;
+
+
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values
 (13, 'Juego De Números', 'Permite trabajar las parte cognitiva de identificar los números, además de reforzar la estabilidad, movilidad y fuerza de tronco y piernas a nivel físico.',
