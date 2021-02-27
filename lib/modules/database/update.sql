@@ -52,7 +52,7 @@ insert into procedimiento values
 ('***Instrucciones:*** Se colocan los objetos con los números en el piso frente a la persona, esta tendrá que lanzar el dado y dependiendo del número que salga, deberá tocar dicho objeto.
  ***Observación:*** En caso de no poder agacharse a tocar los objetos, este tendrá que estar sentado alrededor de los mismos.',
  6,13),
- ('###Instrucciones:
+ ('###Instrucciones:\n
   Se debe sentar al paciente y colocarle en cada extremidad un pañuelo, luego se debe decir el nombre de un color y el paciente deberá alzar la extremidad que tenga ese color.
  ###Observación:
   Con más colores se posean, más difícil se podrá hacer la actividad.',
