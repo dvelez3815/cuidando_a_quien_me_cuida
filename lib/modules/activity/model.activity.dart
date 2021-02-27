@@ -142,6 +142,8 @@ class Actividad{
     this.time = new TimeOfDay(hour: time[0], minute: time[1]);
     this.daysToNotify = days.split(",");
     this.complements =  List<Map<String, dynamic>>.from(jsonDecode(json["complements"] ?? "[]"));
+
+    
     this.type = loadFromString(json["type"] ?? "recreation");
   }
 

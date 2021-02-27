@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
@@ -45,7 +46,7 @@ class ActivityDetail extends StatelessWidget {
         trailing: null,
         leadingIcon: Icons.info,
         title: Text("Descripción"),
-        subtitle: Text(model.descripcion, textAlign: TextAlign.justify,),
+        subtitle: MarkdownBody(data: model.descripcion),
       ),
       TunnedListTile(
         activity: null, 

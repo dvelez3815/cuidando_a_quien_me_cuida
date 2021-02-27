@@ -8,6 +8,8 @@ import 'package:utm_vinculacion/modules/water/helper.water.dart' as waterHelper;
 /// saves it in [db] what is an instance of database
 Future<void> defaultData(Database db) async {
   bool success = await _performQueries(db, "lib/modules/database/database_script.sql");
+  
+  await upgradeDB(db);
 
   if(success){
     print("All default data has been added");
@@ -31,8 +33,11 @@ Future<void> loadWaterData()async{
 
 /// Initialize an instance of the database [db] with the [version]
 Future<void> initDatabase(Database db, int version) async{
-  await _performQueries(db, "lib/modules/database/database.sql");
+  await _performQueries(db, "lib/modules/database/database.sql"); // Creation
+}
 
+Future<void> upgradeDB(Database db) async {
+  await _performQueries(db, "lib/modules/database/update.sql");
 }
 
 /// This will transform all queries in database_script.sql located in [route] into a

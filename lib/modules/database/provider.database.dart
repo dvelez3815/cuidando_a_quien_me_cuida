@@ -77,13 +77,10 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3, // last was 3
       onUpgrade: (db, oldVersion, newVersion)async{
+        await upgradeDB(db);
         print("Database upgraded");
-        
-        final batch = db.batch();
-        await initDatabase(db, newVersion);
-        await batch.commit();
       },
       onOpen: (db)=>print("Database started"),
       onCreate: (db, version)async{

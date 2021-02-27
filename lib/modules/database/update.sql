@@ -1,3 +1,10 @@
+-- IMPORTANT!!!
+-- All this process is automatic, so, if you want to
+-- update a part of the database, you need to place the 
+-- old code writted in this script and put it in the 
+-- [database_script.sql], then you need to put here the new
+-- code and increase the database version in one unit.
+
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values
 (13, 'Juego De Números', 'Permite trabajar las parte cognitiva de identificar los números, además de reforzar la estabilidad, movilidad y fuerza de tronco y piernas a nivel físico.',
@@ -23,22 +30,22 @@ values
 
 (23, 'Estiramiento de cuello', 'Estiramiento de cuello para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '7:30', 0, 'physical',
-'[Una silla, Ropa cómoda]'),
+'[{"title":"Una silla"}, {"title":"Ropa cómoda"}]'),
 (24, 'Estiramiento de hombros', 'Estiramiento de hombro para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '8:30', 0, 'physical',
-'[Una silla, Ropa cómoda]'),
+'[{"title":"Una silla"}, {"title":"Ropa cómoda"}]'),
 (25, 'Estiramiento de codo', 'Estiramiento de codo para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '9:30', 0, 'physical',
-'[Una silla, Ropa cómoda]'),
+'[{"title":"Una silla"}, {"title":"Ropa cómoda"}]'),
 (26, 'Estiramiento de muñeca', 'Estiramiento de muñeca para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '10:30', 0, 'physical',
-'[Una silla, Ropa cómoda]'),
+'[{"title":"Una silla"}, {"title":"Ropa cómoda"}]'),
 (27, 'Estiramiento de cadera', 'Estiramiento de cadera para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '11:30', 0, 'physical',
-'[Una silla, Ropa cómoda]'),
+'[{"title":"Una silla"}, {"title":"Ropa cómoda"}]'),
 (28, 'Estiramiento de tobillo', 'Estiramiento de tobillo para estimular los músculos y liberar tensión que la persona pueda tener, además de mejorar el tono muscular, la fuerza, la movilidad y la funcionalidad de los músculos y articulaciones en general.', 
     '[lunes, miercoles, viernes]', '12:30', 0, 'physical',
-'[Una silla, Ropa cómoda]');
+'[{"title": "Una silla"}, {"title": "Ropa cómoda"}]');
 
 
 insert into procedimiento values

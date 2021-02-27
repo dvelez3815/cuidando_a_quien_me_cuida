@@ -21,6 +21,7 @@ dependencies:
   youtube_player_iframe: ^1.1.0
   shared_preferences: ^0.5.11 # Con esto se guarda informacion en cache
   flutter_speed_dial: ^1.2.5
+  flutter_markdown: ^0.5.2
   cupertino_icons: ^1.0.0
   carousel_slider: ^1.4.1
   flutter_dotenv: ^2.1.0
@@ -57,3 +58,4 @@ flutter:
     - .env
     - lib/modules/database/database_script.sql
     - lib/modules/database/database.sql
+    - lib/modules/database/update.sql
