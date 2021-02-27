@@ -45,8 +45,7 @@ values
 6.	Tirarle leche al gusto (Al gusto)
 7.	Antes de servir tirarle cilandro picado',
     '[{"title":"6 tomates"},{"title":"1 cucharada Azúcar"},{"title":"½ litro de Agua"},{"title":"¼ Queso"},{"title":"10 lamitas Cilandro"},{"title":"1 taza de Leche"}]'
-)
-;
+);
 
 
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
