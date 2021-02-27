@@ -94,9 +94,9 @@ class _CalendarScreenState extends State<CalendarScreen>
         ((2 / (rowListReturned.length - 1)) * getActiveRow()) - 1;
 
     //Initialize animation controllers
-    _controller = AnimationController(duration: widget._kExpand, value: this);
+    _controller = AnimationController(duration: widget._kExpand, vsync: this);
     _monthController =
-        AnimationController(duration: widget._kExpand, value: this);
+        AnimationController(duration: widget._kExpand, vsync: this);
     _anim = _controller.drive(widget._easeInTween);
     _arrowColor =
         _controller.drive(_arrowColorTween.chain(widget._easeInTween));
