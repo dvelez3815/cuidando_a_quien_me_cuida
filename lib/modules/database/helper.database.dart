@@ -22,8 +22,8 @@ Future<void> loadWaterData()async{
 
   // This restart the water reminder object and all streams around it
   await AndroidAlarmManager.periodic(
-    Duration(days: 1), 
-    waterHelper.FIRST_REMINDER_ALARM_ID, 
+    Duration(days: 1),
+    waterHelper.FIRST_REMINDER_ALARM_ID,
     waterHelper.startCallback,
     startAt: new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0).add(Duration(days: 1))
   );

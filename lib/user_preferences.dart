@@ -40,10 +40,10 @@ class UserPreferences{
   }
 
   set areWaterAlarmsCreated(bool value) {
-    _prefs.setBool('water_reminders', value);
+    _prefs.setBool('reminder_created', value);
   }
 
-  bool get areWaterAlarmsCreated => _prefs.getBool('water_reminders') ?? false;
+  bool get areWaterAlarmsCreated => _prefs.getBool('reminder_created') ?? false;
   bool get darkMode => _prefs.getBool('dark_mode');
   Stream<bool> get darkStream => darkModeController.stream;
   double get waterProgress => _prefs.getDouble("water_progress");
