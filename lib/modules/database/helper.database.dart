@@ -27,8 +27,15 @@ Future<void> loadWaterData()async{
     Duration(days: 1),
     waterHelper.FIRST_REMINDER_ALARM_ID,
     waterHelper.startCallback,
-    startAt: new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0).add(Duration(days: 1))
+    startAt: new DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().add(Duration(days: 1)).day,
+      0, 0
+    )
   );
+
+  print("Water reminder triggered");
 }
 
 /// Initialize an instance of the database [db] with the [version]
