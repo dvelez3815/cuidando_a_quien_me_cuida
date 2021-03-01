@@ -66,7 +66,8 @@ class _AddPlatosState extends State<AddPlatos> {
             title: "Ingredientes"
           ),
           Divider(),
-          _getSaveButton(context)
+          _getSaveButton(context),
+          SizedBox(height: 150.0,)
         ],
       ),
     );
@@ -154,17 +155,19 @@ class _AddPlatosState extends State<AddPlatos> {
 
   Future<void> _saveAction()async{
 
-    if(updateData.isNotEmpty){
-      await widget.dbProvider.eliminarComida(updateData['model_data']);
-    }
-
     // The food we're gonna save
     Comida food = new Comida(
       ingredientes: List<String>.from(widget.ingredientes.map((e) => e["title"])),
       nombre: widget.titleController.text ?? "Sin nombre",
       preparacion: widget.descriptionController.text ?? "Sin descripción",
-      urlImagen: "assets/imagenes/recetas.jpg"
+      urlImagen: updateData.isNotEmpty? updateData["model_data"].urlImagen : "assets/imagenes/recetas.jpg",
+      id: updateData['model_data']?.id
     );
+
+
+    if(updateData.isNotEmpty){
+      await widget.dbProvider.eliminarComida(updateData['model_data']);
+    }
 
     // saving the new information
     await widget.dbProvider.nuevaComida(food);

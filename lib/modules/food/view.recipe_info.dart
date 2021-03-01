@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:utm_vinculacion/widgets/components/header.dart';
 import 'package:utm_vinculacion/widgets/widget.tunned_expansion.dart';
 
@@ -73,20 +74,23 @@ class InfoReceta extends StatelessWidget {
             Divider(),
             TunnedExpansion(
               expansionTile: ExpansionTile(
-                  tileColor: Theme.of(context).accentColor,
-                  textColor: Theme.of(context).canvasColor,
-                  title: Text("Prepa"),
-                  initiallyExpanded: true,
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.restaurant),
-                      title: Text("Preparación\n"),
-                      subtitle: Text(
-                        food.preparacion ?? "Sin descripción",
-                        textAlign: TextAlign.justify,
+                tileColor: Theme.of(context).accentColor,
+                textColor: Theme.of(context).canvasColor,
+                title: Text("Preparación"),
+                initiallyExpanded: true,
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.restaurant),
+                    title: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MarkdownBody(
+                        data: food.preparacion,
+                        fitContent: true,
                       ),
-                    ),
-                  ]),
+                    )
+                  )
+                ]
+              ),
             ),
           ],
         )

@@ -16,8 +16,9 @@ class Comida {
     this.preparacion,
     this.ingredientes,
     this.urlImagen,
+    this.id
   }){
-    this.id = generateID(); // Esto es tremendamente necesario
+    this.id = this.id ?? generateID(); // Esto es tremendamente necesario
   }
 
   Comida.fromJson(Map<String, dynamic> item){
