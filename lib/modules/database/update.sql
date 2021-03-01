@@ -26,7 +26,7 @@ values
 3.	Después de que esté cocido, se procese a dejar refrescar para licuar todo.
 4.	Posteriormente, se le añade sal al gusto y leche.
 5.	Se sirve en plato, se añade cilantro y queso rallado encima.',
-    '[{"title":"Un zapallo mediano."},{"title":"1 papa mediana."},{"title":"½ cebolla blanca."},{"title":"½ cebolla paiteña."},{"title":"¼ de leche."},{"title":"Sal al gusto."},{"title":"Cilantro al gusto."},{"title":"Queso al gusto."},{"title":""},{"title":""},{"title":""}]'
+    '[{"title":"Un zapallo mediano."},{"title":"1 papa mediana."},{"title":"½ cebolla blanca."},{"title":"½ cebolla paiteña."},{"title":"¼ de leche."},{"title":"Sal al gusto."},{"title":"Cilantro al gusto."},{"title":"Queso al gusto."}]'
 ),
 (23, 'Crema de zanahoria', 'assets/imagenes/zanahoria.jpg', 
     '1.	Se lava y se pica la zanahoria, el brócoli y la coliflor.
