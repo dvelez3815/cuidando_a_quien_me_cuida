@@ -13,6 +13,7 @@ class AddActividades extends StatefulWidget {
   
   // These come from input fields in each specific class
   final TextEditingController objetivosActividad = new TextEditingController();
+  final TextEditingController procedureActividad = new TextEditingController();
   final TextEditingController nombreActividad = new TextEditingController();
   
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -81,7 +82,7 @@ class _AddActividadesState extends State<AddActividades>{
   }
 
   /////////////////////////////////// Methods ///////////////////////////////////
-  void loadUpdateData(Function setState) {
+  void loadUpdateData(Function setState) async{
     
     if(!loadFirstTime) loadFirstTime = true;
     else return;
@@ -92,6 +93,7 @@ class _AddActividadesState extends State<AddActividades>{
     // Loading values into text controllers
     widget.nombreActividad.text = activity.nombre;
     widget.objetivosActividad.text = activity.descripcion;
+    widget.procedureActividad.text = await DBProvider.db.loadActivityProcedure(activity.id);
     
     // This is the time where alarms will be activated
     time = activity.time;
@@ -186,15 +188,18 @@ class _AddActividadesState extends State<AddActividades>{
   Future<void> saveAlarm(BuildContext context) async {  
     // What I actually do, is to delete the current event and its alarms
     // and then I create a new one with the new data
+
+     Actividad activity;
+
     if(updateData.isNotEmpty){
-      Actividad activity = updateData['model_data'];
+      activity = updateData['model_data'];
       await activity.delete();
     }
 
-    return await _newAlarm(context);
+    return await _newAlarm(context, id: activity?.id ?? null);
   }
 
-  Future<void> _newAlarm(BuildContext context) async {
+  Future<void> _newAlarm(BuildContext context, {int id}) async {
 
     // This will contains only the days to notify
     final List<String> daysActive = new List<String>();
@@ -216,10 +221,11 @@ class _AddActividadesState extends State<AddActividades>{
       daysActive, // this is not the class attribute
       nombre: widget.nombreActividad.text ?? "Sin título",
       descripcion: widget.objetivosActividad.text ?? "Sin objetivos",
-      complements: this.materiales
+      complements: this.materiales, id: id
     );
 
     await activity.save(); // this save this activity/activity in local database
+    await DBProvider.db.setProcedure(activity.id, widget.procedureActividad.text);
 
     widget.scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text('La alarma fué creada')
@@ -243,6 +249,15 @@ class _AddActividadesState extends State<AddActividades>{
       maxLines: null
     );
   }
+
+  Widget _getProcedureField() {
+
+    return getInputStyle(
+      "Procedimiento", "Escribe un procedimiento en caso de ser necesario",
+      widget.procedureActividad, Icons.precision_manufacturing_rounded,
+      maxLines: null
+    );
+  }
   
   List<Widget> _getElementList() {
 
@@ -254,6 +269,7 @@ class _AddActividadesState extends State<AddActividades>{
       ),
       (updateData["restricted"] ?? false)?Container():_getTitleField(),
       (updateData["restricted"] ?? false)?Container(): _getDescriptionField(),
+      (updateData["restricted"] ?? false)?Container(): _getProcedureField(),
       (updateData["restricted"] ?? false)?Container():getExpansionTile(
         controller: controller,
         items: this.materiales,

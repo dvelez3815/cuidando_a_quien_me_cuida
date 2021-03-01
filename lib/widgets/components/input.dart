@@ -11,10 +11,12 @@ Widget getInputStyle(
       onChanged: (value)=>controller.text = value, 
       maxLines: maxLines,
       initialValue: controller.text ?? "",
-      keyboardType: inputType ?? TextInputType.text,
+      keyboardType: inputType ?? TextInputType.multiline,
       textCapitalization: (capitalize ?? true)?TextCapitalization.sentences:TextCapitalization.none,
       validator: validatorCallback,
-    
+      autocorrect: true,
+      autofocus: false,
+      enableSuggestions: true,
       decoration: InputDecoration(                    
         labelText: label,
         hintText: hint,

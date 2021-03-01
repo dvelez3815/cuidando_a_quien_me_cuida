@@ -8,6 +8,7 @@ import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/alarms/model.alarm.dart';
 import 'package:utm_vinculacion/modules/contacts/model.contacts.dart';
 import 'package:utm_vinculacion/modules/food/model.food.dart';
+import 'package:utm_vinculacion/modules/global/helpers.dart';
 import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 
@@ -187,8 +188,7 @@ class DBProvider {
     final res = await db.insert("actividad", activity.toJson()); 
 
     if(res > 0){
-      actividades.add(activity);
-      actividadSink(actividades);
+      await getActivities();
     }
 
     return res>0;
@@ -256,12 +256,22 @@ class DBProvider {
 
     final res = await db.query("procedimiento", where: "activity_id=?", whereArgs: [id]);
     String steps = "";
-    if(res!=null)
+    if(res!=null && res.isNotEmpty)
     {
       steps = res[0]["steps"];
     }
       
     return steps ?? "";
+  }
+
+  Future<void> setProcedure(int activityID, String procedure) async {
+    final db = await database;
+
+    await db.insert('procedimiento', {
+      "steps": procedure,
+      "id": generateID(),
+      "activity_id": activityID,
+    });
   }
 
   /////////////////////////// Activity alarms ///////////////////////////

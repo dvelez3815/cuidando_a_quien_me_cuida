@@ -27,10 +27,11 @@ class Actividad{
 
   DBProvider db = DBProvider.db;
 
-  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion, List<Map<String, dynamic>> complements}){
+  Actividad(this.type, this.time, this.daysToNotify, {this.nombre, this.descripcion, 
+  List<Map<String, dynamic>> complements, this.id}){
     this.complements = complements;
     this.type = this.type ?? ActivityType.recreation;
-    this.id = generateID(); // Esto es tremendamente necesario
+    this.id = this.id ?? generateID(); // Esto es tremendamente necesario
   }
   
   /////////////////////////////////// CRUD ///////////////////////////////////

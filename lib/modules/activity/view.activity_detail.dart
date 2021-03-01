@@ -136,8 +136,12 @@ class ActivityDetail extends StatelessWidget {
               default:
                 if(snapshot.data == "" || snapshot.data == null) return ListTile(title: Text("No existe un procedimiento"));
 
-                return ListTile(
-                  title: Text(snapshot.data, textAlign: TextAlign.justify,),
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MarkdownBody(
+                    data: snapshot.data,
+                    fitContent: true,
+                  ),
                 );
             }
           }),
