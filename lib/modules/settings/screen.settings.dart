@@ -68,7 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text("Tutorial de uso"),
                   subtitle: Text("Tutorial de cómo usar la aplicación"),
                   trailing: Icon(Icons.arrow_forward_ios),
-                  onTap: null,
+                  onTap: ()=>launch("https://www.youtube.com/playlist?list=PLi78ev46WowcREuEyZ0GottgIijIkAo1n&fbclid=IwAR2GvoIfIxS8Ne9h95mVCWV2SiY2x4IgxjHBVzyias8HNvS7n0rNL3w7_Mo"),
                 ),
               ],
             ),
