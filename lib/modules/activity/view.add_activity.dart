@@ -114,6 +114,9 @@ class _AddActividadesState extends State<AddActividades>{
       case ActivityType.care:
         this.selectedType = 3;
         break;
+      case ActivityType.reminder:
+        this.selectedType=-1;
+        break;
     }
 
     this.materiales = activity.complements;

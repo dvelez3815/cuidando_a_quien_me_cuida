@@ -42,8 +42,7 @@ class AlarmModel {
     this._period = isMinute? Duration(minutes: this._interval):Duration(days: this._interval);
     
     // You can create your own activate method if you want to do something else
-    if(activate != null) await activate();
-    else  await this.activate();
+    await this.activate(showNotification: activate);
 
     await db.deleteAlarm(this.id);
     return await db.nuevaAlarma(this);

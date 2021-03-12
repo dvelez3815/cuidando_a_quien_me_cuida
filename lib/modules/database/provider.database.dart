@@ -194,6 +194,20 @@ class DBProvider {
     return res>0;
   }
 
+  Future<bool> existActivity(int id) async {
+    final db = await database;
+    final res = await db.query("actividad", where: "id=?", whereArgs: [id]); 
+
+    return res.isNotEmpty;
+  }
+
+  Future<Actividad> getActivity(int id) async {
+      final db = await database;
+      final res = await db.query("actividad", where: "id=?", whereArgs: [id]); 
+
+      return res.isNotEmpty? Actividad.fromJson(res[0]):null;
+  }
+
   Future<Actividad> updateActivity(Map<String, dynamic> params, int id) async {
     final db = await database;
 
@@ -430,7 +444,7 @@ class DBProvider {
 
     if(response.isEmpty) return null;
 
-    double progress = UserPreferences().waterProgress ?? 0.0;
+    double progress = UserPreferences()?.waterProgress ?? 0.0;
     Map<String, dynamic> lastElement = new Map<String, dynamic>();
     
     lastElement.addAll(response[0]);

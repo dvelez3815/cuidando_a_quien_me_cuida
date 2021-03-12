@@ -1,8 +1,6 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:utm_vinculacion/modules/water/helper.water.dart' as waterHelper;
 
 /// Loads all default data defined in database_script.sql file and
 /// saves it in [db] what is an instance of database
@@ -17,25 +15,6 @@ Future<void> defaultData(Database db) async {
   else {
     throw new ErrorDescription("There were some errors while trying to load default data");
   }
-}
-
-/// Loads default data for water module
-Future<void> loadWaterData()async{
-
-  // This restart the water reminder object and all streams around it
-  await AndroidAlarmManager.periodic(
-    Duration(days: 1),
-    waterHelper.FIRST_REMINDER_ALARM_ID,
-    waterHelper.startCallback,
-    startAt: new DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().add(Duration(days: 1)).day,
-      0, 0
-    )
-  );
-
-  print("Water reminder triggered");
 }
 
 /// Initialize an instance of the database [db] with the [version]

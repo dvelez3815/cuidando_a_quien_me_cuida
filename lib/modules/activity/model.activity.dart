@@ -11,7 +11,8 @@ enum ActivityType {
   mental,
   recreation,
   physical,
-  care
+  care,
+  reminder
 }
 
 class Actividad{
@@ -35,8 +36,8 @@ class Actividad{
   }
   
   /////////////////////////////////// CRUD ///////////////////////////////////
-  Future<bool> save() async {
-    final res = await this.createAlarms();
+  Future<bool> save({int interval, bool isMinute=false, Function callback}) async {
+    final res = await this.createAlarms(interval: interval, isMinute: isMinute, callback: callback);
     return res && (await db.newActivity(this));
   }
 
@@ -96,7 +97,7 @@ class Actividad{
   }
 
   ////////////////////////////// Functionality //////////////////////////////
-  Future<bool> createAlarms() async {
+  Future<bool> createAlarms({int interval, bool isMinute=false, Function callback}) async {
     this.daysToNotify.forEach((String element)async{
       AlarmModel alarm = new AlarmModel(
         parseDay(element), // day to be notified
@@ -105,7 +106,7 @@ class Actividad{
         this.descripcion
       );
 
-      await alarm.save();
+      await alarm.save(interval: interval, isMinute: isMinute, activate: callback);
       await db.newActivityAlarm(this.id, alarm.id);
     });
 
@@ -168,6 +169,7 @@ class Actividad{
       case "physical": return ActivityType.physical;
       case "recreation": return ActivityType.recreation;
       case "care": return ActivityType.care;
+      case "reminder": return ActivityType.reminder;
       default: return ActivityType.recreation;
     }
   }
@@ -179,6 +181,7 @@ class Actividad{
       case ActivityType.recreation: return "recreation";
       case ActivityType.physical: return "physical";
       case ActivityType.care: return "care";
+      case ActivityType.reminder: return "reminder";
       default: return "recreation";
     }
   }

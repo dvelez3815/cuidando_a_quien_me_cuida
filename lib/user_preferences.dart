@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences{
@@ -41,16 +40,17 @@ class UserPreferences{
   }
 
   set areWaterAlarmsCreated(bool value) {
-    _prefs.setBool('reminder_created', value);
+    _prefs.setBool('reminder_initialized', value);
   }
 
   set showTutorial(bool value) {
     _prefs.setBool('show_tutorial', value);
   }
 
-  bool get areWaterAlarmsCreated => _prefs.getBool('reminder_created') ?? false;
+
+  bool get areWaterAlarmsCreated => _prefs.getBool('reminder_initialized') ?? false;
   bool get darkMode => _prefs.getBool('dark_mode');
   bool get showTutorial => _prefs.getBool('show_tutorial') ?? true;
   Stream<bool> get darkStream => darkModeController.stream;
-  double get waterProgress => _prefs.getDouble("water_progress");
+  double get waterProgress => _prefs?.getDouble("water_progress") ?? 0.0;
 }

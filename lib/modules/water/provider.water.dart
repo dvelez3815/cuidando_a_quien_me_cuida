@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:utm_vinculacion/modules/activity/model.activity.dart';
 import 'package:utm_vinculacion/modules/database/provider.database.dart';
+import 'package:utm_vinculacion/modules/dates/helper.date.dart';
+import 'package:utm_vinculacion/modules/water/helper.water.dart' as helper;
 import 'package:utm_vinculacion/modules/water/model.water.dart';
 import 'package:utm_vinculacion/user_preferences.dart';
 
-// cuando se edita el tamaño del vaso o el objetivo diario, estas 
-// permanecen intactas, es más, habrán bugs.
+
 
 class WaterProvider {
 
@@ -79,6 +81,62 @@ class WaterProvider {
     }
   }
 
+  /// This method must to be called once and no more
+  static Future<void> loadWaterData() async {
+    int id = -31415926;
+    int morningReminder = -271;
+    int afternoonReminder = -90;
+    int eveningReminder = -40;
+
+    // It's gonna be removed 'casuse it crash DB if there are
+    // another item with the same ID
+    if(await DBProvider.db.existActivity(id)) {
+      await (await DBProvider.db.getActivity(id)).delete();
+    }
+
+    Actividad restart = new Actividad(
+      ActivityType.reminder, 
+      new TimeOfDay(hour: 0, minute: 0), 
+      [parseDayWeek(DateTime.now().add(Duration(days: 1)).weekday)],
+      nombre: "Reinicio de vaso de agua",
+      descripcion: "Resetea el contador de agua",
+      id: id // pi negativo
+    );
+
+    Actividad morning = new Actividad(
+      ActivityType.reminder, 
+      new TimeOfDay(hour: 9, minute: 0), 
+      [parseDayWeek(DateTime.now().weekday)],
+      nombre: "¡Bebe un vaso de agua!",
+      descripcion: "¿Ya has bebido tu vaso de agua?",
+      id: morningReminder // pi negativo
+    );
+
+    Actividad afternnoon = new Actividad(
+      ActivityType.reminder, 
+      new TimeOfDay(hour: 14, minute: 0), 
+      [parseDayWeek(DateTime.now().weekday)],
+      nombre: "¡Mantente hidratado!",
+      descripcion: "Bebe un vaso de agua",
+      id: afternoonReminder // pi negativo
+    );
+
+    Actividad evening = new Actividad(
+      ActivityType.reminder, 
+      new TimeOfDay(hour: 20, minute: 0), 
+      [parseDayWeek(DateTime.now().weekday)],
+      nombre: "¿Ya has completado tu objetivo?",
+      descripcion: "Recuerda beber agua",
+      id: eveningReminder // pi negativo
+    );
+
+    await restart.save(interval: 1, callback: helper.restoreProgressCallback);
+    await morning.save(interval: 1);
+    await afternnoon.save(interval: 1);
+    await evening.save(interval: 1);
+
+  }
+
   Future<void> updateGlassContent(int mlts) async {
 
     assert(mlts > 0);
@@ -109,6 +167,11 @@ class WaterProvider {
 
     this.model.progress = 0.0;
     this._modelStreamController.sink.add(this.model);
+
+    if(!UserPreferences().isInitialized){
+      await UserPreferences().initPrefs();
+    }
+
     UserPreferences().waterProgress = 0;
 
     print("process restored");

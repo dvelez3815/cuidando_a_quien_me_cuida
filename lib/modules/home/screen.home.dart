@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:utm_vinculacion/modules/dates/helper.date.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/modules/home/view.carousel.dart';
 import 'package:utm_vinculacion/routes/route.names.dart';
@@ -20,7 +21,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
-    _showTutorial();
+
+    Future.delayed(Duration(seconds: 1)).then((value) => 
+      _showTutorial()
+    );
 
     return Scaffold(
       body: Stack(
@@ -32,6 +36,12 @@ class _HomeState extends State<Home> {
               children: [
                 _getHeader(),
                 CarouselWidget(),
+                RaisedButton.icon(
+                  icon: Icon(Icons.calendar_today_outlined),
+                  label: Text(getFormattedDate()),
+                  elevation: 2.0,
+                  onPressed: (){},
+                ),
                 _getActivitiesButton(),
                 SizedBox(height: 10.0,),
                 _getOptions()
@@ -138,22 +148,28 @@ class _HomeState extends State<Home> {
 
   void _showTutorial() {
     if(UserPreferences().showTutorial) {
-      // TODO
-      // UserPreferences().showTutorial = false;
+      
+      UserPreferences().showTutorial = false;
 
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text("¡Bienvenido!"),
-            content: Text("En nuestro canal de YouTube puedes encontrar guías de cómo usar la app"),
-            actions: [
-              RaisedButton.icon(
-                icon: Icon(Icons.play_arrow),
-                label: Text("Abrir YouTube"),
-                onPressed: ()=>launch("https://www.youtube.com/playlist?list=PLi78ev46WowcREuEyZ0GottgIijIkAo1n&fbclid=IwAR2GvoIfIxS8Ne9h95mVCWV2SiY2x4IgxjHBVzyias8HNvS7n0rNL3w7_Mo"),
-              )
-            ],
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("En nuestro canal de YouTube puedes encontrar guías de cómo usar la app"),
+                SizedBox(height: 10,),
+                RaisedButton.icon(
+                  icon: Icon(Icons.play_arrow),
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  label: Text("Abrir YouTube"),
+                  onPressed: ()=>launch("https://www.youtube.com/playlist?list=PLi78ev46WowcREuEyZ0GottgIijIkAo1n&fbclid=IwAR2GvoIfIxS8Ne9h95mVCWV2SiY2x4IgxjHBVzyias8HNvS7n0rNL3w7_Mo"),
+                ),
+              ],
+            ),
           );
         }
       );
