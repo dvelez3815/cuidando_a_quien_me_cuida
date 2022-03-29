@@ -10,6 +10,9 @@ class CreateContactView extends StatelessWidget {
   final _nameCTRL = new TextEditingController();
   final _aboutCTRL = new TextEditingController();
   final _phoneCTRL = new TextEditingController();
+  final _emailCTRL = new TextEditingController();
+  final _locationCTRL = new TextEditingController();
+  final _webpageCTRL = new TextEditingController();
 
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = new GlobalKey<FormState>();
@@ -40,6 +43,9 @@ class CreateContactView extends StatelessWidget {
     this._nameCTRL.text = contact?.title ?? this._nameCTRL.text;
     this._aboutCTRL.text = contact?.description ?? this._aboutCTRL.text;
     this._phoneCTRL.text = contact?.phone ?? this._phoneCTRL.text;
+    this._locationCTRL.text = contact?.location ?? this._locationCTRL.text;
+    this._emailCTRL.text = contact?.email ?? this._emailCTRL.text;
+    this._webpageCTRL.text = contact?.webpage ?? this._webpageCTRL.text;
 
     return Expanded(
       child: ListView(
@@ -57,11 +63,30 @@ class CreateContactView extends StatelessWidget {
                   }
                 ),
                 getInputStyle(
-                  "Descripción", "Descripción del contacto", this._aboutCTRL, Icons.info,
-                ),
-                getInputStyle(
                   "Teléfono", "Número de teléfono", this._phoneCTRL, Icons.phone_android, 
                   inputType: TextInputType.number, validatorCallback: phoneValidator
+                ),
+                getInputStyle(
+                  "Localización", "Localización", this._locationCTRL, Icons.location_on, 
+		  capitalize: true
+                ),
+                getInputStyle(
+                  "Email", "algo@dominio.com", this._emailCTRL, Icons.email, 
+		  inputType: TextInputType.emailAddress, validatorCallback: (email) {
+		    if(email.isNotEmpty && !RegExp("^\\w+@\\w+\\.\\w+").hasMatch(email)) {
+		      return "Email no válido";
+		    }
+
+		    return null;
+		  }
+                ),
+                getInputStyle(
+                  "Página web", "https://www.url.com", this._webpageCTRL, Icons.link,
+		  inputType:  TextInputType.url, validatorCallback: (url){
+		    if(url.isNotEmpty && !RegExp("^https?://www\\.\\w+\\.\\w+").hasMatch(url)){
+		      return "URL no válida";
+		    }
+		  }
                 ),
               ],
             ),

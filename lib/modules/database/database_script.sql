@@ -1,6 +1,7 @@
 insert into contacto values
     (0, 'Policía', 'Policía Nacional de Ecuador', '111'),
-    (1, 'Emergencia', 'Contacto de emergencia de Ecuador', '911');
+    (1, 'Ecu911', 'Contacto de emergencia de Ecuador', '911');
+
 
 insert into actividad (id, nombre, descripcion, days, time, active, type, complements)
 values

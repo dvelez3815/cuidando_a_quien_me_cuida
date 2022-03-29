@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:utm_vinculacion/modules/music/model.playlist.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +13,7 @@ class MusicProvider {
   static const String CHANNEL_ID = "UCRFgeSNI_UmvjtNoj2eLobQ";
   static const String PLAYLIST_REQUIREMENTS = "id,contentDetails,player,contentDetails,id,snippet,status";
 
-  static final String apiKey = DotEnv().env['API_KEY_YT']; // YouTube API key
+  static final String apiKey = "AIzaSyBfpIDxfx9bvePXSwfJj7Y5yX3lErprbzg";
   final List<String> playElements = new List<String>();
 
   // Singleton pattern
@@ -53,7 +52,7 @@ class MusicProvider {
   /// description, thumbnails, and the playlist ID
   Future<void> queryPlaylist() async{
 
-    final response = await http.get(playlistYTUrl);
+    final response = await http.get(Uri.parse(playlistYTUrl));
     final Map<String, dynamic> decodedData = json.decode(response.body);
 
     final List<PlayList> playlist = List<PlayList>.from(decodedData["items"].map((playlist){
@@ -73,7 +72,7 @@ class MusicProvider {
     
     final url = "${MusicProvider.URL}playlistItems?part=contentDetails,id,snippet&playlistId=$playlistID&key=$apiKey&maxResults=30";
     
-    final res = await http.get(url);
+    final res = await http.get(Uri.parse(url));
     final Map<String, dynamic> decoded = json.decode(res.body);
 
     // This will clear the stream every time a request is made, in order to avoid

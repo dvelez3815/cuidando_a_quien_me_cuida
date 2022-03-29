@@ -32,19 +32,19 @@ class Actividades extends StatefulWidget {
           title: Text("¡Atención!"),
           content: Text("Está a punto de eliminar esta actividad, ¿desea continuar?"),
           actions: [
-            FlatButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancelar"),
               onPressed: ()=>Navigator.of(contextInternal).pop(),
             ),
-            FlatButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.check_circle, color: Colors.red),
               label: Text("Eliminar", style: TextStyle(color: Colors.red)),
               onPressed: ()async{
                 if(!deleting){
                   final ok = await Actividades.deleteEvent(item);
 
-                  scaffoldKey.currentState.showSnackBar(new SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                     content: Text("El cuidado ${ok? "fue eliminado":"no pudo ser eliminado"}"),
                     duration: Duration(seconds: 2),
                   ));
@@ -121,21 +121,30 @@ class _ActividadesState extends State<Actividades>{
 
         final Map<String, dynamic> activityTypes = AppSettings().settings["activities_type"];
         
-        final content = new List<Widget>();
+        final content = <Widget>[];
         content.addAll(List<Widget>.from(activityTypes.keys.map((String key){
 
             final String title = activityTypes[key];
 
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: ExpansionTile(
-                  tileColor: Theme.of(context).accentColor,
-                  textColor: Theme.of(context).canvasColor,   
-                  title: Text(title.capitalize(), style: TextStyle(fontWeight: FontWeight.bold),),
-                  children: _getActivityData(key, snapshot.data),
-                  maintainState: false,
+		  collapsedBackgroundColor: Theme.of(context).accentColor,
+		  collapsedTextColor: Colors.white,
+		  collapsedIconColor: Colors.white,
+		  textColor: Colors.white,
+		  backgroundColor: Theme.of(context).accentColor,
+                  title: Text(
+		      title.capitalize(),
+		      style: TextStyle(
+			fontWeight: FontWeight.bold,
+		      ),
+
+		    ),
+		    children: _getActivityData(key, snapshot.data),
+		    maintainState: false,
                   initiallyExpanded: true,   
                 ),
               ),
@@ -168,7 +177,7 @@ class _ActividadesState extends State<Actividades>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      FlatButton.icon(
+                      TextButton.icon(
                         icon: Icon(Icons.edit),
                         label: Text("Editar"),
                         onPressed: (){
@@ -179,7 +188,7 @@ class _ActividadesState extends State<Actividades>{
                           });
                         },
                       ),
-                      FlatButton.icon(
+                      TextButton.icon(
                         icon: Icon(Icons.delete, color: Colors.red),
                         label: Text("Eliminar", style: TextStyle(color: Colors.red)),
                         onPressed: (){
@@ -210,15 +219,18 @@ class _ActividadesState extends State<Actividades>{
         onChanged: (value)=>setState((){activity.estado = value;})
       );
       
-      return Column(
-        children: [
-          TunnedListTile(
-            activity: activity,
-            leadingEvent: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
-            trailing: trailing,
-          ),
-          Divider()
-        ],
+      return Container(
+	color: Colors.white,
+        child: Column(
+          children: [
+            TunnedListTile(
+              activity: activity,
+              leadingEvent: ()=>showEditDeleteOptions(context, activity, widget._scaffoldKey),
+              trailing: trailing,
+            ),
+            Divider(height:2.0)
+          ],
+        ),
       );
     }));
   }

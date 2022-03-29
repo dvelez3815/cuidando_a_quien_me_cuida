@@ -33,6 +33,7 @@ class ContactsScreen extends StatelessWidget {
     );
   }
 
+  /// Contains basic information of contacts (title and a short description)
   Widget _getContent(BuildContext context) {
 
     return StreamBuilder(
@@ -49,6 +50,7 @@ class ContactsScreen extends StatelessWidget {
 
         return ListView.builder(
           itemCount: snapshot.data.length,
+	  physics: BouncingScrollPhysics(),
           itemBuilder: (context, index){
             return ListTile(
               leading: CircleAvatar(
@@ -68,6 +70,7 @@ class ContactsScreen extends StatelessWidget {
 
   }
 
+  /// Shows additional information for [contact] such as location and/or webpage
   void _getOptionAction(BuildContext context, Contact contact) {
     
     bool deleting = false;
@@ -93,20 +96,37 @@ class ContactsScreen extends StatelessWidget {
                 subtitle: Text(contact.title.capitalize() ?? "Sin título"),
               ),
               ListTile(
-                title: Text("Descripción"),
-                subtitle: Text(contact.description ?? "Sin descripción"),
+                title: Text("Localización"),
+                subtitle: Text(contact.location ?? "No disponible"),
               ),
               ListTile(
                 title: Text("Teléfono"),
                 subtitle: Text(contact.phone ?? "Sin teléfono"),
                 trailing: Icon(Icons.call),
-                onTap: ()=>launch("tel:${contact.phone}"),
+                onTap: contact.phone ==null? null:()=>launch("tel:${contact.phone}"),
               ),
+              ListTile(
+                title: Text("Email"),
+                subtitle: Text(contact.email ?? "Sin email"),
+                trailing: Icon(Icons.email),
+                onTap: contact.email != null?()=>launch("${contact.email}"):null,
+              ),
+              ListTile(
+                title: Text("Página web"),
+                subtitle: Text(contact.webpage ?? "Desconocida"),
+                trailing: Icon(Icons.link),
+                onTap: contact.webpage != null?()=>launch("${contact.webpage}"):null
+              ),
+              ListTile(
+                title: Text("Descripción"),
+                subtitle: Text(contact.description ?? "Sin descripción"),
+              ),
+
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FlatButton.icon(
+                  TextButton.icon(
                     icon: Icon(Icons.delete),
                     label: Text("Eliminar"),
                     onPressed: ()async{
@@ -119,7 +139,7 @@ class ContactsScreen extends StatelessWidget {
                       // closing this widget context
                       Navigator.of(context).pop();
 
-                      this._scaffoldKey.currentState.showSnackBar(new SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                         content: Text("Contacto eliminado"),
                       ));
 
@@ -129,7 +149,7 @@ class ContactsScreen extends StatelessWidget {
 
                     },
                   ),
-                  FlatButton.icon(
+                  TextButton.icon(
                     icon: Icon(Icons.edit),
                     label: Text("Editar"),
                     onPressed: ()=>Navigator.of(context).pushNamed(ADDCONTACT, arguments: contact)

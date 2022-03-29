@@ -83,7 +83,7 @@ class _YouTubePageState extends State<YouTubePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.skip_previous),
+                      icon: Icon(Icons.skip_previous, size: 40),
                       onPressed: (){
                         setState(() {
                           _controller.previousVideo();
@@ -91,7 +91,7 @@ class _YouTubePageState extends State<YouTubePage> {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.pause),
+                      icon: Icon(Icons.pause, size: 40),
                       onPressed: (){
                         setState(() {
                           _controller.pause();
@@ -99,7 +99,15 @@ class _YouTubePageState extends State<YouTubePage> {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.skip_next),
+                      icon: Icon(Icons.play_arrow, size: 40),
+                      onPressed: (){
+                        setState(() {
+                          _controller.play();
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.skip_next, size: 40),
                       onPressed: (){
                         setState(() {
                           _controller.nextVideo();

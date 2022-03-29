@@ -1,8 +1,7 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:device_preview/device_preview.dart' as dp;
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:utm_vinculacion/modules/global/settings.dart';
 import 'package:utm_vinculacion/modules/global/theme.dart';
@@ -38,7 +37,7 @@ void main() async {
   
   // WARNING: the way and order next methods are called matters! Be careful if
   // you want to change it
-  await DotEnv().load('.env'); // environment variables
+  // await DotEnv().load(fileName: '.env'); // environment variables
   await AndroidAlarmManager.initialize(); // To create alarms
   await WaterProvider().init(); // water settings
   await appSettings.initState(); // application settings

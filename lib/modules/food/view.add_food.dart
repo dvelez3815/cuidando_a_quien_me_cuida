@@ -97,42 +97,44 @@ class _AddPlatosState extends State<AddPlatos> {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      child: AlertDialog(
-        title: Text("Agregar ingrediente"),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              getInputStyle("Nombre", "Nombre del ingrediente", controller, null),
-            ],
-          ),
-        ),
-        actions: [
-          FlatButton.icon(
-            icon: Icon(Icons.cancel),
-            label: Text("Cancelar"),
-            onPressed: ()=>Navigator.of(context).pop(),
-          ),
-          FlatButton.icon(
-            icon: Icon(Icons.check_circle),
-            label: Text("Guardar"),
-            onPressed: ()=>setState((){
+      builder: (context){
+	return AlertDialog(
+	  title: Text("Agregar ingrediente"),
+	  content: SingleChildScrollView(
+	    child: Column(
+	      mainAxisSize: MainAxisSize.min,
+	      children: [
+		getInputStyle("Nombre", "Nombre del ingrediente", controller, null),
+	      ],
+	    ),
+	  ),
+	  actions: [
+	    TextButton.icon(
+	      icon: Icon(Icons.cancel),
+	      label: Text("Cancelar"),
+	      onPressed: ()=>Navigator.of(context).pop(),
+	    ),
+	    TextButton.icon(
+	      icon: Icon(Icons.check_circle),
+	      label: Text("Guardar"),
+	      onPressed: ()=>setState((){
 
-              if(widget.ingredientes.indexWhere((element) => (element["title"] == controller.text)) > -1){
-                widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
-                  content: Text("Material ya existe"),
-                ));
-                return;
-              }
+		if(widget.ingredientes.indexWhere((element) => (element["title"] == controller.text)) > -1){
+		  widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
+		    content: Text("Material ya existe"),
+		  ));
+		  return;
+		}
 
-              widget.ingredientes.add({
-                "title": controller.text
-              });
-              Navigator.of(context).pop();
-            })
-          ),
-        ],
-      )
+		widget.ingredientes.add({
+		  "title": controller.text
+		});
+		Navigator.of(context).pop();
+	      })
+	    ),
+	  ],
+	);
+      }
     );
   }
 

@@ -43,7 +43,7 @@ class _WaterGoalEditorState extends State<WaterGoalEditor> {
         children: [
           Text(widget.title ?? "Ingrese el valor en ${widget.unit ?? "litros"}"),
           Slider(
-            divisions: widget.division ?? (2 * (widget.maxValue - widget.minValue))~/1,
+            divisions: widget.division ?? (4 * (widget.maxValue - widget.minValue))~/1,
             onChanged: (value)=>setState(()=>this._goalEditController.text = value.toStringAsFixed(2)),
             value: double.parse(this._goalEditController.text ?? '0', (error)=>0.0),
             label: (this._goalEditController.text ?? '0') + " "+(widget.unitPrefix ?? "Lts"),

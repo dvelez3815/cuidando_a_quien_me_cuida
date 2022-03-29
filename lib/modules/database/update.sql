@@ -1,10 +1,7 @@
--- IMPORTANT!!!
--- All this process is automatic, so, if you want to
--- update a part of the database, you need to place the 
--- old code writted in this script and put it in the 
--- [database_script.sql], then you need to put here the new
--- code and increase the database version in one unit.
-
+--- IMPORTANT!!!
+--- You can add new features at SQL level in the application
+--- creating a new file and then calling it on [database_script.sql]
+--- calling source method, just like 'source ./update.sql'.
 
 delete from actividad where id = '1';
 delete from comida where id = '15';

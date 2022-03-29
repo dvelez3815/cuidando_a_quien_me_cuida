@@ -74,7 +74,14 @@ class _WaterScreenState extends State<WaterScreen> {
         _getTunedButton(
           "Beber un vaso de agua", 
           Icons.bubble_chart_rounded,
-          widget._provider.addWaterLts
+	  (){
+	    if(widget._provider.model.progress >= 100){
+	      widget._scaffoldKey.currentState.showSnackBar(new SnackBar(
+		content: Text("No puedes agregar más vasos de agua :')"),
+	      ));
+	    }
+	    else widget._provider.addWaterLts();
+	  }
         ),
         _getTunedButton(
           "Quitar un vaso de agua", 
@@ -143,10 +150,16 @@ class _WaterScreenState extends State<WaterScreen> {
               ),
               child: Center(
                 child: Text(
-                  model.progress > 6.0? "SOBREHIDRATACIÓN":"COMPLETADO",
+                  model.progress > 6.0 && model.progress < 40? "SOBREHIDRATACIÓN"
+		    :model.progress >= 40 && model.progress < 60? "No lo haga compa"
+		    :model.progress >= 60 && model.progress < 70? "Para, por favor :("
+		    :model.progress >= 70 && model.progress < 75? "'tas bien?"
+		    :model.progress >= 75 && model.progress < 80? "A conocer a \nMaradona :')"
+		    :model.progress >= 80 && model.progress < 100? "Fuen un placer,\nsoldado"
+		    :model.progress >= 100? "*se muere*":"COMPLETADO",
                   style: TextStyle(
                     fontSize: 25.0, 
-                    color: Theme.of(context).accentColor,
+                    color: model.progress > 6.0?Colors.white:Theme.of(context).accentColor,
                     fontWeight: FontWeight.bold
                   ),
                 )

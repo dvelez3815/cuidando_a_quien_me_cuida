@@ -78,7 +78,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 3, // last was 3
+      version: 4, // last was 4
       onUpgrade: (db, oldVersion, newVersion)async{
         await upgradeDB(db);
         print("Database upgraded");
@@ -338,7 +338,7 @@ class DBProvider {
     contacts.clear();
 
     final db = await database;
-    final affectedRows = List<Map<String, dynamic>>.from(await db.query("contacto"));
+    final affectedRows = List<Map<String, dynamic>>.from(await db.query("contacto", orderBy: 'name'));
 
     contacts.addAll(affectedRows.map((Map<String, dynamic> e) => Contact.fromJson(e)));
 

@@ -35,7 +35,7 @@ class InfoReceta extends StatelessWidget {
             Divider(),
             TunnedExpansion(
               expansionTile: ExpansionTile(
-                tileColor: Theme.of(context).accentColor,
+                // tileColor: Theme.of(context).accentColor,
                 textColor: Theme.of(context).canvasColor,
                 initiallyExpanded: true,
                 title: Text("Imágen de la receta"),
@@ -53,7 +53,7 @@ class InfoReceta extends StatelessWidget {
             Divider(),
             TunnedExpansion(
               expansionTile: ExpansionTile(
-                tileColor: Theme.of(context).accentColor,
+                // tileColor: Theme.of(context).accentColor,
                 textColor: Theme.of(context).canvasColor,
                 title: Text("Ingredientes"),
                 initiallyExpanded: true,
@@ -74,7 +74,7 @@ class InfoReceta extends StatelessWidget {
             Divider(),
             TunnedExpansion(
               expansionTile: ExpansionTile(
-                tileColor: Theme.of(context).accentColor,
+                // tileColor: Theme.of(context).accentColor,
                 textColor: Theme.of(context).canvasColor,
                 title: Text("Preparación"),
                 initiallyExpanded: true,

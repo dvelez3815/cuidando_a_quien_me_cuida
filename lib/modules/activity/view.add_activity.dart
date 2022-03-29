@@ -153,9 +153,9 @@ class _AddActividadesState extends State<AddActividades>{
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        FlatButton.icon(
+        TextButton.icon(
           onPressed: ()=>showPicker(context),
-          color: Theme.of(context).bottomAppBarColor,
+          // color: Theme.of(context).bottomAppBarColor,
           icon: Icon(Icons.timer),
           label: Text('Establecer hora')
         ),
@@ -205,7 +205,7 @@ class _AddActividadesState extends State<AddActividades>{
   Future<void> _newAlarm(BuildContext context, {int id}) async {
 
     // This will contains only the days to notify
-    final List<String> daysActive = new List<String>();
+    final List<String> daysActive = <String>[];
 
     this.widget.daysToNotify.forEach((key, value) {
       if(value) daysActive.add(key);
@@ -213,7 +213,7 @@ class _AddActividadesState extends State<AddActividades>{
 
     // At least one day should be selected
     if(daysActive.isEmpty) {
-      widget.scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(content: Text("Debe seleccionar al menos un día")));
       return;
     }
 
@@ -230,7 +230,7 @@ class _AddActividadesState extends State<AddActividades>{
     await activity.save(); // this save this activity/activity in local database
     await DBProvider.db.setProcedure(activity.id, widget.procedureActividad.text);
 
-    widget.scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('La alarma fué creada')
     ));
   
@@ -346,43 +346,46 @@ class _AddActividadesState extends State<AddActividades>{
     return showDialog(
       barrierDismissible: false,
       context: context,
-      child: AlertDialog(
-        title: Text("Agregar material"),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              getInputStyle("Nombre", "Nombre del material", controller, Icons.sports_baseball),
-            ],
-          ),
-        ),
-        actions: [
-          FlatButton.icon(
-            icon: Icon(Icons.cancel),
-            label: Text("Cancelar"),
-            onPressed: ()=>Navigator.of(context).pop(),
-          ),
-          FlatButton.icon(
-            icon: Icon(Icons.check_circle),
-            label: Text("Guardar"),
-            onPressed: ()=>setState((){
+      builder: (context) {
+	return AlertDialog(
+	  title: Text("Agregar material"),
+	  content: SingleChildScrollView(
+	    child: Column(
+	      mainAxisSize: MainAxisSize.min,
+	      children: [
+		getInputStyle("Nombre", "Nombre del material", controller, Icons.sports_baseball),
+	      ],
+	    ),
+	  ),
+	  actions: [
+	    TextButton.icon(
+	      icon: Icon(Icons.cancel),
+	      label: Text("Cancelar"),
+	      onPressed: ()=>Navigator.of(context).pop(),
+	    ),
+	    TextButton.icon(
+	      icon: Icon(Icons.check_circle),
+	      label: Text("Guardar"),
+	      onPressed: ()=>setState((){
 
-              if(this.materiales.indexWhere((element) => (element["title"] == controller.text)) > -1){
-                widget.scaffoldKey.currentState.showSnackBar(new SnackBar(
-                  content: Text("Material ya existe"),
-                ));
-                return;
-              }
+		if(this.materiales.indexWhere((element) => (element["title"] == controller.text)) > -1){
+		  ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+		    content: Text("Material ya existe"),
+		  ));
+		  return;
+		}
 
-              this.materiales.add({
-                "title": controller.text
-              });
-              Navigator.of(context).pop();
-            })
-          ),
-        ],
-      )
-    );
+		this.materiales.add({
+		  "title": controller.text
+		});
+		Navigator.of(context).pop();
+	      })
+	    ),
+	  ],
+	);
+
+      },
+      );
   }
 
   IconData _getIconByDay(String key) {

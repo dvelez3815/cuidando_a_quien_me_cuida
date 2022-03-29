@@ -69,7 +69,7 @@ class Rutina extends StatelessWidget {
             textAlign: TextAlign.justify,
           ),
           actions: [
-            FlatButton.icon(
+            TextButton.icon(
               icon: Icon(Icons.check_circle),
               label: Text("OK"),
               onPressed: (){
@@ -178,29 +178,35 @@ class Rutina extends StatelessWidget {
 
   Widget _createActivityTile(BuildContext context, Actividad item){
     
-    return Column(
-      children: [
-        TunnedListTile(
-          activity: item,
-          leadingEvent: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {"model_data": item, "restricted":true}),
-          trailing: Icon(Icons.arrow_forward_ios),
-          leadingIcon: Icons.edit,
-        ),
-        Divider()
-      ],
+    return Container(
+	color: Colors.white,
+      child: Column(
+        children: [
+          TunnedListTile(
+            activity: item,
+            leadingEvent: ()=>Navigator.of(context).pushNamed(ADDACTIVIDADES, arguments: {"model_data": item, "restricted":true}),
+            trailing: Icon(Icons.arrow_forward_ios),
+            leadingIcon: Icons.edit,
+          ),
+          Divider()
+        ],
+      ),
     );
   }
 
   Widget _titleListTile(BuildContext context, String title, IconData icon, List<Widget> activities){
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.all(10.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20.0),
         child: ExpansionTile(
           initiallyExpanded: true,
+	  backgroundColor: Theme.of(context).accentColor,
+	  collapsedTextColor: Colors.white,
+	  collapsedBackgroundColor: Theme.of(context).accentColor,
           leading: Icon(icon, color: Theme.of(context).canvasColor),
-          tileColor: Theme.of(context).accentColor,
-          textColor: Theme.of(context).canvasColor,   
+	  textColor: Colors.white,
+          // tileColor: Theme.of(context).accentColor,
           title: Text(
             title ?? "Sin título",
             style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).canvasColor)

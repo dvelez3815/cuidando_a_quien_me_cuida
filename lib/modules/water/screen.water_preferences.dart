@@ -117,7 +117,7 @@ class _WaterPreferencesState extends State<WaterPreferences> {
             widget._scaffoldKey,
             maxValue: 500,
             minValue: 50,
-            division: 10,
+            division: 30,
             initialValue: widget._provider.model?.glassSize.toString() ?? "250",
             title: "Ajustar vaso de agua",
             unit: "mililitros",

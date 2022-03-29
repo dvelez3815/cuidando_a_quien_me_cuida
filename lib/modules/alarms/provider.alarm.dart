@@ -1,5 +1,5 @@
 
-import 'package:audioplayers/audio_cache.dart';
+// import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -8,7 +8,7 @@ import 'package:utm_vinculacion/routes/route.names.dart';
 class AlarmProvider {
     
   static final androidChannel = AndroidNotificationDetails(
-     'show weekly channel id', 'show weekly channel name', 'show weekly description');
+     'show weekly channel id', 'show weekly channel name', channelDescription: 'show weekly description');
   static final iOSChannel = IOSNotificationDetails();
   
   // Esto es para el sonido de la alarma (deben ser estaticos)

@@ -76,7 +76,7 @@ class ActivityDetail extends StatelessWidget {
     return TunnedExpansion(
       expansionTile: ExpansionTile(
         textColor: Theme.of(context).canvasColor,
-        tileColor: Theme.of(context).accentColor,
+        // tileColor: Theme.of(context).accentColor,
         initiallyExpanded: true,
         title: Text("Imágenes"),
         subtitle: Text("\nPuede arrastrar la imágen a la derecha o izquierda para ver más."),
@@ -94,7 +94,7 @@ class ActivityDetail extends StatelessWidget {
       expansionTile: ExpansionTile(
         title: Text("Materiales"),
         textColor: Theme.of(context).canvasColor,
-        tileColor: Theme.of(context).accentColor,
+        // tileColor: Theme.of(context).accentColor,
         initiallyExpanded: true,
         leading: Icon(Icons.view_comfortable_sharp, color: Theme.of(context).canvasColor),
         children: model.complements.isEmpty?
@@ -117,7 +117,7 @@ class ActivityDetail extends StatelessWidget {
       expansionTile: ExpansionTile(
         title: Text("Procedimiento"),
         textColor: Theme.of(context).canvasColor,
-        tileColor: Theme.of(context).accentColor,
+        // tileColor: Theme.of(context).accentColor,
         initiallyExpanded: true,
         leading: Icon(Icons.toc_outlined, color: Theme.of(context).canvasColor),
         children: [FutureBuilder(
