@@ -1,21 +1,3 @@
-# utm_vinculacion
-
-### Proyecto de vinculación
-
-## Integrantes
-- Franco Cantos Jandry Hernaldo
-- Garcia Arteaga Joel Junior
-- Mendoza Macias Yahir
-- Loor Zambrano Bernis Alfredo
-- Santillan ganchozo
-- Palacios Balderramo Emerson Javier
-- Velez Cedeño Maria José
-- Velez Zambrano Darwin Xavier
-
-
-### Tutor: Ing. SANTANA CAMPOVERDE FABRICIO JAVIER
-### Coordinadora: Ing. ZAMBRANO SOLORZANO ELBA TATIANA
-
 ## Cuidando a quien me cuida
 
 Cuidado a quien me cuida es una aplicativo que tiene como objetivo el de reducir el estres de los cuidadores, mediante la realiación de un control sobre su dieta y control sobre los ejercicios que realiza
